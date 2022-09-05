@@ -21,7 +21,7 @@ const registerUser = async (req:Request, res:Response) =>{
          // // Hashed Passwords
         const hashedPassword = await hashPassword.hash({rounds:10, password})
         // token
-        const token = generateToken(email,first_name, last_name)
+        const userToken = generateToken(email,first_name, last_name)
 
         // Create User 
         const user = User.build({
@@ -39,8 +39,16 @@ const registerUser = async (req:Request, res:Response) =>{
 
             // send user
             if (user) {
-                res.status(200).json({user, token})
-    
+                // Creates session cookie
+                res.cookie("x-auth-token",userToken,{
+                    maxAge: 15 * 60 * 1000,
+                    expires: new Date(Date.now() + 15 * 60 * 1000),
+                    secure: false,
+                    httpOnly: true,
+                    signed: true,
+                    sameSite: 'strict'
+                });                
+                res.status(201).json(user);
             } else {
                 error.push( "Invalid user data" )
                 res.status(400).json({ errors: error.map(err => err) })
@@ -58,19 +66,24 @@ const loginUser = async (req:Request, res:Response) =>{
         res.status(400).json({ errors: error.map(err => err) })
         error= []
     }else{
+        const userToken  = generateToken(existingUser.email, existingUser.first_name, existingUser.last_name)
+
+        res.cookie('x-auth-token', userToken, {
+            maxAge: 15 * 60 * 1000,
+            expires: new Date(Date.now() + 15 * 60 * 1000),
+            secure: false,
+            httpOnly: true,
+            signed: true,
+            sameSite: 'strict'
+          });
+
         res.status(200).json(
             {
             id: existingUser.id,
-            firstname: existingUser.first_name,
-            lastname: existingUser.last_name,
             email: existingUser.email,
-            token: generateToken(existingUser.email, existingUser.first_name, existingUser.last_name)
             }
          );
     }
-       
-    
 }
-
 
 export default {registerUser, loginUser}
