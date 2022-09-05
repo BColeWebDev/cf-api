@@ -1,7 +1,7 @@
 
-import { generateToken } from './../config/jwt';
+import { generateToken } from '../config/jwt';
 import { Response, Request } from "express"
-import { User } from "../models/user"
+import { User } from "../models/user.model"
 import hashPassword from '../config/hash'
 
 let error: string[] = []

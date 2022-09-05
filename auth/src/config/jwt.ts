@@ -4,7 +4,7 @@ import {sign, verify,SignOptions,JwtPayload} from "jsonwebtoken"
  * generates JWT used for local testing
  */
 
-const jwtSecret: any = process.env.JWT_SECRET
+// const jwtSecret: any = process.env.JWT_SECRET
 
 // Generates JWT Token
 export const generateToken  = (email:String, first_name:String, last_name:String) =>{
