@@ -86,4 +86,8 @@ const loginUser = async (req:Request, res:Response) =>{
     }
 }
 
-export default {registerUser, loginUser}
+const currentUser = async (req: Request, res: Response) =>{
+    res.json({currentUser: req.currentUser || null});
+}  
+
+export default {registerUser, loginUser, currentUser}
