@@ -88,6 +88,31 @@ const loginUser = async (req:Request, res:Response) =>{
 
 const currentUser = async (req: Request, res: Response) =>{
     res.json({currentUser: req.currentUser || null});
-}  
+};
 
-export default {registerUser, loginUser, currentUser}
+const forgotPassword = async (req:Request, res: Response) =>{
+
+};
+
+const resetPassword = async (req: Request, res: Response) =>{
+    
+}
+const sendConfirmation = async (req:Request, res:Response) =>{
+
+}
+const userCancel = async (req:Request, res:Response) =>{
+
+}
+const loginReset = async (req:Request, res:Response) =>{
+
+}
+export default {
+    registerUser,
+     loginUser, 
+     currentUser, 
+     forgotPassword, 
+     resetPassword,
+    sendConfirmation,
+    userCancel,
+    loginReset
+    }
