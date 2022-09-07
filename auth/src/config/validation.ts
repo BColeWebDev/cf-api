@@ -10,6 +10,10 @@ interface Login{
     email:string
     password:string
 }
+interface forgotPassword{
+    email:string
+}
+
 
 // Validation Schema
 const registerSchema = Joi.object({
@@ -124,6 +128,19 @@ const loginSchema = Joi.object({
 
 })
 
+const emailSchema = Joi.object({
+    email: Joi.string()
+    .max(30)
+    .required()
+    .email({minDomainSegments: 2, tlds:{allow:["com","net"]}})
+    .messages({
+        'string.empty': `email cannot be an empty field`,
+        'string.max': `email should have a max of length of 30 characters`,
+        'string.email': "must be a valid email",
+        'any.required': `email is a required field`
+    })
+})
+
 class Validation {
      // Validation for registering Register
      registerValidation = (data : Register) => {
@@ -137,7 +154,13 @@ class Validation {
         const response = loginSchema.validate({ email, password }, { abortEarly: false })
         return response
 
-        }    
+    }    
+    // Forgot password validation
+    forgotValidation = (data: forgotPassword) =>{
+        const {email} = data
+        const response = emailSchema.validate({email}, {abortEarly: false})
+        return response
+    };
 }
 
 export default new Validation()
