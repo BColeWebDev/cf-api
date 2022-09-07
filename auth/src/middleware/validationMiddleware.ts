@@ -28,4 +28,14 @@ const loginIsValid = async (req: Request, res:Response, next:NextFunction)  => {
         :
         res.status(400).json({ errors: error.details.map(err => err.message) })
 }
-export default {registerIsValid, loginIsValid}
+
+// Validation of Forgot Password
+const forgotPassword = async (req:Request, res:Response, next:NextFunction) =>{
+const{error} = await validation.forgotValidation(req.body)
+error === undefined ?
+next():
+res.status(400).json({errors: error.details.map(err => err.message)})
+};
+
+
+export default {registerIsValid, loginIsValid, forgotPassword}
