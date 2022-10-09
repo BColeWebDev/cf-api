@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 import rateLimit from "express-rate-limit";
 // Enviorment Variables
 if (process.env.NODE_ENV !== 'production') {
-    dotenv.config()
+    dotenv.config();
 }
 
 const limit = rateLimit({

@@ -1,0 +1,67 @@
+import sgMail from "@sendgrid/mail";
+
+
+
+// Enviorment Variables
+import dotenv from "dotenv";
+if (process.env.NODE_ENV !== 'production') {
+    dotenv.config();
+    
+}
+
+// setup api key
+sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
+
+
+// Email Reset
+export const emailResetLink = (receiverEmail:string, resetToken: string):sgMail.MailDataRequired =>{
+const email: sgMail.MailDataRequired ={
+    to: receiverEmail,
+    from: `${process.env.SENDING_EMAIL}`,
+    subject:"Reset password link",
+    text:"text",
+    html: `<p>You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n Please click on the following link, or paste this into your browser to complete the process:\n\n
+  <a href="http://${process.env.HOST}/login/reset/${resetToken}">http://${process.env.HOST}/login/reset/${resetToken}</a> \n\n If you did not request this, please ignore this email and your password will remain unchanged.\n </p>`,
+}
+return email
+}
+// Email Reset confirmation 
+export const resetConfirmationEmail = (receiverEmail:string): sgMail.MailDataRequired =>{
+const email: sgMail.MailDataRequired ={
+    to:receiverEmail,
+    from:`${process.env.SENDING_EMAIL}`,
+    subject:"Your password has been changed",
+    text: "Some useless text",
+    html: `<p>This is a confirmation that the password for your account ${receiverEmail} has just been changed. </p>`,
+};
+return email
+}
+
+// Verification Email : Goes to Front end
+export const verificationEmail = (receiverEmail: string, verficationTokenValue:string):sgMail.MailDataRequired =>{
+const email = {
+    to: receiverEmail,
+    from: `${process.env.SENDING_EMAIL}`,
+    subject:"Email Verification",
+    text:"some useless text",
+    html: `<p>Please verify your account by clicking the link: 
+    <a href="http://${process.env.HOST}/account/confirm/${verficationTokenValue}">http://${process.env.HOST}/account/confirm/${verficationTokenValue}</a> </p>`,
+}
+return email
+};
+
+
+// Sending email
+export const sendEmail = async (email: sgMail.MailDataRequired) => {
+    console.log(email);
+    sgMail.send(email);
+};
+
+
+
+ export default {
+    emailResetLink,
+    resetConfirmationEmail,
+    verificationEmail,
+    sendEmail
+}
