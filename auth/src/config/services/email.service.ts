@@ -38,7 +38,7 @@ return email
 }
 
 // Verification Email : Goes to Front end
-export const verificationEmail = (receiverEmail: string, verficationTokenValue:string):sgMail.MailDataRequired =>{
+export const verificationEmail = (receiverEmail: string, verficationTokenValue:string): sgMail.MailDataRequired =>{
 const email = {
     to: receiverEmail,
     from: `${process.env.SENDING_EMAIL}`,
@@ -50,18 +50,30 @@ const email = {
 return email
 };
 
+// Reset Password Email: Goes to Front End
+export const createResetPasswordEmail = (receiverEmail: string, verificationTokenValue: string): sgMail.MailDataRequired =>{
+    const email = {
+        to: receiverEmail,
+        from: `${process.env.SENDING_EMAIL}`,
+        subject: "Email Verification",
+        text: "Some uselss text",
+        html: `<p>Please verify your account by clicking the link: 
+      <a href="http://${process.env.HOST}/account/confirm/${verificationTokenValue}">http://${process.env.HOST}/account/confirm/${verificationTokenValue}</a> </p>`,
+      };
+    
+      return email;
 
-// Sending email
-export const sendEmail = async (email: sgMail.MailDataRequired) => {
-    console.log(email);
-    sgMail.send(email);
 };
+// Sending email
+export const sendEmail = async (email: sgMail.MailDataRequired) => sgMail.send(email);
+
 
 
 
  export default {
     emailResetLink,
     resetConfirmationEmail,
+    createResetPasswordEmail,
     verificationEmail,
     sendEmail
 }

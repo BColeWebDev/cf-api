@@ -1,4 +1,4 @@
-import emailService, { verificationEmail,sendEmail} from './../config/services/email.service';
+import emailService, { verificationEmail,sendEmail, createResetPasswordEmail} from './../config/services/email.service';
 import {setResetPasswordToken, saveUser,findUserById, setUserVerified, deleteUnverifiedUserByEmail} from '../config/services/user.service';
 import {saveToken,findTokenBy} from '../config/services/token.service';
 import{setUserId} from "../config/services/token.service"
@@ -9,7 +9,7 @@ import { User } from "../models/user.model"
 import hashPassword from '../config/hash'
 import dayjs from 'dayjs';
 
-let error: string[] = []
+let error: string[] = [];
 
 // Creates user and generates login token
 const registerUser = async (req:Request, res:Response) =>{
@@ -120,20 +120,44 @@ const loginUser = async (req:Request, res:Response) =>{
         console.log(error);
         res.status(400).json(error)
     }
-}
+};
+
+// Sign Out User 
 const SignOutUser = async (req:Request, res: Response) =>{
 res.clearCookie("x-auth-cookie")
 res.status(200).json({message:"Successfully Logged out"});
-}
+};
 
-// CurrentUser
+// Current User
 const currentUser = async (req: Request, res: Response) =>{
     res.json({currentUser: req.currentUser || null});
 };
-const loginReset = async (req:Request, res:Response) =>{
 
+// Login Reset
+const loginReset = async (req:Request, res:Response) => {
+    const{email}= req.body;
+try {
+    const user = await findUserById(email);
+    if(!user)return res.status(404).send({message:"No user found with this email address." })
+    const resetToken = createToken();    
+    const tokenExpiryDate = dayjs().add(12,"hours").toDate();
+
+    setUserId(resetToken, user.id);
+    setResetPasswordToken(user, resetToken.token,tokenExpiryDate);
+    await saveUser(user);
+    await saveToken(resetToken);
+    try {
+        const email = createResetPasswordEmail(user.email, resetToken.token);
+        await sendEmail(email);
+        return res.status(200).send({message:"Password has been successfully changed."})
+    } catch (error) {
+        return res.status(503).send({message: `Impossible to send an email to ${user.email}, try again. Our service may be down.`});
+    }
+
+} catch (error) {
+    return res.status(500).send({message:"An unexpected error occurred"});
+}
 };
-
 
 // Forgot Password 
 const forgotPassword = async (req:Request, res: Response) =>{
@@ -196,9 +220,9 @@ const resetPassword = async (req: Request, res: Response) =>{
             .status(500)
             .send({message:"Error has occured"})
     }
-}
+};
 
-
+// Send Confirmation 
 const sendConfirmation = async (req:Request, res:Response) =>{
 try {
     const token = await findTokenBy("token", req.params.token);
@@ -224,13 +248,15 @@ try {
           .status(400)
           .send({ message: "This user has already been verified. Please log in." });
     }
-
+    setUserVerified(user);
+    await saveUser(user);
+    
 } catch (error) {
     return res.status(500).send("An unexpected error occurred");
 }
-}
+};
 
-
+// User Cancel
 const userCancel = async (req:Request, res:Response) =>{
    
    try {
