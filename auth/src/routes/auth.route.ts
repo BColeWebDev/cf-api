@@ -4,10 +4,13 @@ import { currentUser } from '../middleware/currentUserMiddleware';
 const router = express.Router()
 import authCtrl from "../controllers/auth.controller"
 
+
 router.route("/")
       .get(currentUser,authCtrl.currentUser);
+
 router.route("/register")
       .post( middleware.registerIsValid, authCtrl.registerUser)
+
 router.route("/register/cancel")
        .post(authCtrl.userCancel)
 
@@ -19,10 +22,11 @@ router.route("/login/forgot-password")
       
 router.route("/login/reset/:token")
       .post(authCtrl.loginReset)
+
 router.route("/confirmation/:token")
       .post(authCtrl.sendConfirmation)
 
-router.route("/logout").
-post(authCtrl.SignOutUser)
+router.route("/logout")
+      .post(authCtrl.SignOutUser)
 
 export default router

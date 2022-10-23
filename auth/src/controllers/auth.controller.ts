@@ -250,7 +250,7 @@ try {
     }
     setUserVerified(user);
     await saveUser(user);
-    
+
 } catch (error) {
     return res.status(500).send("An unexpected error occurred");
 }
@@ -259,12 +259,12 @@ try {
 // User Cancel
 const userCancel = async (req:Request, res:Response) =>{
    
-   try {
+try {
        deleteUnverifiedUserByEmail(req.body.email);
         return res.status(200).send({message:"User reset success"});
-   } catch (error) {
+} catch (error) {
     return res.status(500).send("An unexpected error occurred");
-   }
+}
 
 };
 
