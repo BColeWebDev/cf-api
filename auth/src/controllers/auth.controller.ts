@@ -86,13 +86,10 @@ const registerUser = async (req:Request, res:Response) =>{
                       res.status(400).json({ errors: error.map(err => err) })
                       error= [];
                   }
-    }
-    
-   
-    
+    }  
 };
 
-// Login User 
+// - Login User 
 const loginUser = async (req:Request, res:Response) =>{
     const {email, password} = req.body
     // Checks for email
@@ -122,18 +119,18 @@ const loginUser = async (req:Request, res:Response) =>{
     }
 };
 
-// Sign Out User 
+// - Sign Out User 
 const SignOutUser = async (req:Request, res: Response) =>{
 res.clearCookie("x-auth-cookie")
 res.status(200).json({message:"Successfully Logged out"});
 };
 
-// Current User
+// - Current User
 const currentUser = async (req: Request, res: Response) =>{
     res.json({currentUser: req.currentUser || null});
 };
 
-// Login Reset
+// - Login Reset
 const loginReset = async (req:Request, res:Response) => {
     const{email}= req.body;
 try {
@@ -159,7 +156,7 @@ try {
 }
 };
 
-// Forgot Password 
+// - Forgot Password 
 const forgotPassword = async (req:Request, res: Response) =>{
     const{email}=req.body
     try {
@@ -195,7 +192,7 @@ const forgotPassword = async (req:Request, res: Response) =>{
     }
 };
 
-// Reset User Password 
+// - Reset User Password 
 const resetPassword = async (req: Request, res: Response) =>{
     try {
         const token = await findTokenBy("token",req.params['token'])
@@ -222,7 +219,7 @@ const resetPassword = async (req: Request, res: Response) =>{
     }
 };
 
-// Send Confirmation 
+// - Send Confirmation 
 const sendConfirmation = async (req:Request, res:Response) =>{
 try {
     const token = await findTokenBy("token", req.params.token);
@@ -237,17 +234,14 @@ try {
     if (!user) {
         return res.status(404).send({ message: `We were unable to find a user for this token.` });
     }
-    if (user.isVerified) {
-        return res
-          .status(400)
-          .send({ message: "This user has already been verified. Please log in." });
-    }
 
     if (user.isVerified) {
         return res
           .status(400)
           .send({ message: "This user has already been verified. Please log in." });
     }
+
+
     setUserVerified(user);
     await saveUser(user);
 
@@ -256,7 +250,7 @@ try {
 }
 };
 
-// User Cancel
+// - User Cancel
 const userCancel = async (req:Request, res:Response) =>{
    
 try {

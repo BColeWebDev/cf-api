@@ -74,6 +74,10 @@ const userSchema = new mongoose.Schema({
         type:Boolean,
         required: true
     },
+    experience:{
+      type:String,
+      required:true
+    },
     isVerified: {
         type: Boolean,
         required: true,
@@ -96,6 +100,7 @@ userSchema.methods.comparePassword = function (password:string){
 userSchema.methods.hashPassword = function(){
   return passwordHash.hash({rounds: 10, password: this.password});
 }
+
 userSchema.methods.hidePasswod  = function (){
   return _.omit(["password", "__v", "_id"], this.toObject({ virtuals: true }));
 }
