@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --coverage",
+    "test": "jest",
     "test:watch": "jest --watch",
     "start": "nodemon src/index.ts",
     "server": "concurrently \" npm run test\"  \"npm run start\""
