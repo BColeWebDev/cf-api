@@ -2,6 +2,8 @@ import needle from "needle"
 import{NeedleHttpVerbs} from "needle"
 let error: string[] = [];
 import { Response, Request } from "express"
+import Pagination from "../middleware/pagination";
+import Sorting from "../middleware/sorting";
 // Call 3rd Party endpoint 
 
 const Proxy = async(method:NeedleHttpVerbs, query: string) =>{
@@ -21,8 +23,13 @@ const Proxy = async(method:NeedleHttpVerbs, query: string) =>{
 const GetAllExercises = async (req:Request, res:Response) =>{
     try {
         const data = await Proxy('get', "")
-        res.status(200).json(data)
-
+        let results = {
+            page:Number(req.query.page),
+             pageDisplay:Number(req.query.limit), 
+             items: Pagination(req,data)
+            };    
+       res.status(200).json(results)
+    
     } catch (error) {
         console.log(error);
         res.status(400).json(error)
@@ -45,13 +52,19 @@ const GetSingleBodyPart =  async (req:Request, res:Response) =>{
     const name = req.params.name
     try {
         const data = await Proxy('get', `/bodyPart/${name}`)
-        res.status(200).json(data)
+        let results = {
+            page:Number(req.query.page),
+             pageDisplay:Number(req.query.limit), 
+             items: Pagination(req,data)
+            };    
+       res.status(200).json(results)
+        
     } catch (error) {
         console.log(error);
         res.status(400).json(error)
     }
 }
-const GetSingleMuscleGroup = async (req:Request,res:Response) =>{
+const GetAllMuscleGroup = async (req:Request,res:Response) =>{
 try {
     const data = await Proxy('get','/targetList')
     res.json(data);
@@ -60,6 +73,24 @@ try {
     res.status(400).json(error)
 }
 };
+
+const GetSingleMuscleGroup = async (req:Request,res:Response) => {
+    const name = req.params.name
+    try {
+        const data = await Proxy('get', `/target/${name}`)
+        let results = {
+            page:Number(req.query.page),
+             pageDisplay:Number(req.query.limit), 
+             items: Pagination(req,data)
+            };    
+       res.status(200).json(results)
+    } catch (error) {
+        console.log(error);
+        res.status(400).json(error)
+    }
+
+    
+}
 
 const GetAllEquipment = async  (req:Request,res:Response) =>{
     try {
@@ -75,7 +106,12 @@ const GetSingleEquipment = async (req:Request,res:Response) =>{
     const name = req.params.name
 try {
     const data = await Proxy('get', `/equipment/${name}`)
-    res.json(data)
+    let results = {
+        page:Number(req.query.page),
+         pageDisplay:Number(req.query.limit), 
+         items: Pagination(req,data)
+        };    
+   res.status(200).json(results)
 } catch (error) {
     console.log(error);
     res.status(400).json(error)
@@ -86,7 +122,12 @@ const GetByName = async (req:Request,res:Response) =>{
     const name = req.params.name
     try {
         const data = await Proxy('get', `/name/${name}`)
-        res.json(data)
+        let results = {
+            page:Number(req.query.page),
+             pageDisplay:Number(req.query.limit), 
+             items: Pagination(req,data)
+            };    
+       res.status(200).json(results)
 
     } catch (error) {
         console.log(error);
@@ -100,6 +141,7 @@ export default {
     GetAllExercises,
     GetAllBodyParts,
     GetSingleBodyPart,
+    GetAllMuscleGroup,
     GetSingleMuscleGroup,
     GetSingleEquipment,
     GetAllEquipment,

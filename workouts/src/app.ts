@@ -4,6 +4,7 @@ import cors from "cors";
 import rateLimit from "express-rate-limit";
 import workoutRoutes from "./routes/workout.route"
 import dotenv from "dotenv";
+import isAuthenticated from "./middleware/authMiddleware"
 // Enviorment Variables
 if (process.env.NODE_ENV !== 'production') {
     dotenv.config();
@@ -16,7 +17,6 @@ const limit = rateLimit({
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 
 });
-
 const app = express();
 // Middleware
 app.set('trust proxy', true);
