@@ -4,8 +4,6 @@ import Sorting from "./sorting"
 
 const Pagination = (req:Request, data:any) =>{
     const page:number = Number(req.query.page)
-   
-
     const pageDisplay:number = Number(req.query.limit)
     const startIndex = (page - 1) * pageDisplay
     const endIndex = page * pageDisplay
