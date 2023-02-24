@@ -29,4 +29,7 @@ router.route("/confirmation/:token")
 router.route("/logout")
       .post(authCtrl.SignOutUser)
 
+router.route('/authO')
+      .post(authCtrl.authOLogin)
+
 export default router

@@ -263,6 +263,11 @@ try {
 };
 
 
+const authOLogin = async (req:Request, res:Response) => {
+    res.json('google login')
+}
+ 
+
 
 export default {
     registerUser,
@@ -273,5 +278,6 @@ export default {
     sendConfirmation,
     userCancel,
     loginReset,
-    SignOutUser
+    SignOutUser,
+    authOLogin
 }
