@@ -1,33 +1,67 @@
 // Workout Plans 
 import { Response, Request } from "express"
-
+import {v4 as uuid} from 'uuid';
+import { Regiment } from "../models/regiment.model";
 // POST - Create Workout Plans (Training ID)
-const CreateWorkoutPlan =  async (req:Request,res:Response) =>{
 
-    
+
+const CreateRegimentPlan =  async (req:Request,res:Response) =>{
+    const {name,description,userid} =req.body
+ 
+try {
+    if(name === undefined || description === undefined || userid === undefined){
+        return res.status(400).send('missing values')
+    }
+    const newRegiment = await Regiment.build({name,description,userid, routines:[], isCompleted:false});
+    newRegiment.save()
+    return res.json(newRegiment);
+} catch (error) {
+ 
+    res.status(400).json(error)
+}
 };
-// PUT - Update workout Plans (Training ID)
-const UpdateWorkoutPlan =  async (req:Request,res:Response) =>{
+// PUT - Update workout Plans (Regiment ID)
+const UpdateRegimentPlan =  async (req:Request,res:Response) =>{
+const {name,description, isCompleted} = req.body
+
+const response  = await Regiment.findByIdAndUpdate( req.params.id,{name,description,isCompleted})
+
+return res.status(200).json(response)
 
 };
-// GET  - Get all Workout Plans (Training ID)
-const GetAllWorkoutPlan = async (req:Request,res:Response) =>{
-
+// GET  - Get all Workout Plans (Regiment ID)
+const GetAllRegimentPlan = async (req:Request,res:Response) =>{
+try {
+    const allRegiments = await  Regiment.find({userid: req.params.id})
+    return res.status(200).json(allRegiments)
+} catch (error) {
+    res.status(400).json(error)
+}
 };
 
-// GET - Get Workout Plan (Training ID)
-const GetSingleWorkoutPlan = async (req:Request,res:Response) =>{
-
+// GET - Get Workout Plan (Regiment ID)
+const GetSingleRegimentPlan = async (req:Request,res:Response) =>{
+try {
+    const singleWorkout = await Regiment.findById(req.params.id)
+    return res.status(200).json(singleWorkout)
+} catch (error) {
+    res.status(400).json(error)
+}
 };
-// DELETE - Delete workout plans (Training ID)
-const DeleteWorkoutPlan = async (req:Request,res:Response) =>{
-
+// DELETE - Delete Regiment plans (Training ID)
+const DeleteRegimentPlan = async (req:Request,res:Response) =>{
+    try {
+        const deleteRegiment = await Regiment.findByIdAndDelete(req.params.id)
+        return res.status(200).json(deleteRegiment)
+    } catch (error) {
+        res.status(400).json(error)
+    }
 };
 
 export default {
-    CreateWorkoutPlan,
-    UpdateWorkoutPlan,
-    GetAllWorkoutPlan,
-    GetSingleWorkoutPlan,
-    DeleteWorkoutPlan
+    CreateRegimentPlan,
+    UpdateRegimentPlan,
+    GetAllRegimentPlan,
+    GetSingleRegimentPlan,
+    DeleteRegimentPlan
 }

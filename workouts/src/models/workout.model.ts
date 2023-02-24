@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
 // Workouts Schema 
-interface WorkoutAttrs{
+ interface WorkoutAttrs{
     name: string,
     equipment: string,
     muscle_target: string,
@@ -43,4 +43,4 @@ const workoutSchema = new mongoose.Schema({
 })
 
 const Workout = mongoose.model<WorkoutDocument,WorkoutModel>('Workout',workoutSchema)
-export { Workout }
+export { Workout,WorkoutAttrs }
