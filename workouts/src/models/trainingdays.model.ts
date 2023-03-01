@@ -7,6 +7,7 @@ interface TrainingDaysAttrs{
     name:string,
     day: string,
     workouts:WorkoutAttrs[]
+    _id?:string
 
 }
 

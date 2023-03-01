@@ -19,20 +19,15 @@ Router.route("/exercises/muscles")
     .get(exercisesCtrl.GetAllMuscleGroup)
 Router.route("/exercises/muscles/:name")
     .get(exercisesCtrl.GetSingleMuscleGroup)
-
-
 // GET - Get all MuscleGroup
 
 Router.route("/exercises/equipments")
     .get(exercisesCtrl.GetAllEquipment)
 Router.route("/exercises/equipments/:name")
     .get(exercisesCtrl.GetSingleEquipment)
-
-
 // GET - Get By Name
 Router.route('/exercises/name')
     .get(exercisesCtrl.GetByName)
-
 
 // GET,POST - Regiments -> (userid) 
 Router.route("/regiments/:id")
@@ -51,9 +46,21 @@ Router.route("/trainingdays/:id")
     .get(TrainingDay.getAllTrainingDays)
     .post(TrainingDay.createTrainingDay)
     .put(TrainingDay.UpdateTrainingDay)
+    .delete(TrainingDay.DeleteTrainingDay)
 // GET
 Router.route("/singleTrainingDay/:id")
     .get(TrainingDay.findSingleTrainingDay)
-    .delete(TrainingDay.DeleteTrainingDay)
+
+
+
+// Ex
+Router.route('/routines/:id')
+    .get(exercisesCtrl.getAllWorkouts)
+    .post(exercisesCtrl.createWorkout)
+    .put(exercisesCtrl.updateWorkout)
+    .delete(exercisesCtrl.deleteWorkout)
+
+
+   
 
 export default Router

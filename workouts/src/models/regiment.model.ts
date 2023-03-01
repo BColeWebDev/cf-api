@@ -20,6 +20,7 @@ export interface RegiementDocument extends mongoose.Document{
 }
 
 interface RegimentModel extends mongoose.Model<RegiementDocument>{
+    
     build(attrs:IRegimentAttrs): RegiementDocument;
 }
 

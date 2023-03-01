@@ -6,6 +6,7 @@ import mongoose from "mongoose"
     muscle_target: string,
     bodyPart: string,
     imageUrl: string
+    _id?:string
 }
 
 interface WorkoutModel extends mongoose.Model<WorkoutDocument>{
@@ -28,7 +29,7 @@ const workoutSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    password:{
+    muscle_target:{
         type:String,
         required: true
     },
