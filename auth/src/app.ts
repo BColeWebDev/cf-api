@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors({ origin: true, credentials: true }));
 app.use("/api/v1/auth", authRoutes)
-app.all('*', async (req, res) => {res.send("Not Found")})
+app.all('*', async (req, res) => {res.send("Testing")})
 app.use(errorHandler);
 
 export {app}

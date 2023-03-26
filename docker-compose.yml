@@ -1,0 +1,59 @@
+version: '3.7'
+services:
+
+  nosql-db:
+    image: mongo
+    ports:
+      - "27017:27017"
+      
+    container_name: nosql-db
+    volumes:
+      - './db/:/data/db'
+
+  auth:
+      build: 
+        context: auth
+        dockerfile: Dockerfile
+        target: base
+      volumes:
+        - ./auth/src:/app/src
+        - ./auth/nodemon.json:/app/nodemon.json
+      container_name: auth
+      restart: always
+      depends_on:
+       - "nosql-db" 
+      expose:
+        - '8001'
+      ports:
+        - '8001:8001'
+      command: npm run dev
+ 
+  workouts:
+      build: 
+        context: workouts
+        dockerfile: Dockerfile
+        target: base
+      volumes:
+        - ./workouts/src:/app/src
+        - ./workouts/nodemon.json:/app/nodemon.json
+      container_name: workouts
+      restart: always
+      depends_on:
+       - "nosql-db"
+      expose:
+        - '8002'
+      ports:
+        - '8002:8002'
+      command: npm run dev
+  
+  nginx-proxy:
+    build:
+      dockerfile: Dockerfile
+      context: ./proxy
+    depends_on:
+      - auth
+      - workouts
+    ports:
+      - 8080:80
+
+        

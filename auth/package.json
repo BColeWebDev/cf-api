@@ -6,7 +6,9 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "start": "nodemon src/index.ts",
+    "build":"tsc -p .",
+    "start":"NODE_PATH=./build node build/index.js",
+    "dev": "nodemon src/index.ts",
     "server": "concurrently \" npm run test\"  \"npm run start\""
   },
   "keywords": [],
