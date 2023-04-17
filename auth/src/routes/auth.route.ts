@@ -8,6 +8,7 @@ import authCtrl from "../controllers/auth.controller"
 router.route("/")
       .get(currentUser,authCtrl.currentUser);
 
+
 router.route("/register")
       .post( middleware.registerIsValid, authCtrl.registerUser)
 

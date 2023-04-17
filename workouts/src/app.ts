@@ -1,5 +1,5 @@
 // import { errorHandler } from './middleware/errorMiddleware';
-import express from "express";
+import express,{Request,Response} from "express";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
 import workoutRoutes from "./routes/workout.route"
@@ -24,8 +24,11 @@ app.use(limit);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors({ origin: true, credentials: true }));
-app.use("/api/v1/workouts", workoutRoutes)
-app.all('*', async (req, res) => {res.send("Not Found")})
+app.use("/api/workouts", workoutRoutes)
+app.get('/api/workouts/whoami',async(req:Request,res:Response) =>{
+    res.json({message:"workouts controller"})
+})
+// app.all('*', async (req, res) => {res.send("Not Found")})
 // app.use(errorHandler);
 
 export {app}

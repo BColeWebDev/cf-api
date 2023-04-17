@@ -1,5 +1,5 @@
 import { errorHandler } from './middleware/errorMiddleware';
-import express from "express";
+import express,{Request,Response} from "express";
 import authRoutes from "./routes/auth.route";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -23,8 +23,11 @@ app.use(limit);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors({ origin: true, credentials: true }));
-app.use("/api/v1/auth", authRoutes)
-app.all('*', async (req, res) => {res.send("Testing")})
+app.use("/api/auth", authRoutes)
+app.get('/api/auth/whoami',async(req:Request,res:Response) =>{
+    res.json({message:"auth controller"})
+})
+// app.all('*', async (req, res) => {res.send("Testing")})
 app.use(errorHandler);
 
 export {app}

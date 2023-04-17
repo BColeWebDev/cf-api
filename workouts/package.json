@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "start":"NODE_PATH=./build node build/index.js",
+    "start": "NODE_PATH=./build node ./build/src/index.js",
+    "build": "tsc -p .",
     "dev": "nodemon src/index.ts",
     "server": "concurrently \" npm run test\"  \"npm run start\""
   },

@@ -6,8 +6,8 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "build":"tsc -p .",
-    "start":"NODE_PATH=./build node build/index.js",
+    "start": "NODE_PATH=./build node ./build/src/index.js",
+    "build": "tsc -p .",
     "dev": "nodemon src/index.ts",
     "server": "concurrently \" npm run test\"  \"npm run start\""
   },
