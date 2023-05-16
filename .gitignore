@@ -1,6 +1,4 @@
 node_modules/
 coverage/
-.DS_Store
-/db
-
-workouts/.env
+db/
+workouts/.DS_Store
