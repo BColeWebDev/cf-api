@@ -1,8 +1,7 @@
 // Workout Plans 
-import { Response, Request } from "express"
-import {v4 as uuid} from 'uuid';
+import { Response, Request } from "express";
 import { Regiment } from "../models/regiment.model";
-// POST - Create Workout Plans (Training ID)
+
 
 
 const CreateRegimentPlan =  async (req:Request,res:Response) =>{
@@ -48,6 +47,10 @@ try {
     res.status(400).json(error)
 }
 };
+
+
+
+
 // DELETE - Delete Regiment plans (Training ID)
 const DeleteRegimentPlan = async (req:Request,res:Response) =>{
     try {

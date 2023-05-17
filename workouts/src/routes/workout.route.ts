@@ -29,6 +29,17 @@ Router.route("/exercises/equipments/:name")
 Router.route('/exercises/name')
     .get(exercisesCtrl.GetByName)
 
+// GET - Get By Name
+Router.route('/muscleGroup')
+    .get(exercisesCtrl.GetMuscleGroup)
+Router.route('/muscleImages')
+    .get(exercisesCtrl.GetImages)
+
+
+
+
+
+
 // GET,POST - Regiments -> (userid) 
 Router.route("/regiments/:id")
     .get(regimentCtrl.GetAllRegimentPlan)

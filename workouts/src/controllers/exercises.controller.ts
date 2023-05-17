@@ -1,141 +1,214 @@
 import needle from "needle"
 import{NeedleHttpVerbs} from "needle"
 let error: string[] = [];
-import { Response, Request } from "express"
+import { Response, Request, json } from "express"
 import Pagination from "../middleware/pagination";
 import Sorting from "../middleware/sorting";
 import { Regiment } from "../models/regiment.model";
 // Call 3rd Party endpoint 
 
-const Proxy = async(method:NeedleHttpVerbs, query: string) =>{
+const WorkoutsProxy = async(method:NeedleHttpVerbs, query: string) =>{
     const options = {
         "headers":{
-            "x-rapidapi-host": `${process.env.API_HOST}`,
-            "x-rapidapi-key": `${process.env.API_KEY}`
+            "x-rapidapi-host": `${process.env.API_HOST_EXERCISES}`,
+            "x-rapidapi-key": `${process.env.API_KEY_EXERCISES}`
         }
     }
-     const resData = await needle(`${method}`,`${process.env.API_URL}${query ? query : " "}`,options)
+     const resData = await needle(`${method}`,`${process.env.API_URL_EXERCISES}${query ? query : " "}`,options)
      const body = resData.body
      return body
 }
 
-// GET - All Excercises route 
-
-const GetAllExercises = async (req:Request, res:Response) =>{
-    try {
-        const data = await Proxy('get', "")
-        let results = {
-            page:Number(req.query.page),
-             pageDisplay:Number(req.query.limit), 
-             items: Pagination(req,data)
-            };    
-       res.status(200).json(results)
-    
-    } catch (error) {
-        console.log(error);
-        res.status(400).json(error)
+const MuscleGroupProxy = async(method:NeedleHttpVerbs, query: string, params?:any) =>{
+    const options = {
+        "headers":{
+            "X-RapidAPI-Host": `${process.env.API_HOST_MUSCLE_GROUP}`,
+            "X-RapidAPI-Key": `${process.env.API_KEY_MUSCLE_GROUP}`
+        },
     }
+    try {
+        const response = await needle(`${method}`,`${process.env.API_URL_MUSCLE_GROUP}${query ? query :""}${params ? `?${params}` :""}`,options)
+          
+         return response.body
+    } catch (error) {
+       console.log(error)
+    }
+   
 }
 
-// GET - All Body Parts
-const GetAllBodyParts = async (req:Request, res:Response) =>{
-    try {
-        const data = await Proxy('get', "/bodyPartList")
-        res.status(200).json(data)
 
-    } catch (error) {
-        console.log(error);
-        res.status(400).json(error)
-    }
-};
-// GET - Single Body Part
-const GetSingleBodyPart =  async (req:Request, res:Response) =>{
-    const name = req.params.name
-    try {
-        const data = await Proxy('get', `/bodyPart/${name}`)
-        let results = {
-            page:Number(req.query.page),
-             pageDisplay:Number(req.query.limit), 
-             items: Pagination(req,data)
-            };    
-       res.status(200).json(results)
+
+//    ***EXERCISES***
+    // GET - All Excercises route 
+    const GetAllExercises = async (req:Request, res:Response) =>{
+
+        const page = req.query.page
+        const pageDisplay = req.query.limit 
+        const sortation = req.query.sort
+        const filters = req.query.filters
+
+
+        try {
+            let data = await WorkoutsProxy('get', "")
+            if(page === undefined || pageDisplay === undefined){
+                res.status(400).json({error:"Page Number or Page Limit Missing"})
+            }
+            // Pagination Check  
+            data = Pagination(req,data);
+            
+            let results = {
+                page:Number(page),
+                pageDisplay:Number(pageDisplay), 
+                items:  data
+                };    
+        res.status(200).json(results)
         
+        } catch (error) {
+
+            res.status(400).json(error)
+        }
+    }
+    // GET - All Body Parts
+    const GetAllBodyParts = async (req:Request, res:Response) =>{
+        try {
+            const data = await WorkoutsProxy('get', "/bodyPartList")
+            res.status(200).json(data)
+
+        } catch (error) {
+
+            res.status(400).json(error)
+        }
+    };
+    // GET - Single Body Part
+    const GetSingleBodyPart =  async (req:Request, res:Response) =>{
+        const name = req.params.name
+        const page = req.query.page
+        const pageDisplay = req.query.limit 
+
+
+        try {
+            const data = await WorkoutsProxy('get', `/bodyPart/${name}`)
+
+
+            if(page === undefined || pageDisplay === undefined){
+                res.status(400).json({error:"Page Number or Page Limit Missing"})
+        }
+
+
+        let results = {
+            page:Number(page),
+            pageDisplay:Number(pageDisplay), 
+            items:  data
+            };    
+        res.status(200).json(results)
+            
+        } catch (error) {
+
+            res.status(400).json(error)
+        }
+    }
+    // GET- Muscle Group 
+    const GetAllMuscleGroup = async (req:Request,res:Response) =>{
+    try {
+        const data = await WorkoutsProxy('get','/targetList')
+        res.json(data);
     } catch (error) {
-        console.log(error);
         res.status(400).json(error)
     }
-}
-const GetAllMuscleGroup = async (req:Request,res:Response) =>{
-try {
-    const data = await Proxy('get','/targetList')
-    res.json(data);
-} catch (error) {
-    console.log(error);
-    res.status(400).json(error)
-}
-};
+    };
 
-const GetSingleMuscleGroup = async (req:Request,res:Response) => {
-    const name = req.params.name
+    // GET - Muscle Single Group
+    const GetSingleMuscleGroup = async (req:Request,res:Response) => {
+        const name = req.params.name
+        try {
+            const data = await WorkoutsProxy('get', `/target/${name}`)
+            let results = {
+                page:Number(req.query.page),
+                pageDisplay:Number(req.query.limit), 
+                items: Pagination(req,data)
+                };    
+        res.status(200).json(results)
+        } catch (error) {
+
+            res.status(400).json(error)
+        }
+
+        
+    }
+
+    // GET - All Equipment
+    const GetAllEquipment = async  (req:Request,res:Response) =>{
+        try {
+            const data = await WorkoutsProxy('get','/equipmentList');
+            res.json(data)
+        } catch (error) {
+
+            res.status(400).json(error);
+        }
+    };
+
+    const GetSingleEquipment = async (req:Request,res:Response) =>{
+        const name = req.params.name
     try {
-        const data = await Proxy('get', `/target/${name}`)
+        const data = await WorkoutsProxy('get', `/equipment/${name}`)
         let results = {
             page:Number(req.query.page),
-             pageDisplay:Number(req.query.limit), 
-             items: Pagination(req,data)
+            pageDisplay:Number(req.query.limit), 
+            items: Pagination(req,data)
             };    
-       res.status(200).json(results)
+    res.status(200).json(results)
     } catch (error) {
-        console.log(error);
         res.status(400).json(error)
     }
+    };
+    // GET - Get By Name
+    const GetByName = async (req:Request,res:Response) =>{
+        const name = req.params.name
+        try {
+            const data = await WorkoutsProxy('get', `/name/${name}`)
+            let results = {
+                page:Number(req.query.page),
+                pageDisplay:Number(req.query.limit), 
+                items: Pagination(req,data)
+                };    
+        res.status(200).json(results)
 
-    
-}
+        } catch (error) {
 
-const GetAllEquipment = async  (req:Request,res:Response) =>{
-    try {
-        const data = await Proxy('get','/equipmentList');
-        res.json(data)
-    } catch (error) {
-        console.log(error);
-        res.status(400).json(error);
+            res.status(400).json(error)
+        }
+        
     }
-};
-
-const GetSingleEquipment = async (req:Request,res:Response) =>{
-    const name = req.params.name
-try {
-    const data = await Proxy('get', `/equipment/${name}`)
-    let results = {
-        page:Number(req.query.page),
-         pageDisplay:Number(req.query.limit), 
-         items: Pagination(req,data)
-        };    
-   res.status(200).json(results)
-} catch (error) {
-    console.log(error);
-    res.status(400).json(error)
-}
-};
-
-const GetByName = async (req:Request,res:Response) =>{
-    const name = req.params.name
+//  ***Muscle Group***
+// Available Muscle Groups
+    const GetMuscleGroup = async (req:Request,res:Response)=>{
+        try {
+            const data = await MuscleGroupProxy('get',"/getMuscleGroups");
+            res.status(200).json(data);
+        } catch (error) {
+            res.status(400).json(error)
+        }
+    }   
+// Available Muscle Groups
+const GetImages= async (req:Request,res:Response)=>{
     try {
-        const data = await Proxy('get', `/name/${name}`)
-        let results = {
-            page:Number(req.query.page),
-             pageDisplay:Number(req.query.limit), 
-             items: Pagination(req,data)
-            };    
-       res.status(200).json(results)
-
+        let params = {
+            muscleGroups: 'biceps,chest,hamstring',
+            color: '200,100,80',
+            transparentBackground: '0'
+          }
+        const data = await MuscleGroupProxy('get',`/getImage`, 'muscleGroups=biceps,chest,hamstring&color=200,100,80&transparentBackground=0');
+        res.status(200).send(data);
     } catch (error) {
-        console.log(error);
         res.status(400).json(error)
     }
-    
-}
+}   
+
+
+
+
+
+
 
 // Routines
 const createWorkout =async(req:Request,res:Response) =>{
@@ -259,6 +332,8 @@ export default {
     GetSingleEquipment,
     GetAllEquipment,
     GetByName,
+    GetMuscleGroup,
+    GetImages,
     createWorkout,
     updateWorkout,
     getAllWorkouts,

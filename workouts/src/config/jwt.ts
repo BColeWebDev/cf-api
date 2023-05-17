@@ -1,4 +1,4 @@
-import {sign, verify,SignOptions,JwtPayload} from "jsonwebtoken";
+import {verify} from "jsonwebtoken";
 const jwtSecret:any = process.env.JWT_SECRET;
 // Verfiy JWT Token
 export const decodeToken = (token:string) =>{
