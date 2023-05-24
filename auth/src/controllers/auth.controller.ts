@@ -11,6 +11,15 @@ import dayjs from 'dayjs';
 
 let error: string[] = [];
 
+// Return all Created Users (Admin)
+const allUsers = async (req:Request, res:Response) =>{
+    try {
+        const allUsers = await User.find({})
+    return res.status(200).json(allUsers)
+    } catch (error) {
+        return res.status(500).json(error)
+    }
+}
 // Creates user and generates login token
 const registerUser = async (req:Request, res:Response) =>{
     const{
@@ -49,7 +58,13 @@ const registerUser = async (req:Request, res:Response) =>{
                   experience,
                   age,
                   sex,
-                  crown_member
+                  crown_member,
+                  settings:{
+                                    theme:"dark",
+                                    weight:"imperial",
+                                    distance:"imperial",
+                                    size:"imperial"
+                    }
               })
               await newUser.save();
                   // send user
@@ -93,29 +108,20 @@ const registerUser = async (req:Request, res:Response) =>{
 const loginUser = async (req:Request, res:Response) =>{
     const {email, password} = req.body
     // Checks for email
-    try {
-        const existingUser = await User.findOne({email: email})
-        if(!existingUser || !(await hashPassword.compare(password,existingUser.password))){
-            error.push( "Invalid Credentials email or password is incorrect" )
-          res.status(400).json({ errors: error.map(err => err) })
-          error= []
-      }else{
+    const existingUser = await User.findOne({email: email})
+    if(!existingUser || !(await hashPassword.compare(password,existingUser.password))){
+        error.push( "Invalid Credentials email or password is incorrect" )
+      return res.status(400).json({message:"Invalid Credentials email or password is incorrect"})
+    
+    }
+    try {   
           const userToken  = generateToken(existingUser.email, existingUser.first_name, existingUser.last_name)
+      
   
-          res.cookie('x-auth-token', userToken, {
-              maxAge: 15 * 60 * 1000,
-              expires: new Date(Date.now() + 15 * 60 * 1000),
-              secure: false,
-              httpOnly: true,
-              signed: true,
-              sameSite: 'strict'
-            });
-  
-          res.status(200).json({id: existingUser.id,email: existingUser.email});
-      }
+          res.status(200).json({id: existingUser.id,email: existingUser.email, userToken});
     } catch (error) {
-        console.log(error);
-        res.status(400).json(error)
+        console.log(error)
+        res.status(400).json({error:error})
     }
 };
 
@@ -271,6 +277,7 @@ const authOLogin = async (req:Request, res:Response) => {
 
 export default {
     registerUser,
+    allUsers,
     loginUser, 
     currentUser, 
     forgotPassword, 

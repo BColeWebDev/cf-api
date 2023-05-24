@@ -13,6 +13,7 @@ interface UserAttrs{
     age:string
     sex:string
     crown_member:boolean
+    settings:Object
 }
 // Interface that describe property a user model has
 interface UserModel extends mongoose.Model<UserDocument>{
@@ -36,6 +37,7 @@ export interface UserDocument extends mongoose.Document {
     comparePassword(password: string): boolean,
     hidePassword(): void,
     hashPassword(): Promise<string>
+    settings: Object
 }
 
 const userSchema = new mongoose.Schema({
@@ -63,7 +65,7 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     age:{
-        type:String,
+        type:Number,
         required:true
     },
     sex:{
@@ -88,7 +90,11 @@ const userSchema = new mongoose.Schema({
         default: false,
         required: true,
       },
+      Settings: {
+        type: Object,
+      },
     expires: { type: Date, default: dayjs().toDate(), expires: 43200 },
+    created:{ type: Date, default: Date.now()}
   });
 
 userSchema.statics.build = (attrs: UserAttrs) => {

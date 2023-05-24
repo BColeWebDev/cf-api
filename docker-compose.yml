@@ -2,10 +2,9 @@ version: '3.7'
 services:
 
   nosql-db:
-    image: mongo
+    image: mongo:latest
     ports:
       - "27017:27017"
-      
     container_name: nosql-db
     volumes:
       - './db/:/data/db'

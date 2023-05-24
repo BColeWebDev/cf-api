@@ -18,7 +18,6 @@ const isAuthenticated = async  (req: Request, res: Response, next: NextFunction)
         // Verify token
         const decoder = decodeToken(token)
         // Get user from the token
-        console.log(decoder)
         next()
     } catch (error) {
         return res.status(401).json('Not Authorized')

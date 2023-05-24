@@ -3,11 +3,13 @@ import middleware from "../middleware/validationMiddleware"
 import { currentUser } from '../middleware/currentUserMiddleware';
 const router = express.Router()
 import authCtrl from "../controllers/auth.controller"
+import { isAdmin } from "../middleware/isAdminMiddleware";
 
 
 router.route("/")
       .get(currentUser,authCtrl.currentUser);
-
+router.route("/:id/users")
+      .get(isAdmin,authCtrl.allUsers);
 
 router.route("/register")
       .post( middleware.registerIsValid, authCtrl.registerUser)

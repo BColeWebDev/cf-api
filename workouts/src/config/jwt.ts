@@ -1,9 +1,14 @@
 import {verify} from "jsonwebtoken";
-const jwtSecret:any = process.env.JWT_SECRET;
+
+
+
 // Verfiy JWT Token
 export const decodeToken = (token:string) =>{
     try {
-        return verify(token, jwtSecret)
+        const jwtSecret = process.env.JWT_SECRET;
+
+        console.log("jwt",jwtSecret)
+        return verify(token, jwtSecret as string)
     } catch (error) {
         return error
     }

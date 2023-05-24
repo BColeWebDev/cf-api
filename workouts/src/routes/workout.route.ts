@@ -3,37 +3,37 @@ const Router = express.Router()
 import exercisesCtrl  from "../controllers/exercises.controller"
 import regimentCtrl from "../controllers/regiments.controller"
 import TrainingDay from "../controllers/training_day.controller";
-
+import isAuthenticated from "../middleware/authMiddleware";
 // GET - Exercises 
 Router.route('/exercises')
-    .get(exercisesCtrl.GetAllExercises);
+    .get(isAuthenticated,exercisesCtrl.GetAllExercises);
 // GET - Exercises (Muscle Target)
 // GET - Single Body Part
 Router.route('/exercises/targets')
-    .get(exercisesCtrl.GetAllBodyParts)
+    .get(isAuthenticated,exercisesCtrl.GetAllBodyParts)
 Router.route('/exercises/targets/:name')
-    .get(exercisesCtrl.GetSingleBodyPart)
+    .get(isAuthenticated,exercisesCtrl.GetSingleBodyPart)
 
 // GET - Get all MuscleGroup
 Router.route("/exercises/muscles")
-    .get(exercisesCtrl.GetAllMuscleGroup)
+    .get(isAuthenticated,exercisesCtrl.GetAllMuscleGroup)
 Router.route("/exercises/muscles/:name")
-    .get(exercisesCtrl.GetSingleMuscleGroup)
+    .get(isAuthenticated,exercisesCtrl.GetSingleMuscleGroup)
 // GET - Get all MuscleGroup
 
 Router.route("/exercises/equipments")
-    .get(exercisesCtrl.GetAllEquipment)
+    .get(isAuthenticated,exercisesCtrl.GetAllEquipment)
 Router.route("/exercises/equipments/:name")
-    .get(exercisesCtrl.GetSingleEquipment)
+    .get(isAuthenticated,exercisesCtrl.GetSingleEquipment)
 // GET - Get By Name
 Router.route('/exercises/name')
-    .get(exercisesCtrl.GetByName)
+    .get(isAuthenticated,exercisesCtrl.GetByName)
 
 // GET - Get By Name
 Router.route('/muscleGroup')
-    .get(exercisesCtrl.GetMuscleGroup)
+    .get(isAuthenticated,exercisesCtrl.GetMuscleGroup)
 Router.route('/muscleImages')
-    .get(exercisesCtrl.GetImages)
+    .get(isAuthenticated,exercisesCtrl.GetImages)
 
 
 
