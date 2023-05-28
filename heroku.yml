@@ -1,64 +1,18 @@
-version: "3.7"
-services:
-  web:
-    build: .
-    ports:
-      - "5000:5000"
-    depends_on:
-      - "nginx-proxy"
-    volumes:
-      - ./webapp:/opt/webapp
-
-  nosql-db:
-    image: mongo:latest
-    ports:
-      - "27017:27017"
-    container_name: nosql-db
-    volumes:
-      - "./db/:/data/db"
-
-  auth:
-    build:
-      context: auth
-      dockerfile: Dockerfile
-      target: base
-    volumes:
-      - ./auth/src:/app/src
-      - ./auth/nodemon.json:/app/nodemon.json
-    container_name: auth
-    restart: always
-    depends_on:
-      - "nosql-db"
-    expose:
-      - "8001"
-    ports:
-      - "8001:8001"
-    command: npm run dev
-
-  workouts:
-    build:
-      context: workouts
-      dockerfile: Dockerfile
-      target: base
-    volumes:
-      - ./workouts/src:/app/src
-      - ./workouts/nodemon.json:/app/nodemon.json
-    container_name: workouts
-    restart: always
-    depends_on:
-      - "nosql-db"
-    expose:
-      - "8002"
-    ports:
-      - "8002:8002"
-    command: npm run dev
-
-  nginx-proxy:
-    build:
-      dockerfile: Dockerfile
-      context: ./proxy
-    depends_on:
-      - auth
-      - workouts
-    ports:
-      - 80:80
+setup:
+  addons:
+    - plan: heroku-postgresql
+      as: DATABASE
+  config:
+    MY_VAR: my value
+    MY_VAR_2: another value
+build:
+  docker:
+    web: proxy/Dockerfile
+    worker: auth/Dockerfile
+    worker: workouts/Dockerfile
+# release:
+  # copy resources
+  # skip in this example
+# run:
+  # startup script
+  # skip in this example
