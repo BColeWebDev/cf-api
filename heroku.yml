@@ -1,0 +1,18 @@
+setup:
+  addons:
+    - plan: heroku-postgresql
+      as: DATABASE
+  config:
+    MY_VAR: my value
+    MY_VAR_2: another value
+build:
+  docker:
+    web: proxy/Dockerfile
+    worker: auth/Dockerfile
+    worker: workouts/Dockerfile
+# release:
+  # copy resources
+  # skip in this example
+# run:
+  # startup script
+  # skip in this example
