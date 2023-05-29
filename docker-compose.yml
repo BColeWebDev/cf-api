@@ -7,6 +7,8 @@ services:
     container_name: nosql-db
     volumes:
       - './db/:/data/db'
+    depends_on:
+       - "nginx-proxy"
 
   auth:
       build: 
@@ -20,6 +22,7 @@ services:
       restart: always
       depends_on:
        - "nosql-db" 
+       - "nginx-proxy"
       expose:
         - '8001'
       ports:
@@ -38,6 +41,7 @@ services:
       restart: always
       depends_on:
        - "nosql-db"
+       - "nginx-proxy"
       expose:
         - '8002'
       ports:
@@ -45,6 +49,7 @@ services:
       command: npm run dev
   
   nginx-proxy:
+    image: nginx:latest
     build:
       dockerfile: Dockerfile
       context: ./proxy
