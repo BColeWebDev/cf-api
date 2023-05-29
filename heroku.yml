@@ -7,12 +7,13 @@ setup:
     MY_VAR_2: another value
 build:
   docker:
-    web: proxy/Dockerfile
-    worker: auth/Dockerfile
     worker: workouts/Dockerfile
+    # web: proxy/Dockerfile
+    # worker: auth/Dockerfile
+    # worker: workouts/Dockerfile
 # release:
-  # copy resources
-  # skip in this example
+# copy resources
+# skip in this example
 # run:
-  # startup script
-  # skip in this example
+# startup script
+# skip in this example
