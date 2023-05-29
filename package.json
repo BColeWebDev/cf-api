@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "start": "tsc && ./build/src/index.js",
+    "start": "node ./build/src/index.js",
     "build": "tsc -p .",
     "dev": "nodemon src/index.ts",
     "server": "concurrently \" npm run test\"  \"npm run start\""
