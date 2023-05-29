@@ -4,6 +4,7 @@ FROM nginx
 
 RUN rm /etc/nginx/nginx.conf 
 
+ENV PORT=80
 
 COPY ./www/*.html /usr/share/nginx/html/
 #copy ./*.css /usr/share/nginx/html/
