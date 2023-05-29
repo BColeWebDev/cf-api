@@ -3,6 +3,7 @@ import express,{Request,Response} from "express";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
 import workoutRoutes from "./routes/workout.route"
+import authRoutes from "./routes/auth.route"
 import dotenv from "dotenv";
 import isAuthenticated from "./middleware/authMiddleware"
 // Enviorment Variables
@@ -25,6 +26,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors({ origin: true, credentials: true }));
 app.use("/api/workouts", workoutRoutes)
+app.use("/api/auth", authRoutes)
+app.get('/api/auth/whoami',async(req:Request,res:Response) =>{
+    res.json({message:"auth controller"})
+})
 app.get('/api/workouts/whoami',async(req:Request,res:Response) =>{
     res.json({message:"workouts controller"})
 })
