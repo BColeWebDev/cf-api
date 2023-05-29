@@ -9,7 +9,7 @@
     "start": "tsc && ./build/src/index.js",
     "build": "tsc -p .",
     "dev": "nodemon src/index.ts",
-
+    "postinstall": "npm run build",
     "server": "concurrently \" npm run test\"  \"npm run start\""
   },
   "keywords": [],
