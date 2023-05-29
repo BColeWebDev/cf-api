@@ -2,7 +2,7 @@
 
 FROM nginx
 
-RUN rm /etc/nginx/nginx.conf 
+# RUN rm /etc/nginx/nginx.conf 
 
 ENV PORT=80
 
