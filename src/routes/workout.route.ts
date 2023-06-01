@@ -4,6 +4,7 @@ import exercisesCtrl  from "../controllers/exercises.controller"
 import regimentCtrl from "../controllers/regiments.controller"
 import TrainingDay from "../controllers/training_day.controller";
 import isAuthenticated from "../middleware/authMiddleware";
+import isValidUser from "../middleware/validUserIdMiddleware";
 // GET - Exercises 
 Router.route('/exercises')
     .get(isAuthenticated,exercisesCtrl.GetAllExercises);
@@ -41,10 +42,10 @@ Router.route('/muscleImages')
 
 
 // GET,POST - Regiments -> (userid) 
-Router.route("/regiments/:id")
+Router.route("/createRegiment")
+    .post(isValidUser,regimentCtrl.CreateRegimentPlan)
+Router.route("/regimentsAll")
     .get(regimentCtrl.GetAllRegimentPlan)
-    .post(regimentCtrl.CreateRegimentPlan)
-   
     
 // GET,PUT,DELETE - Regiments -> (regId) 
 Router.route("/singleRegiment/:id")

@@ -220,7 +220,7 @@ const createWorkout =async(req:Request,res:Response) =>{
     const{name,imageUrl,equipment,muscle_target,bodyPart,regimentID} = req.body
 try {
     if(regimentID === undefined){
-        return res.status(400).json({message:"no workoutid found"})
+        return res.status(400).json({message:"no regimentid found"})
     }
     if(name === undefined || imageUrl === undefined || equipment === undefined || muscle_target === undefined ||bodyPart === undefined)
     {

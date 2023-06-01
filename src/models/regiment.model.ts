@@ -1,3 +1,4 @@
+import { ObjectId } from 'bson';
 import mongoose from "mongoose";
 import { TrainingDaysAttrs,TrainingDay } from "./trainingdays.model";
 
@@ -6,7 +7,7 @@ import { TrainingDaysAttrs,TrainingDay } from "./trainingdays.model";
 interface IRegimentAttrs{
     name:string,
     description:string,
-    userid:number,
+    userid:ObjectId,
     routines:TrainingDaysAttrs[],
     isCompleted:boolean
 }
@@ -14,7 +15,7 @@ interface IRegimentAttrs{
 export interface RegiementDocument extends mongoose.Document{
     name:string,
     description:string,
-    userid:number,
+    userid:ObjectId,
     routines:TrainingDaysAttrs[],
     isCompleted: boolean
 }
@@ -36,7 +37,7 @@ const regimentSchema = new mongoose.Schema({
        
     },
     userid:{
-        type:Number,
+        type:ObjectId,
        
     },
     routines:{
