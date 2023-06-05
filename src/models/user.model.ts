@@ -90,7 +90,7 @@ const userSchema = new mongoose.Schema({
         default: false,
         required: true,
       },
-      Settings: {
+    settings: {
         type: Object,
       },
     expires: { type: Date, default: dayjs().toDate(), expires: 43200 },
