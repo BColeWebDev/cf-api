@@ -5,7 +5,7 @@ import {Request, Response, NextFunction} from 'express';
 const isAuthenticated = async  (req: Request, res: Response, next: NextFunction) => {
     const authHeader:string = req?.headers?.authorization!
 
-
+    
     // verify token being sent from header 
     if ((!authHeader || !authHeader.startsWith('Bearer ')) && !process.env.CC_DISABLE_AUTH  ) {
         return res.status(400).json('No token provided')

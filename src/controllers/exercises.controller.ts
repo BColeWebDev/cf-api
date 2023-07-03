@@ -7,6 +7,7 @@ import Sorting from "../middleware/sorting";
 import { Regiment } from "../models/regiment.model";
 // Call 3rd Party endpoint 
 import staticData from "./data"
+import Filtering from "../middleware/filtering";
 const WorkoutsProxy = async(method:NeedleHttpVerbs, query: string) =>{
     const options = {
         "headers":{
@@ -46,21 +47,26 @@ const MuscleGroupProxy = async(method:NeedleHttpVerbs, query: string, params?:an
         const pageDisplay = req.query.limit 
         const sortation = req.query.sort
         const filters = req.query.filters
-        console.log("fitlers", filters)
+       
         if(page === undefined || pageDisplay === undefined){
             return res.status(400).json({error:"Page Number or Page Limit Missing"})
         }
 
         try {
-            // let data = await WorkoutsProxy('get', "")
-            
+            let items = staticData;
+           
+            if(sortation !== undefined){
+                items = Sorting(req, staticData)
+            }
+            if(filters !== undefined){
+                items = Filtering(req,staticData);
+            }
             // const filters = data.filter((val:any,) => val.target === "" || val.target === "chest")
-
+            
 
 
             // // Pagination Check  
-            let data = Pagination(req,staticData);
-            
+            let data = Pagination(req,items);
             let results = {
                 page:Number(page),
                 pageDisplay:Number(pageDisplay), 
