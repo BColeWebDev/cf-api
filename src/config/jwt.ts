@@ -32,7 +32,8 @@ export const createToken = (): TokenDocument =>
 // Verfiy JWT Token
 export const decodeToken = (token:string) =>{
     try {
-        return verify(token, jwtSecret)
+        const res = verify(token, jwtSecret)
+        return res
     } catch (error) {
         return error
     }

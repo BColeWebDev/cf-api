@@ -43,25 +43,25 @@ Router.route('/muscleImages')
 
 // GET,POST - Regiments -> (userid) 
 Router.route("/createRegiment")
-    .post(isValidUser,regimentCtrl.CreateRegimentPlan)
+    .post(isAuthenticated,isValidUser,regimentCtrl.CreateRegimentPlan)
 Router.route("/regimentsAll")
-    .get(regimentCtrl.GetAllRegimentPlan)
+    .get(isAuthenticated,regimentCtrl.GetAllRegimentPlan)
     
 // GET,PUT,DELETE - Regiments -> (regId) 
 Router.route("/singleRegiment/:id")
-    .get(regimentCtrl.GetSingleRegimentPlan)
-    .delete(regimentCtrl.DeleteRegimentPlan)
-    .put(regimentCtrl.UpdateRegimentPlan)
+    .get(isAuthenticated,regimentCtrl.GetSingleRegimentPlan)
+    .delete(isAuthenticated,regimentCtrl.DeleteRegimentPlan)
+    .put(isAuthenticated,regimentCtrl.UpdateRegimentPlan)
 
 // POST,PUT - Training Days -> (regId)
 Router.route("/trainingdays/:id")
-    .get(TrainingDay.getAllTrainingDays)
-    .post(TrainingDay.createTrainingDay)
-    .put(TrainingDay.UpdateTrainingDay)
-    .delete(TrainingDay.DeleteTrainingDay)
+    .get(isAuthenticated,TrainingDay.getAllTrainingDays)
+    .post(isAuthenticated,TrainingDay.createTrainingDay)
+    .put(isAuthenticated,TrainingDay.UpdateTrainingDay)
+    .delete(isAuthenticated,TrainingDay.DeleteTrainingDay)
 // GET
 Router.route("/singleTrainingDay/:id")
-    .get(TrainingDay.findSingleTrainingDay)
+    .get(isAuthenticated,TrainingDay.findSingleTrainingDay)
 
 
 

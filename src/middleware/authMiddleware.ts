@@ -3,26 +3,33 @@ import {Request, Response, NextFunction} from 'express';
 
 // User authentication for routes 
 const isAuthenticated = async  (req: Request, res: Response, next: NextFunction) => {
-    const authHeader:string = req?.headers?.authorization!
-
-    
-    // verify token being sent from header 
-    if ((!authHeader || !authHeader.startsWith('Bearer ')) && !process.env.CC_DISABLE_AUTH  ) {
+    const authHeader:any = req?.headers?.bearer
+    const disabledAuth:boolean = process.env.CC_DISABLE_AUTH === "true"? true : false;
+    console.log(disabledAuth,req.headers)
+  
+    // // verify token being sent from header 
+    if ( authHeader === undefined || disabledAuth) {
         return res.status(400).json('No token provided')
     }
-    if(process.env.CC_DISABLE_AUTH){
-        next()
+    
+    if(disabledAuth){
+        console.log(disabledAuth)
+        return next()
     }
-    // Get token from header
-    let token = authHeader?.split(' ')[1]
-    try {
-        
+
+    // // // Get token from header
+   if(authHeader !== undefined && !disabledAuth ){
+    try {     
         // Verify token
-        const decoder = decodeToken(token)
-        // Get user from the token
-        next()
+        let decoder:any  = decodeToken(authHeader)
+        if(decoder.message === "jwt expired"){
+            return res.status(401).json(decoder.message)
+        }
+        next();
     } catch (error) {
         return res.status(401).json('Not Authorized')
     }
+   }
+ 
 }
 export default isAuthenticated
