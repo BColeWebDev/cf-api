@@ -44,7 +44,7 @@ Router.route('/muscleImages')
 // GET,POST - Regiments -> (userid) 
 Router.route("/createRegiment")
     .post(isAuthenticated,isValidUser,regimentCtrl.CreateRegimentPlan)
-Router.route("/regimentsAll")
+Router.route("/regimentsAll/:id")
     .get(isAuthenticated,regimentCtrl.GetAllRegimentPlan)
     
 // GET,PUT,DELETE - Regiments -> (regId) 

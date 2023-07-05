@@ -9,8 +9,8 @@ const createTrainingDay  = async (req:Request,res:Response) =>{
 if(req.params.id === undefined){
  return   res.status(400).json({message:"No Regiment Id found"})
 }
-if(req.body.name === undefined ||  req.body.description === undefined){
-    return res.status(400).json({message:"missing name / description"})
+if(req.body.name === undefined ||  req.body.description === undefined || req.body.day === undefined){
+    return res.status(400).json({message:"missing name / description / days"})
 }
 try {
     const response = await Regiment.find({_id:req.params.id});
@@ -19,13 +19,18 @@ try {
         res.status(400).json({message:"no regiment found"})
     }
 
- 
+ if(response[0].routines.filter((val)=>val.day === days[req.body.day]).length > 0){
+    return res.status(400).json({message:`${days[req.body.day]} already added`})
+ }
 response[0].routines.push({name: req.body.name,day:days[req.body.day],description: req.body.description, workouts:[]})
 
+
+
+// Creates new training days
 const newTrainingDay = await Regiment.updateOne({_id:req.params.id},{routines:response[0].routines})
-return res.status(200).json(newTrainingDay)
-
-
+if(newTrainingDay.acknowledged){
+    return res.status(200).json("New Training Day created!")
+}
 } catch (error:any) {
     res.status(400).json(error.message)
 }

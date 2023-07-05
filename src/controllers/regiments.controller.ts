@@ -1,6 +1,7 @@
 // Workout Plans 
 import { Response, Request } from "express";
 import { Regiment } from "../models/regiment.model";
+import mongoose from "mongoose";
 
 
 
@@ -30,8 +31,10 @@ return res.status(200).json(response)
 };
 // GET  - Get all Workout Plans (Regiment ID)
 const GetAllRegimentPlan = async (req:Request,res:Response) =>{
+    const{id} = req.params
 try {
-    const allRegiments = await  Regiment.find({userid: req.params.id})
+    console.log("params",req.params.id)
+    const allRegiments = await  Regiment.find({userid: id})
     return res.status(200).json(allRegiments)
 } catch (error) {
     res.status(400).json(error)
