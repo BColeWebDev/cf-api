@@ -273,6 +273,14 @@ const authOLogin = async (req:Request, res:Response) => {
     res.json('google login')
 }
  
+const Settings = async (req:Request, res:Response) =>{
+    try {
+        const response = await User.findByIdAndUpdate(req.body.id,{settings: req.body.settings})
+          return res.status(200).json(response)
+    } catch (error) {
+        return res.status(500).send("An unexpected error occurred"); 
+    }
+}
 
 
 export default {
@@ -286,5 +294,6 @@ export default {
     userCancel,
     loginReset,
     SignOutUser,
-    authOLogin
+    authOLogin,
+    Settings
 }

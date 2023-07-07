@@ -34,5 +34,7 @@ router.route("/logout")
 
 router.route('/authO')
       .post(authCtrl.authOLogin)
+router.route("/settings")
+      .post(authCtrl.Settings)
 
 export default router
