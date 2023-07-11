@@ -16,7 +16,7 @@ try {
     const response = await Regiment.find({_id:req.params.id});
 
     if(response.length === 0){
-        res.status(400).json({message:"no regiment found"})
+        return res.status(400).json({message:"no regiment found"})
     }
 
  if(response[0].routines.filter((val)=>val.day === days[req.body.day]).length > 0){

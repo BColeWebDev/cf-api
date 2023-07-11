@@ -34,7 +34,7 @@ const trainingSchema = new mongoose.Schema({
     },
     day:{
         type:String,
-        unique:true
+     
     },
     workouts:{
         type:[Workout.schema]

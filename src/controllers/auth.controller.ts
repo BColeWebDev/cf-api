@@ -8,6 +8,7 @@ import { Response, Request } from "express"
 import { User } from "../models/user.model"
 import hashPassword from '../config/hash'
 import dayjs from 'dayjs';
+import db from '../db';
 
 let error: string[] = [];
 
@@ -127,7 +128,7 @@ const loginUser = async (req:Request, res:Response) =>{
 
 // - Sign Out User 
 const SignOutUser = async (req:Request, res: Response) =>{
-res.clearCookie("x-auth-cookie")
+
 res.status(200).json({message:"Successfully Logged out"});
 };
 
@@ -282,6 +283,30 @@ const Settings = async (req:Request, res:Response) =>{
     }
 }
 
+// Delete all user and workouts regiments related to
+const deleteUser = async (req:Request,res:Response) =>{
+    console.log(req.params.id)
+   
+    try {
+      
+        // no id provided
+        if(req.params.id === undefined){
+            return res.status(400).json({message:"no id found"})
+        }
+        const existingUser = await User.findById(req.params.id)
+        if(existingUser === null){
+            return res.status(400).json({message:"Error could not find user!"})
+        }
+       const response = await User.findByIdAndDelete(req.params.id);
+
+       if(response){
+        return res.status(200).json(response)
+       }
+     
+    } catch (error) {
+        return res.status(500).send("An unexpected error occurred"); 
+    }
+}
 
 export default {
     registerUser,
@@ -295,5 +320,6 @@ export default {
     loginReset,
     SignOutUser,
     authOLogin,
-    Settings
+    Settings,
+    deleteUser
 }

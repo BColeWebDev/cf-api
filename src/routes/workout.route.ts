@@ -43,7 +43,7 @@ Router.route('/muscleImages')
 
 // GET,POST - Regiments -> (userid) 
 Router.route("/createRegiment")
-    .post(isAuthenticated,isValidUser,regimentCtrl.CreateRegimentPlan)
+    .post(isAuthenticated,regimentCtrl.CreateRegimentPlan)
 Router.route("/regimentsAll/:id")
     .get(isAuthenticated,regimentCtrl.GetAllRegimentPlan)
     

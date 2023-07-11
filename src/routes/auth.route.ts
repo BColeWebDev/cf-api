@@ -10,7 +10,8 @@ router.route("/")
       .get(currentUser,authCtrl.currentUser);
 router.route("/:id/users")
       .get(isAdmin,authCtrl.allUsers);
-
+router.route("/:id/delete")
+      .delete(authCtrl.deleteUser)
 router.route("/register")
       .post( middleware.registerIsValid, authCtrl.registerUser)
 
