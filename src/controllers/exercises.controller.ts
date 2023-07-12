@@ -15,7 +15,8 @@ const WorkoutsProxy = async(method:NeedleHttpVerbs, query: string) =>{
             "x-rapidapi-key": `${process.env.API_KEY_EXERCISES}`
         }
     }
-     const resData = await needle(`${method}`,`${process.env.API_URL_EXERCISES}${query ? query : " "}`,options)
+    console.log("URL",`${process.env.API_URL_EXERCISES}${query ? query : ""}`)
+     const resData = await needle(`${method}`,`${process.env.API_URL_EXERCISES}${query ? query : ""}`,options)
      const body = resData.body
      return body
 }
@@ -23,12 +24,12 @@ const WorkoutsProxy = async(method:NeedleHttpVerbs, query: string) =>{
 const MuscleGroupProxy = async(method:NeedleHttpVerbs, query: string, params?:any) =>{
     const options = {
         "headers":{
-            "X-RapidAPI-Host": `${process.env.API_HOST_MUSCLE_GROUP}`,
-            "X-RapidAPI-Key": `${process.env.API_KEY_MUSCLE_GROUP}`
+            "x-rapidapi-host": `${process.env.API_HOST_EXERCISES}`,
+            "x-rapidapi-key": `${process.env.API_KEY_EXERCISES}`
         },
     }
     try {
-        const response = await needle(`${method}`,`${process.env.API_URL_MUSCLE_GROUP}${query ? query :""}${params ? `?${params}` :""}`,options)
+        const response = await needle(`${method}`,`${process.env.API_URL_EXERCISES}${query ? query :""}${params ? `?${params}` :""}`,options)
           
          return response.body
     } catch (error) {
@@ -53,17 +54,17 @@ const MuscleGroupProxy = async(method:NeedleHttpVerbs, query: string, params?:an
         }
 
         try {
-            let items = staticData;
+            const workoutData = await WorkoutsProxy("get","exercises");
+            let items = workoutData;
            
             if(sortation !== undefined){
-                items = Sorting(req, staticData)
+                items = Sorting(req, workoutData)
             }
             if(filters !== undefined){
-                items = Filtering(req,staticData);
+                items = Filtering(req,workoutData);
             }
-            // const filters = data.filter((val:any,) => val.target === "" || val.target === "chest")
-            
-
+    
+    
 
             // // Pagination Check  
             let data = Pagination(req,items);
