@@ -83,7 +83,7 @@ const MuscleGroupProxy = async(method:NeedleHttpVerbs, query: string, params?:an
     // GET - All Body Parts
     const GetAllBodyParts = async (req:Request, res:Response) =>{
         try {
-            const data = await WorkoutsProxy('get', "/bodyPartList")
+            const data = await WorkoutsProxy('get', "exercises/bodyPartList")
             res.status(200).json(data)
 
         } catch (error) {
@@ -99,7 +99,7 @@ const MuscleGroupProxy = async(method:NeedleHttpVerbs, query: string, params?:an
 
 
         try {
-            const data = await WorkoutsProxy('get', `/bodyPart/${name}`)
+            const data = await WorkoutsProxy('get', `/exercises/bodyPart/${name}`)
 
 
             if(page === undefined || pageDisplay === undefined){
@@ -122,7 +122,7 @@ const MuscleGroupProxy = async(method:NeedleHttpVerbs, query: string, params?:an
     // GET- Muscle Group 
     const GetAllMuscleGroup = async (req:Request,res:Response) =>{
     try {
-        const data = await WorkoutsProxy('get','/targetList')
+        const data = await WorkoutsProxy('get','exercises/targetList')
         res.json(data);
     } catch (error) {
         res.status(400).json(error)
@@ -133,7 +133,7 @@ const MuscleGroupProxy = async(method:NeedleHttpVerbs, query: string, params?:an
     const GetSingleMuscleGroup = async (req:Request,res:Response) => {
         const name = req.params.name
         try {
-            const data = await WorkoutsProxy('get', `/target/${name}`)
+            const data = await WorkoutsProxy('get', `exercises/target/${name}`)
             let results = {
                 page:Number(req.query.page),
                 pageDisplay:Number(req.query.limit), 
@@ -151,7 +151,7 @@ const MuscleGroupProxy = async(method:NeedleHttpVerbs, query: string, params?:an
     // GET - All Equipment
     const GetAllEquipment = async  (req:Request,res:Response) =>{
         try {
-            const data = await WorkoutsProxy('get','/equipmentList');
+            const data = await WorkoutsProxy('get','exercises/equipmentList');
             res.json(data)
         } catch (error) {
 
@@ -162,7 +162,7 @@ const MuscleGroupProxy = async(method:NeedleHttpVerbs, query: string, params?:an
     const GetSingleEquipment = async (req:Request,res:Response) =>{
         const name = req.params.name
     try {
-        const data = await WorkoutsProxy('get', `/equipment/${name}`)
+        const data = await WorkoutsProxy('get', `exercises/equipment/${name}`)
         let results = {
             page:Number(req.query.page),
             pageDisplay:Number(req.query.limit), 
@@ -177,7 +177,7 @@ const MuscleGroupProxy = async(method:NeedleHttpVerbs, query: string, params?:an
     const GetByName = async (req:Request,res:Response) =>{
         const name = req.params.name
         try {
-            const data = await WorkoutsProxy('get', `/name/${name}`)
+            const data = await WorkoutsProxy('get', `exercises/name/${name}`)
             let results = {
                 page:Number(req.query.page),
                 pageDisplay:Number(req.query.limit), 
@@ -195,7 +195,7 @@ const MuscleGroupProxy = async(method:NeedleHttpVerbs, query: string, params?:an
 // Available Muscle Groups
     const GetMuscleGroup = async (req:Request,res:Response)=>{
         try {
-            const data = await MuscleGroupProxy('get',"/getMuscleGroups");
+            const data = await MuscleGroupProxy('get',"exercises/getMuscleGroups");
             res.status(200).json(data);
         } catch (error) {
             res.status(400).json(error)

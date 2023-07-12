@@ -8,12 +8,11 @@ const isAuthenticated = async  (req: Request, res: Response, next: NextFunction)
     console.log(disabledAuth,req.headers)
   
     // // verify token being sent from header 
-    if ( authHeader === undefined || disabledAuth) {
+    if ( authHeader === undefined && !disabledAuth) {
         return res.status(400).json('No token provided')
     }
     
     if(disabledAuth){
-        console.log(disabledAuth)
         return next()
     }
 
