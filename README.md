@@ -7,23 +7,28 @@ Crown Fitness REST API
 - 
 ### Server <img height="20" src="https://pic.onlinewebfonts.com/svg/img_569193.png"></img>
 
-| Verb   | Endpoint                    | Result                |
-| ------ | --------------------------- | --------------------- |
-| POST   | /api/v1/users/login         | Login User            |
-| POST   | /api/v1/users/register      | Create User           |
-| POST   | /api/v1/users/authO         | Google Login          |
-| GET    | /api/v1/regiments           | Get all regiments     |
-| POST   | /api/v1/regiments           | Create regiment       |
-| PUT    | /api/v1/regiments/:id       | Update regiment       |
-| DELETE | /api/v1/regiments/:id       | Delete regiment       |
-| GET    | /api/v1/day                 | Get all training days |
-| POST   | /api/v1/day                 | Create a training day |
-| PUT    | /api/v1/day/:id             | Update a training day |
-| DELETE | /api/v1/day/:id             | Delete a training day |
-| GET    | /api/v1/exercises/plans     | Get all exercises     |
-| POST   | /api/v1/exercises/plans     | Create a exercises    |
-| PUT    | /api/v1/exercises/plans/:id | Update a exercises    |
-| DELETE | /api/v1/exercises/plans/:id | Delete a exercises    |
+| Verb   | Endpoint                    | Result                | Body   | 
+| ------ | --------------------------- | --------------------- | ------ | 
+| POST   | /api/auth/login             | Login User            |  {email, password}   | /api/auth/login             |
+| POST   | /api/auth/register          | Create User           |  {first_name, last_name, email, password, bio,experience, crown_member,age, sex}   | /api/auth/register          
+| POST   | /api/auth/register/cancel   | Cancel User           |
+| POST   | /api/auth/login/forgot-password| Forgot Password          |
+| POST   | /api/auth/authO         | Google Login *W.I.P*       |
+| GET    | /api/workouts/regiments           | Get all regiments     |
+| POST   |  /api/workouts/createRegiment           | Create regiment       |
+| GET   |  /api/workouts/regimentsAll/:id           | Get all regiment       |
+| GET   |  /api/workouts/singleRegiment/:id           | Get single regiment       |
+| PUT    |/api/workouts/singleRegiment/:id       | Update regiment       |
+| DELETE | /api/workouts/singleRegiment/:id       | Delete regiment       |
+| GET    | /api/workouts/trainingdays/:id                 | Get all training days |
+| GET    | /api/workouts/singleTrainingDay/:id                 | Get single training days |
+| POST    | /api/workouts/trainingdays/:id                | Create a training day |
+| PUT    |  /api/workouts/trainingdays/:id             | Update a training day |
+| DELETE |  /api/workouts/trainingdays/:id           | Delete a training day |
+| GET    | /api/workouts/routines/:id     | Get all exercises     |
+| POST   | /api/workouts/routines/:id          | Create a exercises    |
+| PUT    | /api/workouts/routines/:id | Update a exercises    |
+| DELETE | /api/workouts/routines/:idd | Delete a exercises    |
 
 ## 1- Download
 
