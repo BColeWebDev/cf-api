@@ -1,17 +1,15 @@
 import { Response, Request, } from "express";
 
+
 const Filtering = (req:Request, results:any)=>{
 
    
    try {
-      var filter = {
-         bodyPart: 'back',
-  name: '45° side bend'
-};
-      const filters:any = req.query.filters
+      const OBJ:any = req.query.filters
+         let filters = JSON.parse(OBJ)
       return  results.filter(function(item:any) {
-         for (var key in filter) {
-           if ((item[key] === undefined )|| (item[key] !== filter["name"] || item[key] !== filter["bodyPart"]))
+         for (var key in filters) {
+           if ((item[key] === undefined || item[key] != filters[key as keyof typeof filters]))
              return false;
          }
          return true;

@@ -54,14 +54,14 @@ const MuscleGroupProxy = async(method:NeedleHttpVerbs, query: string, params?:an
         }
 
         try {
-            const workoutData = await WorkoutsProxy("get","exercises");
-            let items = workoutData;
+            // const workoutData = await WorkoutsProxy("get","exercises");
+            let items = staticData;
            
             if(sortation !== undefined){
-                items = Sorting(req, workoutData)
+                items = Sorting(req, staticData)
             }
             if(filters !== undefined){
-                items = Filtering(req,workoutData);
+                items = Filtering(req,staticData);
             }
     
     
