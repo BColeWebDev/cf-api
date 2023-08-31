@@ -1,4 +1,4 @@
-const data =[
+[
     {
       "bodyPart": "waist",
       "equipment": "body weight",
@@ -10592,5 +10592,3 @@ const data =[
       "target": "forearms"
     }
   ]
-
-  export default data
