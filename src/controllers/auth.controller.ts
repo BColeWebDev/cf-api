@@ -8,7 +8,7 @@ import { Response, Request } from "express"
 import { User } from "../models/user.model"
 import hashPassword from '../config/hash'
 import dayjs from 'dayjs';
-import db from '../db';
+
 
 let error: string[] = [];
 
@@ -268,11 +268,6 @@ try {
 }
 
 };
-
-
-const authOLogin = async (req:Request, res:Response) => {
-    res.json('google login')
-}
  
 const Settings = async (req:Request, res:Response) =>{
     try {
@@ -319,7 +314,6 @@ export default {
     userCancel,
     loginReset,
     SignOutUser,
-    authOLogin,
     Settings,
     deleteUser
 }
