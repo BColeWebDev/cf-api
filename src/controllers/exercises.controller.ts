@@ -38,6 +38,23 @@ const MuscleGroupProxy = async(method:NeedleHttpVerbs, query: string, params?:an
    
 }
 
+const MuscleImageGenerator = async (method:NeedleHttpVerbs,query:string, params:any)=>{
+    const options = {
+        "headers":{
+            "x-rapidapi-host": `${process.env.API_HOST_EXERCISES}`,
+            "x-rapidapi-key": `${process.env.API_HOST_MUSCLE_GENERATOR}`
+        },
+        params: params,
+    }
+    try {
+        const response = await needle(`${method}`,`${process.env.API_MUSCLE_GROUP}/${query}`,options)
+
+        return response.body
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 
 //    ***EXERCISES***
@@ -54,7 +71,7 @@ const MuscleGroupProxy = async(method:NeedleHttpVerbs, query: string, params?:an
         }
 
         try {
-            // const workoutData = await WorkoutsProxy("get","exercises");
+ 
             let items = staticData;
            
             if(sortation !== undefined){
@@ -204,12 +221,12 @@ const MuscleGroupProxy = async(method:NeedleHttpVerbs, query: string, params?:an
 // Available Muscle Groups
 const GetImages= async (req:Request,res:Response)=>{
     try {
-        let params = {
+    
+        const data = await MuscleImageGenerator("get",`/getImage`, {
             muscleGroups: 'biceps,chest,hamstring',
             color: '200,100,80',
             transparentBackground: '0'
-          }
-        const data = await MuscleGroupProxy('get',`/getImage`, 'muscleGroups=biceps,chest,hamstring&color=200,100,80&transparentBackground=0');
+          });
         res.status(200).send(data);
     } catch (error) {
         res.status(400).json(error)
