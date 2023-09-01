@@ -3,17 +3,22 @@
     "$oid": "64ee8951a1353c046d05ca41"
   },
   "name": "Bench Press",
+  "category":"Chest",
   "primaryMuscleGroup": [
     "Chest",
     "Front Deltoid"
   ],
+  "imageUrl":"",
   "SecondaryMuscleGroup": [
     "Triceps"
   ],
   "steps": [
-    "one",
-    "two",
-    "three"
+    "Lie on the bench, pull your shoulder blades together and down, and slightly arch your back.",
+    "Grip the bar slightly wider than shoulder-width apart.",
+    "Inhale, hold your breath, and unrack the bar.",
+    "Lower the bar with control, until it touches your chest somewhere close to your sternum.",
+    "Push the bar up to the starting position while exhaling.",
+    "Take another breath while in the top position, and repeat for reps"
   ],
   "equipment": [
     "Barbel"
@@ -23,7 +28,8 @@
   "addedToPlan": 0
 },
 {
-  
+
+
 }
 
 ]
