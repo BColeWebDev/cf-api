@@ -36,11 +36,6 @@ Router.route('/muscleGroup')
 Router.route('/muscleImages')
     .get(isAuthenticated,exercisesCtrl.GetImages)
 
-
-
-
-
-
 // GET,POST - Regiments -> (userid) 
 Router.route("/createRegiment")
     .post(isAuthenticated,regimentCtrl.CreateRegimentPlan)

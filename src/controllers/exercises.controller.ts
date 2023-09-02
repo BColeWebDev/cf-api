@@ -6,7 +6,7 @@ import Pagination from "../middleware/pagination";
 import Sorting from "../middleware/sorting";
 import { Regiment } from "../models/regiment.model";
 // Call 3rd Party endpoint 
-import staticData from "./data"
+import staticData from "./data.json"
 import Filtering from "../middleware/filtering";
 const WorkoutsProxy = async(method:NeedleHttpVerbs, query: string) =>{
     const options = {
@@ -41,25 +41,23 @@ const MuscleGroupProxy = async(method:NeedleHttpVerbs, query: string, params?:an
 const MuscleImageGenerator = async (method:NeedleHttpVerbs,query:string, params:any)=>{
     const options = {
         "headers":{
-            "x-rapidapi-host": `${process.env.API_HOST_EXERCISES}`,
-            "x-rapidapi-key": `${process.env.API_HOST_MUSCLE_GENERATOR}`
+            "x-rapidapi-host": `${process.env.API_HOST_MUSCLE_GENERATOR}`,
+            "x-rapidapi-key": `${process.env.API_KEY_MUSCLE_GENERATOR}`
         },
         params: params,
     }
     try {
-        const response = await needle(`${method}`,`${process.env.API_MUSCLE_GROUP}/${query}`,options)
-
-        return response.body
+        const response = await needle(`${method}`,`${process.env.API_MUSCLE_GROUP}${query}`,options)
+        console.log("response",response)
+        return response
     } catch (error) {
         console.log(error)
     }
 }
 
-
-
 //    ***EXERCISES***
     // GET - All Excercises route 
-    const GetAllExercises = async (req:Request, res:Response) =>{
+const GetAllExercises = async (req:Request, res:Response) =>{
 
         const page = req.query.page
         const pageDisplay = req.query.limit 
@@ -96,9 +94,9 @@ const MuscleImageGenerator = async (method:NeedleHttpVerbs,query:string, params:
 
             res.status(400).json(error)
         }
-    }
+    };
     // GET - All Body Parts
-    const GetAllBodyParts = async (req:Request, res:Response) =>{
+const GetAllBodyParts = async (req:Request, res:Response) =>{
         try {
             const data = await WorkoutsProxy('get', "exercises/bodyPartList")
             res.status(200).json(data)
@@ -109,7 +107,7 @@ const MuscleImageGenerator = async (method:NeedleHttpVerbs,query:string, params:
         }
     };
     // GET - Single Body Part
-    const GetSingleBodyPart =  async (req:Request, res:Response) =>{
+const GetSingleBodyPart =  async (req:Request, res:Response) =>{
         const name = req.params.name
         const page = req.query.page
         const pageDisplay = req.query.limit 
@@ -137,7 +135,7 @@ const MuscleImageGenerator = async (method:NeedleHttpVerbs,query:string, params:
         }
     }
     // GET- Muscle Group 
-    const GetAllMuscleGroup = async (req:Request,res:Response) =>{
+const GetAllMuscleGroup = async (req:Request,res:Response) =>{
     try {
         const data = await WorkoutsProxy('get','exercises/targetList')
         res.json(data);
@@ -147,7 +145,7 @@ const MuscleImageGenerator = async (method:NeedleHttpVerbs,query:string, params:
     };
 
     // GET - Muscle Single Group
-    const GetSingleMuscleGroup = async (req:Request,res:Response) => {
+const GetSingleMuscleGroup = async (req:Request,res:Response) => {
         const name = req.params.name
         try {
             const data = await WorkoutsProxy('get', `exercises/target/${name}`)
@@ -166,7 +164,7 @@ const MuscleImageGenerator = async (method:NeedleHttpVerbs,query:string, params:
     }
 
     // GET - All Equipment
-    const GetAllEquipment = async  (req:Request,res:Response) =>{
+const GetAllEquipment = async  (req:Request,res:Response) =>{
         try {
             const data = await WorkoutsProxy('get','exercises/equipmentList');
             res.json(data)
@@ -219,25 +217,20 @@ const MuscleImageGenerator = async (method:NeedleHttpVerbs,query:string, params:
         }
     }   
 // Available Muscle Groups
-const GetImages= async (req:Request,res:Response)=>{
+const GetImages= async (req:Request,res:Response)=>{     
     try {
-    
-        const data = await MuscleImageGenerator("get",`/getImage`, {
+        const data = await MuscleImageGenerator("get",`getImage`, {
             muscleGroups: 'biceps,chest,hamstring',
             color: '200,100,80',
             transparentBackground: '0'
           });
-        res.status(200).send(data);
+          console.log("data->",data)
+          res.type('image/png')
+        res.send(data);
     } catch (error) {
         res.status(400).json(error)
     }
 }   
-
-
-
-
-
-
 
 // Routines
 const createWorkout =async(req:Request,res:Response) =>{
@@ -349,8 +342,6 @@ const deleteWorkout =async(req:Request,res:Response) =>{
     }
     
 }
-
-
 
 export default {
     GetAllExercises,
