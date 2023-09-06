@@ -6,7 +6,7 @@ import Pagination from "../middleware/pagination";
 import Sorting from "../middleware/sorting";
 import { Regiment } from "../models/regiment.model";
 // Call 3rd Party endpoint 
-import staticData from "./data.json"
+import staticData from "./data"
 import Filtering from "../middleware/filtering";
 const WorkoutsProxy = async(method:NeedleHttpVerbs, query: string) =>{
     const options = {
@@ -71,7 +71,7 @@ const GetAllExercises = async (req:Request, res:Response) =>{
         try {
  
             let items = staticData;
-           
+           console.log("items",items)
             if(sortation !== undefined){
                 items = Sorting(req, staticData)
             }

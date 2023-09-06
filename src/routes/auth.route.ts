@@ -9,7 +9,7 @@ import { isAdmin } from "../middleware/isAdminMiddleware";
 router.route("/")
       .get(currentUser,authCtrl.currentUser);
 router.route("/:id/users")
-      .get(isAdmin,authCtrl.allUsers);
+      .get(isAdmin,authCtrl.allUsers)
 router.route("/:id/delete")
       .delete(authCtrl.deleteUser)
 router.route("/register")
