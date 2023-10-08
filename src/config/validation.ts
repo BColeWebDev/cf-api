@@ -13,7 +13,10 @@ interface Login{
 interface forgotPassword{
     email:string
 }
-
+interface Regiment{
+    name:string
+    description:string
+}
 
 // Validation Schema
 const registerSchema = Joi.object({
@@ -140,7 +143,13 @@ const emailSchema = Joi.object({
         'any.required': `email is a required field`
     })
 })
+const regimentSchema = Joi.object({
+    name:Joi.string().required()
+    .message("Regiment Name Required"),
+    description:Joi.string().required()
+    .message("Regiment Name Required"),
 
+})
 class Validation {
      // Validation for registering Register
      registerValidation = (data : Register) => {
@@ -161,6 +170,10 @@ class Validation {
         const response = emailSchema.validate({email}, {abortEarly: false})
         return response
     };
+    createRegimentValidation = (data:Regiment) =>{
+        const response = regimentSchema.validate(data);
+        return response
+    }
 }
 
 export default new Validation()

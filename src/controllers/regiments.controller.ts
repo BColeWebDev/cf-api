@@ -2,6 +2,7 @@
 import { Response, Request } from "express";
 import { Regiment } from "../models/regiment.model";
 import mongoose from "mongoose";
+import validation from "config/validation";
 
 
 
@@ -11,6 +12,14 @@ const CreateRegimentPlan =  async (req:Request,res:Response) =>{
 try {
     if(name === undefined || description === undefined || userid === undefined){
         return res.status(400).send('missing values')
+    }
+    
+    if(await Regiment.find({name:name})){
+        return res.status(400).json({error:"Regiment Already exist"})
+    }
+    const response = validation.registerValidation(req.body)
+    if(response.error!.details!.length >= 1){
+        return res.status(400).json({error:response.error!.details})
     }
     const newRegiment = await Regiment.build({name,description,userid, routines:[], isCompleted:false});
     newRegiment.save()
