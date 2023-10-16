@@ -4,7 +4,7 @@ let error: string[] = [];
 import { Response, Request, json } from "express"
 import Pagination from "../middleware/pagination";
 import Sorting from "../middleware/sorting";
-import { Regiment } from "../models/regiment.model";
+import { RegiementDocument, Regiment } from "../models/regiment.model";
 // Call 3rd Party endpoint 
 import staticData from "./data"
 import Filtering from "../middleware/filtering";
@@ -234,24 +234,36 @@ const GetImages= async (req:Request,res:Response)=>{
 
 // Routines
 const createWorkout =async(req:Request,res:Response) =>{
-    const{name,imageUrl,equipment,muscle_target,bodyPart,regimentID} = req.body
+    const{name,imageUrl,equipment,muscle_target,bodyPart, day,routineId} = req.body
 try {
-    if(regimentID === undefined){
+    if(req.params.id === undefined){
         return res.status(400).json({message:"no regimentid found"})
     }
-    if(name === undefined || imageUrl === undefined || equipment === undefined || muscle_target === undefined ||bodyPart === undefined)
-    {
-        return res.status(400).json({message:"missing values"})
+    if(routineId === undefined || routineId === null){
+        return res.status(400).json({message:"no routinesId found"})
     }
+ 
 
-    await Regiment.findById(req.params.id, (err:any,results:any) =>{
-        if(!results){
-            return  res.status(404).json({message:"No Regiment Id found"})
-         }
-        results?.routines.id(regimentID).workouts.push({name,equipment,muscle_target,imageUrl,bodyPart})
-        results?.save()
-        res.status(200).json({message:`Success! workout ${name} has been added!`})
+    //     await Regiment.findById(req.params.id, (err:any,results:RegiementDocument) =>{
+    //         console.log("results",results)
+    //     // if(!results){
+    //     //     return  res.status(404).json({message:"No Regiment Id found"})
+    //     //  }
+    //     //  console.log("results",results)
+   
+    // })
+    const results = await Regiment.findById(req.params.id)
+    if(!results){
+    return  res.status(404).json({message:"No Regiment Id found"})
+    }
+    results.routines.filter((routine)=> routine._id?.toString() === routineId)[0]
+     .workouts.push({name,equipment,muscle_target,imageUrl,bodyPart})  
+
+    results?.save().then((res)=>{
+        console.log(res)
     })
+
+    res.status(200).json({message:`Success! workout ${name} has been added!`})
     
 
 } catch (error) {

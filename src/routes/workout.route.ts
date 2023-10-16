@@ -4,6 +4,7 @@ import exercisesCtrl  from "../controllers/exercises.controller"
 import regimentCtrl from "../controllers/regiments.controller"
 import TrainingDay from "../controllers/training_day.controller";
 import isAuthenticated from "../middleware/authMiddleware";
+import middleware from "../middleware/validationMiddlware";
 import isValidUser from "../middleware/validUserIdMiddleware";
 // GET - Exercises 
 Router.route('/exercises')
@@ -62,10 +63,10 @@ Router.route("/singleTrainingDay/:id")
 
 // Ex
 Router.route('/routines/:id')
-    .get(exercisesCtrl.getAllWorkouts)
-    .post(exercisesCtrl.createWorkout)
-    .put(exercisesCtrl.updateWorkout)
-    .delete(exercisesCtrl.deleteWorkout)
+    .get(isAuthenticated,exercisesCtrl.getAllWorkouts)
+    .post(isAuthenticated,middleware.isValidWorkout,exercisesCtrl.createWorkout)
+    .put(isAuthenticated,exercisesCtrl.updateWorkout)
+    .delete(isAuthenticated,exercisesCtrl.deleteWorkout)
 
 
    

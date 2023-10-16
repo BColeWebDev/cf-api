@@ -18,7 +18,7 @@ const jwtSecret:any = process.env.JWT_SECRET;
 export const generateToken  = (email:String, first_name:String, last_name:String) =>{
     // information to be encoded
     return sign({email, first_name,last_name}, jwtSecret,{
-        expiresIn:"1hr"
+        expiresIn:"10hr"
     
     })
 }

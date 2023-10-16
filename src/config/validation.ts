@@ -17,6 +17,14 @@ interface Regiment{
     name:string
     description:string
 }
+interface Workouts{
+    name:string
+    id:string
+    bodyPart:string
+    gifUrl:string
+    target:string
+    equipment:string
+}
 
 // Validation Schema
 const registerSchema = Joi.object({
@@ -145,11 +153,43 @@ const emailSchema = Joi.object({
 })
 const regimentSchema = Joi.object({
     name:Joi.string().required()
-    .message("Regiment Name Required"),
+    .messages({
+        'string.empty': `experience cannot be an empty field`
+    }),
     description:Joi.string().required()
-    .message("Regiment Name Required"),
+    .messages({
+        'string.empty': `experience cannot be an empty field`
+    }),
 
 })
+
+const workoutSchema = Joi.object({
+    name:Joi.string().required().messages({
+        'string.empty': `name cannot be an empty`,
+        'any.required': `experience is required`
+    }),
+    id:Joi.string().required().messages({
+        'string.empty': `id cannot be an empty`,
+        'any.required': `id is required`
+    }),
+    bodyPart:Joi.string().required().messages({
+        'string.empty': `bodyPart cannot be an empty`,
+        'any.required': `bodyPart is required`
+    }),
+    target:Joi.string().required().messages({
+        'string.empty': `target cannot be an empty`,
+        'any.required': `target is required`
+    }),
+    gifUrl:Joi.string().required().messages({
+        'string.empty': `gifUrl cannot be an empty`,
+        'any.required': `gifUrl is required`
+    }),
+    equipment:Joi.string().required().messages({
+        'string.empty': `equipment cannot be an empty`,
+        'any.required': `equipment is required`
+    }),
+    
+}).unknown()
 class Validation {
      // Validation for registering Register
      registerValidation = (data : Register) => {
@@ -172,6 +212,10 @@ class Validation {
     };
     createRegimentValidation = (data:Regiment) =>{
         const response = regimentSchema.validate(data);
+        return response
+    }
+    createWorkoutValidation = (data:Workouts)=>{
+        const response = workoutSchema.validate(data,{abortEarly:false});
         return response
     }
 }

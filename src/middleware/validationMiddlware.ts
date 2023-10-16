@@ -37,5 +37,12 @@ next():
 res.status(400).json({errors: error.details.map(err => err.message)})
 };
 
+const isValidWorkout = async (req:Request, res:Response, next:NextFunction) =>{
+    const{error} = await validation.createWorkoutValidation(req.body)
 
-export default {registerIsValid, loginIsValid, forgotPassword}
+error === undefined ?
+next():
+res.status(400).json({errors: error.details.map(err => err.message)})
+}
+
+export default {registerIsValid, loginIsValid, forgotPassword,isValidWorkout}

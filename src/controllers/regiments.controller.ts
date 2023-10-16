@@ -2,7 +2,7 @@
 import { Response, Request } from "express";
 import { Regiment } from "../models/regiment.model";
 import mongoose from "mongoose";
-import validation from "config/validation";
+import validation from "../config/validation";
 
 
 
@@ -42,8 +42,11 @@ return res.status(200).json(response)
 const GetAllRegimentPlan = async (req:Request,res:Response) =>{
     const{id} = req.params
 try {
+    const days =['sunday','monday','tuesday','wednesday','thursday','friday','saturday']
+    const regimentDays = []
     console.log("params",req.params.id)
     const allRegiments = await  Regiment.find({userid: id})
+   
     return res.status(200).json(allRegiments)
 } catch (error) {
     res.status(400).json(error)

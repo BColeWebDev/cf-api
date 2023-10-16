@@ -4,7 +4,7 @@ import { TrainingDaysAttrs,TrainingDay } from "./trainingdays.model";
 
 
 // 1. Create an interface representing a document in MongoDB.
-interface IRegimentAttrs{
+export interface IRegimentAttrs{
     name:string,
     description:string,
     userid:ObjectId,
