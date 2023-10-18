@@ -5,7 +5,8 @@ import mongoose from "mongoose"
     equipment: string,
     muscle_target: string,
     bodyPart: string,
-    imageUrl: string
+    gifUrl: string
+    id:string   
     _id?:string
 }
 
@@ -17,7 +18,8 @@ export interface WorkoutDocument extends mongoose.Document{
     equipment: string;
     muscle_target: string;
     bodyPart: string;
-    imageUrl: string;
+    gifUrl: string;
+    id:string;
 }
 
 const workoutSchema = new mongoose.Schema({
@@ -37,7 +39,11 @@ const workoutSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    imageUrl:{
+    gifUrl:{
+        type:String,
+        required:true
+    },
+    id:{
         type:String,
         required:true
     }

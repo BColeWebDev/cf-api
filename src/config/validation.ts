@@ -22,7 +22,7 @@ interface Workouts{
     id:string
     bodyPart:string
     gifUrl:string
-    target:string
+    muscle_target:string
     equipment:string
 }
 
@@ -176,9 +176,9 @@ const workoutSchema = Joi.object({
         'string.empty': `bodyPart cannot be an empty`,
         'any.required': `bodyPart is required`
     }),
-    target:Joi.string().required().messages({
-        'string.empty': `target cannot be an empty`,
-        'any.required': `target is required`
+    muscle_target:Joi.string().required().messages({
+        'string.empty': `muscle_target cannot be an empty`,
+        'any.required': `muscle_target is required`
     }),
     gifUrl:Joi.string().required().messages({
         'string.empty': `gifUrl cannot be an empty`,
