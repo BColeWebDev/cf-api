@@ -1,30 +1,7 @@
+import { Register, Regiment,Login,forgotPassword,Workouts } from './interfaces/index';
 import Joi, { required } from "joi"
 
-interface Register{
-    first_name: string
-    last_name:string
-    email:string
-    password: string
-}
-interface Login{
-    email:string
-    password:string
-}
-interface forgotPassword{
-    email:string
-}
-interface Regiment{
-    name:string
-    description:string
-}
-interface Workouts{
-    name:string
-    id:string
-    bodyPart:string
-    gifUrl:string
-    muscle_target:string
-    equipment:string
-}
+
 
 // Validation Schema
 const registerSchema = Joi.object({
@@ -90,10 +67,12 @@ const registerSchema = Joi.object({
     .required(),
     bio: Joi
     .string()
+    .min(2)
+    .max(140)
     .messages({
-        'string.empty': `age cannot be an empty field`,
-        'string.min': `Invalid! age cannot be less than 1. Please try again.`,
-        'string.max': `Invalid! age cannot be over 100. Please try again.`
+        'string.empty': `bio cannot be an empty field`,
+        'string.min': `Invalid! bio cannot be less than 1. Please try again.`,
+        'string.max': `Invalid! bio cannot be over 140. Please try again.`
     }),
 
     experience: Joi
@@ -109,7 +88,9 @@ const registerSchema = Joi.object({
     .messages({
         'boolean.empty': `Crown Member cannot be an empty field`
     }),
-
+    device:Joi.string().required().messages({
+        'string.empty': `device cannot be an empty field`
+    })
     
 })
 

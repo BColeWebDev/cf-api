@@ -12,6 +12,7 @@ interface UserAttrs{
     bio:string
     age:string
     sex:string
+    device:string
     crown_member:boolean
     settings:Object
 }
@@ -27,6 +28,10 @@ export interface UserDocument extends mongoose.Document {
     password: string;
     passwordResetToken:string;
     passwordResetExpires: Date;
+    lastLoggedIn:Date;
+    device:string;
+    height:""
+    accountCreated:Date;
     isVerified: boolean;
     isAdmin: boolean;
     expires?:boolean;
@@ -64,6 +69,10 @@ const userSchema = new mongoose.Schema({
         type:String,
         required: true
     },
+    accountCreated:{
+      type:Date,
+      default:dayjs().toDate() 
+    },
     age:{
         type:Number,
         required:true
@@ -71,6 +80,10 @@ const userSchema = new mongoose.Schema({
     sex:{
         type:String,
         required: true
+    },
+    device:{
+      type:String,
+      required:true
     },
     crown_member:{
         type:Boolean,
@@ -83,7 +96,7 @@ const userSchema = new mongoose.Schema({
     isVerified: {
         type: Boolean,
         required: true,
-        default: false,
+        default: true,
       },
     isAdmin: {
         type: Boolean,
@@ -93,8 +106,6 @@ const userSchema = new mongoose.Schema({
     settings: {
         type: Object,
       },
-    expires: { type: Date, default: dayjs().toDate(), expires: 43200 },
-    created:{ type: Date, default: Date.now()}
   });
 
 userSchema.statics.build = (attrs: UserAttrs) => {

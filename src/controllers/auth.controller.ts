@@ -42,6 +42,8 @@ const registerUser = async (req: Request, res: Response) => {
     crown_member,
     age,
     sex,
+    device,
+    settings
   } = req.body;
 
   // check to see if user already exist
@@ -69,10 +71,11 @@ const registerUser = async (req: Request, res: Response) => {
       crown_member,
       settings: {
         theme: "dark",
-        weight: "imperial",
-        distance: "imperial",
-        size: "imperial",
+        "weight":"ibs",
+        "distance":"miles",
+        "size":"inches"
       },
+      device,
     });
     await newUser.save();
     // send user
@@ -85,7 +88,7 @@ const registerUser = async (req: Request, res: Response) => {
         return res
           .status(201)
           .json({
-            message: `A verification mail has been sent. ${newUser.first_name}`,
+            message: `A verification mail has been sent. ${newUser.email}`,
           });
       } catch (error) {
         console.log(error);
@@ -100,6 +103,8 @@ const registerUser = async (req: Request, res: Response) => {
       error.push("Invalid user data");
       res.status(400).json({ errors: error.map((err) => err) });
       error = [];
+
+      
     }
   }
 };
