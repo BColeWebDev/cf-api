@@ -43,7 +43,7 @@ const registerUser = async (req: Request, res: Response) => {
     age,
     sex,
     device,
-    settings
+   
   } = req.body;
 
   // check to see if user already exist
@@ -114,10 +114,10 @@ const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   // Checks for email
   const existingUser = await User.findOne({ email: email });
-  if (
-    !existingUser ||
-    !(await hashPassword.compare(password, existingUser.password))
-  ) {
+
+
+
+  if (!existingUser ||!(await hashPassword.compare(password, existingUser.password))) {
     error.push("Invalid Credentials email or password is incorrect");
     return res
       .status(400)
@@ -295,6 +295,7 @@ const userCancel = async (req: Request, res: Response) => {
   }
 };
 
+// Settings tools 
 const Settings = async (req: Request, res: Response) => {
   try {
     const response = await User.findByIdAndUpdate(req.body.id, {

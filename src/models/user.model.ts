@@ -34,6 +34,7 @@ export interface UserDocument extends mongoose.Document {
     accountCreated:Date;
     isVerified: boolean;
     isAdmin: boolean;
+    isLoggedIn: boolean;
     expires?:boolean;
     bio:string,
     age:string,
@@ -96,13 +97,19 @@ const userSchema = new mongoose.Schema({
     isVerified: {
         type: Boolean,
         required: true,
-        default: true,
+        default: false,
       },
     isAdmin: {
         type: Boolean,
-        default: false,
         required: true,
+        default: false,
+      
       },
+  isLoggedIn:{
+    type: Boolean,
+    require:true,
+    default:false,
+  },
     settings: {
         type: Object,
       },
