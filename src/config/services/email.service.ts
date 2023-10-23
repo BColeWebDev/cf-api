@@ -47,6 +47,7 @@ const email = {
     html: `<p>Please verify your account by clicking the link: 
     <a href="http://${process.env.HOST}/account/confirm/${verficationTokenValue}">http://${process.env.HOST}/account/confirm/${verficationTokenValue}</a> </p>`,
 }
+console.log("email",email)
 return email
 };
 
