@@ -135,11 +135,15 @@ const emailSchema = Joi.object({
 const regimentSchema = Joi.object({
     name:Joi.string().required()
     .messages({
-        'string.empty': `experience cannot be an empty field`
+        'string.empty': `name cannot be an empty field`
     }),
     description:Joi.string().required()
     .messages({
-        'string.empty': `experience cannot be an empty field`
+        'string.empty': `description cannot be an empty field`
+    }),
+    userid:Joi.string().required()
+    .messages({
+        'string.empty': `id cannot be an empty field`
     }),
 
 })
@@ -171,6 +175,7 @@ const workoutSchema = Joi.object({
     }),
     
 }).unknown()
+
 class Validation {
      // Validation for registering Register
      registerValidation = (data : Register) => {
@@ -192,11 +197,13 @@ class Validation {
         return response
     };
     createRegimentValidation = (data:Regiment) =>{
-        const response = regimentSchema.validate(data);
+        const response = regimentSchema.validate(data,{abortEarly: false});
+        console.log("*RESPONSE*",response)
         return response
     }
     createWorkoutValidation = (data:Workouts)=>{
         const response = workoutSchema.validate(data,{abortEarly:false});
+
         return response
     }
 }

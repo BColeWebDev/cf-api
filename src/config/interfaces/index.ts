@@ -14,6 +14,7 @@ export interface forgotPassword{
 export interface Regiment{
     name:string
     description:string
+    userid:string
 }
 export interface Workouts{
     name:string

@@ -13,20 +13,21 @@ try {
     if(name === undefined || description === undefined || userid === undefined){
         return res.status(400).send('missing values')
     }
-    
-    if(await Regiment.find({name:name})){
+        let regiment =  (await Regiment.find({name:name})).length
+    if(regiment > 0){
         return res.status(400).json({error:"Regiment Already exist"})
     }
-    const response = validation.registerValidation(req.body)
+    const response = validation.createRegimentValidation(req.body)
     if(response.error!.details!.length >= 1){
-        return res.status(400).json({error:response.error!.details})
+        console.log("response", response)
+        return res.status(400).json({error:response})
     }
     const newRegiment = await Regiment.build({name,description,userid, routines:[], isCompleted:false});
     newRegiment.save()
     return res.json(newRegiment);
 } catch (error) {
  
-    res.status(400).json(error)
+   return  res.status(500).json(error)
 }
 };
 // PUT - Update workout Plans (Regiment ID)
