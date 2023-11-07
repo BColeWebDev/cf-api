@@ -18,7 +18,8 @@ try {
         return res.status(400).json({error:"Regiment Already exist"})
     }
     const response = validation.createRegimentValidation(req.body)
-    if(response.error!.details!.length >= 1){
+
+    if(response.error! !== undefined){
         console.log("response", response)
         return res.status(400).json({error:response})
     }
