@@ -70,13 +70,13 @@ const GetAllExercises = async (req:Request, res:Response) =>{
 
         try {
  
-            let items = staticData;
+            let items = await WorkoutsProxy('get',"/exercises");
            console.log("items",items)
             if(sortation !== undefined){
-                items = Sorting(req, staticData)
+                items = Sorting(req, items)
             }
             if(filters !== undefined){
-                items = Filtering(req,staticData);
+                items = Filtering(req,items);
             }
     
     
@@ -88,7 +88,7 @@ const GetAllExercises = async (req:Request, res:Response) =>{
                 pageDisplay:Number(pageDisplay), 
                 items:  data
                 };    
-        res.status(200).json(results)
+        res.status(200).json(items)
         
         } catch (error) {
 
