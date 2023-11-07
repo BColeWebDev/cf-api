@@ -67,10 +67,16 @@ const GetAllExercises = async (req:Request, res:Response) =>{
         if(page === undefined || pageDisplay === undefined){
             return res.status(400).json({error:"Page Number or Page Limit Missing"})
         }
-
-        try {
- 
-            let items = await WorkoutsProxy('get',"/exercises");
+        let items
+            try {
+                items = staticData
+                // items = await WorkoutsProxy('get',"/exercises");
+            } catch (error) {
+            
+                    console.log("error",error)
+                    res.status(500).json(error)
+            }
+       
            console.log("items",items)
             if(sortation !== undefined){
                 items = Sorting(req, items)
@@ -90,10 +96,7 @@ const GetAllExercises = async (req:Request, res:Response) =>{
                 };    
         res.status(200).json(results)
         
-        } catch (error) {
-            console.log("error",error)
-            res.status(500).json(error)
-        }
+        
     };
     // GET - All Body Parts
 const GetAllBodyParts = async (req:Request, res:Response) =>{
