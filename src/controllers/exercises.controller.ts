@@ -69,8 +69,8 @@ const GetAllExercises = async (req:Request, res:Response) =>{
         }
         let items
             try {
-                items = staticData
-                // items = await WorkoutsProxy('get',"/exercises");
+                // items = staticData
+                items = await WorkoutsProxy('get',"/exercises");
             } catch (error) {
             
                     console.log("error",error)
