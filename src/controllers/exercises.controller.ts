@@ -88,11 +88,11 @@ const GetAllExercises = async (req:Request, res:Response) =>{
                 pageDisplay:Number(pageDisplay), 
                 items:  data
                 };    
-        res.status(200).json(items)
+        res.status(200).json(results)
         
         } catch (error) {
-
-            res.status(400).json(error)
+            console.log("error",error)
+            res.status(500).json(error)
         }
     };
     // GET - All Body Parts
