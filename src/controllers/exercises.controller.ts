@@ -106,8 +106,19 @@ const GetAllExercises = async (req:Request, res:Response) =>{
     // GET - All Body Parts
 const GetAllBodyParts = async (req:Request, res:Response) =>{
         try {
-            const data = await WorkoutsProxy('get', "exercises/bodyPartList")
-            res.status(200).json(data)
+            // const data = await WorkoutsProxy('get', "exercises/bodyPartList")
+            res.status(200).json([
+              "back",
+              "cardio",
+              "chest",
+              "lower arms",
+              "lower legs",
+              "neck",
+              "shoulders",
+              "upper arms",
+              "upper legs",
+              "waist"
+            ])
 
         } catch (error) {
 
@@ -145,8 +156,28 @@ const GetSingleBodyPart =  async (req:Request, res:Response) =>{
     // GET- Muscle Group 
 const GetAllMuscleGroup = async (req:Request,res:Response) =>{
     try {
-        const data = await WorkoutsProxy('get','exercises/targetList')
-        res.json(data);
+        // const data = await WorkoutsProxy('get','exercises/targetList')
+        res.json([
+          "abductors",
+          "abs",
+          "adductors",
+          "biceps",
+          "calves",
+          "cardiovascular system",
+          "delts",
+          "forearms",
+          "glutes",
+          "hamstrings",
+          "lats",
+          "levator scapulae",
+          "pectorals",
+          "quads",
+          "serratus anterior",
+          "spine",
+          "traps",
+          "triceps",
+          "upper back"
+        ]);
     } catch (error) {
         res.status(400).json(error)
     }
@@ -174,8 +205,37 @@ const GetSingleMuscleGroup = async (req:Request,res:Response) => {
     // GET - All Equipment
 const GetAllEquipment = async  (req:Request,res:Response) =>{
         try {
-            const data = await WorkoutsProxy('get','exercises/equipmentList');
-            res.json(data)
+            // const data = await WorkoutsProxy('get','exercises/equipmentList');
+            res.json([
+              "assisted",
+              "band",
+              "barbell",
+              "body weight",
+              "bosu ball",
+              "cable",
+              "dumbbell",
+              "elliptical machine",
+              "ez barbell",
+              "hammer",
+              "kettlebell",
+              "leverage machine",
+              "medicine ball",
+              "olympic barbell",
+              "resistance band",
+              "roller",
+              "rope",
+              "skierg machine",
+              "sled machine",
+              "smith machine",
+              "stability ball",
+              "stationary bike",
+              "stepmill machine",
+              "tire",
+              "trap bar",
+              "upper body ergometer",
+              "weighted",
+              "wheel roller"
+            ])
         } catch (error) {
 
             res.status(400).json(error);
