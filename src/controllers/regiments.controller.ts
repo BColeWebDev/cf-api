@@ -50,10 +50,11 @@ const UpdateRegimentPlan = async (req: Request, res: Response) => {
     description,
     isCompleted,
   });
+  response?.save()
 
   return res.status(200).json(response);
 };
-// GET  - Get all Workout Plans (Regiment ID)
+// GET  - Get all Regiment Plans (Regiment ID)
 const GetAllRegimentPlan = async (req: Request, res: Response) => {
   const { id } = req.params;
   if(id === undefined || id === null){

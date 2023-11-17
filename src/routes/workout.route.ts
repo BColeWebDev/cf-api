@@ -74,7 +74,7 @@ Router.route("/singleTrainingDay/:id").get(
 Router.route("/routines/:id")
   .get(isAuthenticated, exercisesCtrl.getAllWorkouts)
   .post(isAuthenticated, middleware.isValidWorkout, exercisesCtrl.createWorkout)
-  .put(isAuthenticated, exercisesCtrl.updateWorkout)
+  .put(isAuthenticated,  exercisesCtrl.updateWorkout)
   .delete(isAuthenticated, exercisesCtrl.deleteWorkout);
 
 export default Router;

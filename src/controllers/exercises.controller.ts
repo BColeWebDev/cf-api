@@ -4,7 +4,7 @@ let error: string[] = [];
 import { Response, Request, json } from "express"
 import Pagination from "../middleware/pagination";
 import Sorting from "../middleware/sorting";
-import { RegiementDocument, Regiment } from "../models/regiment.model";
+import { RegiementDocument, Regiment, RegimentsQueries } from "../models/regiment.model";
 // Call 3rd Party endpoint 
 import staticData from "./data"
 import Filtering from "../middleware/filtering";
@@ -311,7 +311,7 @@ try {
       return res.status(400).json({ message: "No routines id found" });
     }
 
-    // })
+
     const results = await Regiment.findById(req.params.id);
     if (!results) {
       return res.status(404).json({ message: "No Regiment Id found" });
@@ -350,50 +350,35 @@ try {
 }
 }
 const updateWorkout =async(req:Request,res:Response) =>{
+
     try {
-        const{name,gifUrl,equipment,muscle_target,bodyPart,regimentId, workoutId} = req.body
-        if(regimentId === undefined || workoutId === undefined){
+        const{name,gifUrl,equipment,muscle_target,bodyPart, id} = req.body
+        const regimentId = req.params.id
+        if(regimentId === undefined){
             return res.status(400).json({message:"Error! missing ids"})
         }
-        Regiment.findOne({_id:req.params.id},(err:any, results:any)=>{
-        if(!results){
-            return  res.status(404).json({message:"No Regiment Id found"})
-         }
-         if(err){
-            return res.status(404).json({message:err})
-         }
-        results.routines.id(regimentId).workouts.id(workoutId).name = name
-        results.routines.id(regimentId).workouts.id(workoutId).equipment= equipment
-        results.routines.id(regimentId).workouts.id(workoutId).muscle_target= muscle_target
-        results.routines.id(regimentId).workouts.id(workoutId).bodyPart= bodyPart
-        results.routines.id(regimentId).workouts.id(workoutId).gifUrl= gifUrl
-
-         results?.save()
-         
-         res.status(200).json({
-            res:results,
-            message:"Success! Updated workout."
-         })
-       })    
+       const results = await  Regiment.findOneAndUpdate({_id:regimentId},{
+        // update query
+        "$set": RegimentsQueries.UpdateRegimentQuery(id,req.body).query
+       },
+       {arrayFilters: RegimentsQueries.UpdateRegimentQuery(id,req.body).arrayFilter})    
+        let x = results?.save()
+       x?.then((newDoc)=>{
+        res.status(200).json(newDoc)
+       })   
     } catch (error) {
         res.status(400).json({message:error})
     }
     
 }
 const getAllWorkouts =async(req:Request,res:Response) =>{
-    const{regimentID} = req.body
-    if(regimentID !== undefined){
-        return res.status(400).json({message:"No Regiment Id "})
+    const regimentID = req.params.id
+    if(regimentID === undefined){
+        return res.status(400).json({message:"No Regiment Id"})
     }
     try {
-        await Regiment.findById(req.params.id,(err:any,results:any) =>{
-            if(!results){
-                return  res.status(404).json({message:"No Regiment Id found"})
-             }
-            res.status(200).json({"workouts":
-            results?.routines.id(regimentID).workouts})
-        })
-        
+      const workouts =  await Regiment.findById(req.params.id)
+      return res.json(workouts)
     } catch (error) {
         res.status(400).json(error)
     }
@@ -417,24 +402,25 @@ const getSingleWorkout =async(req:Request,res:Response) =>{
     
 }
 const deleteWorkout =async(req:Request,res:Response) =>{
-    const{regimentId, workoutId} = req.body
+    const regimentId = req.params.id
+    const{id} = req.body
+    if(regimentId === undefined || id === undefined){
+      return res.status(400).json({message:"missing ids"})
+  }
     try {
-        if(regimentId === undefined || workoutId === undefined){
-            return res.status(400).json({message:"missing ids"})
-        }
-           Regiment.findOne({_id:req.params.id},(err:any,results:any) =>{
-            if(!results){
-               return  res.status(404).json({message:"No Regiment Id found"})
-            }
-            if(results.routines.id(regimentId).workouts.id(workoutId)){
-                results.routines.id(regimentId).workouts.id(workoutId)?.remove()
-                results.save()
-                return res.status(200).json({message:results.routines.id(regimentId).workouts.id(workoutId)})
-            }else{
-                return  res.status(404).json({message:"workout ID not found!"})
-            }
-            })
-               
+      
+     const results = await Regiment.findByIdAndUpdate({_id:req.params.id},
+      {
+        // Delete Query
+        // "$set": RegimentsQueries.DeleteRegimentQuery(id),
+        "$pull":RegimentsQueries.DeleteRegimentQuery(id).query
+       },
+
+      )
+      let x = results?.save()
+      x?.then((newDoc)=>{
+       res.status(200).json(newDoc)
+      })   
     
     } catch (error) {
         res.status(400).json(error)

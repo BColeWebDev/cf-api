@@ -56,4 +56,32 @@ const Regiment = mongoose.model<RegiementDocument, RegimentModel>(
   regimentSchema
 );
 
-export { Regiment };
+class RegimentsQueries{
+  static UpdateRegimentQuery(id:any,data:any) {
+    let arrayFilter = [ {"x.id": id}]
+    let query =  {
+      // update query
+      "description":"TESTS", 
+      "routines.$[].workouts.$[x].name": name,
+      "routines.$[].workouts.$[x].equipment":data.equipment,
+      "routines.$[].workouts.$[x].bodyPart":data.bodyPart,
+      "routines.$[].workouts.$[x].gifUrl":data.gifUrl,
+      "routines.$[].workouts.$[x].muscle_target":data. muscle_target,
+  }
+
+  return {query,arrayFilter}
+}
+static DeleteRegimentQuery(id:any){
+ 
+  let query =  {
+    routines:{
+      workouts:{
+        "id":id
+      }
+    }
+}
+console.log("query",query)
+return {query}
+}
+}
+export { Regiment, RegimentsQueries };
