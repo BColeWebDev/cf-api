@@ -96,7 +96,7 @@ const GetAllExercises = async (req:Request, res:Response) =>{
                 pageDisplay:Number(pageDisplay), 
                 items:  data
                 };    
-        res.status(200).json(items)
+        res.status(200).json(results)
         
         } catch (error) {
 
