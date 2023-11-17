@@ -1,7 +1,6 @@
 // Workout Plans
 import { Response, Request } from "express";
 import { Regiment } from "../models/regiment.model";
-import mongoose from "mongoose";
 import validation from "../config/validation";
 
 const CreateRegimentPlan = async (req: Request, res: Response) => {
@@ -32,8 +31,8 @@ const CreateRegimentPlan = async (req: Request, res: Response) => {
       routines: [],
       isCompleted: false,
     });
-    newRegiment?.save();
-    return res.status(200).json(newRegiment);
+    newRegiment.save();
+    return res.json(newRegiment);
   } catch (error) {
     return res.status(500).json(error);
   }
@@ -41,7 +40,11 @@ const CreateRegimentPlan = async (req: Request, res: Response) => {
 // PUT - Update workout Plans (Regiment ID)
 const UpdateRegimentPlan = async (req: Request, res: Response) => {
   const { name, description, isCompleted } = req.body;
-
+    try {
+        
+    } catch (error) {
+        return res.status(500).json(error);
+    }
   const response = await Regiment.findByIdAndUpdate(req.params.id, {
     name,
     description,
@@ -53,17 +56,10 @@ const UpdateRegimentPlan = async (req: Request, res: Response) => {
 // GET  - Get all Workout Plans (Regiment ID)
 const GetAllRegimentPlan = async (req: Request, res: Response) => {
   const { id } = req.params;
+  if(id === undefined || id === null){
+    return res.status(400).json({error:"No ID provided"})
+  }
   try {
-    const days = [
-      "sunday",
-      "monday",
-      "tuesday",
-      "wednesday",
-      "thursday",
-      "friday",
-      "saturday",
-    ];
-    const regimentDays = [];
     console.log("params", req.params.id);
     const allRegiments = await Regiment.find({ userid: id });
 
