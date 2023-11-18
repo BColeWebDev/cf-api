@@ -3,6 +3,8 @@ import { ObjectId } from "bson";
 import mongoose from "mongoose";
 import { TrainingDaysAttrs, TrainingDay } from "./trainingdays.model";
 
+// TODO: Add Days array to schema
+
 // 1. Create an interface representing a document in MongoDB.
 export interface IRegimentAttrs {
   name: string;
@@ -10,6 +12,7 @@ export interface IRegimentAttrs {
   userid: ObjectId;
   routines: TrainingDaysAttrs[];
   isCompleted: boolean;
+  days:String[];
 }
 // Extends Mongo Class
 export interface RegiementDocument extends mongoose.Document {
@@ -18,6 +21,7 @@ export interface RegiementDocument extends mongoose.Document {
   userid: ObjectId;
   routines: TrainingDaysAttrs[];
   isCompleted: boolean;
+  days:String[];
 }
 
 interface RegimentModel extends mongoose.Model<RegiementDocument> {
@@ -46,6 +50,10 @@ const regimentSchema = new mongoose.Schema({
     default: false,
     required: true,
   },
+  days:{
+    type:[String],
+    required:true
+  }
 });
 // Defines Schema to be built
 regimentSchema.statics.build = (attrs: IRegimentAttrs) => {
