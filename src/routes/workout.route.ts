@@ -2,7 +2,7 @@ import express from "express";
 const Router = express.Router();
 import exercisesCtrl from "../controllers/exercises.controller";
 import regimentCtrl from "../controllers/regiments.controller";
-import TrainingDay from "../controllers/training_day.controller";
+import trainingCtrl from "../controllers/training_day.controller";
 import isAuthenticated from "../middleware/authMiddleware";
 import middleware from "../middleware/validationMiddlware";
 import isValidUser from "../middleware/validUserIdMiddleware";
@@ -61,17 +61,17 @@ Router.route("/singleRegiment/:id")
 
 // POST,PUT - Training Days -> (regId)
 Router.route("/trainingdays/:id")
-  .get(isAuthenticated, TrainingDay.getAllTrainingDays)
-  .post(isAuthenticated, TrainingDay.createTrainingDay)
-  .put(isAuthenticated, TrainingDay.UpdateTrainingDay);
+  .get(isAuthenticated, trainingCtrl.getAllTrainingDays)
+  .post(isAuthenticated, trainingCtrl.createTrainingDay)
+  .put(isAuthenticated, trainingCtrl.UpdateTrainingDay);
 Router.route("/trainingdays/:id/delete").put(
   isAuthenticated,
-  TrainingDay.DeleteTrainingDay
+  trainingCtrl.DeleteTrainingDay
 );
 // GET
 Router.route("/singleTrainingDay/:id").get(
   isAuthenticated,
-  TrainingDay.findSingleTrainingDay
+  trainingCtrl.findSingleTrainingDay
 );
 
 Router.route("/routines/:id")
