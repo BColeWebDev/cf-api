@@ -2,6 +2,30 @@
 import { Response, Request } from "express"
 import { Regiment } from "../models/regiment.model"
 
+const days = [
+  "sunday",
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+];
+const createTrainingDay = async (req: Request, res: Response) => {
+  if (req.params.id === undefined) {
+    return res.status(400).json({ message: "No Regiment Id found" });
+  }
+  if (
+    req.body.name === undefined ||
+    req.body.description === undefined ||
+    req.body.day === undefined
+  ) {
+    return res
+      .status(400)
+      .json({ message: "missing name / description / days" });
+  }
+  try {
+    const response = await Regiment.find({ _id: req.params.id });
 
 
 
@@ -122,23 +146,22 @@ const DeleteTrainingDay = async (req:Request, res:Response) =>{
     }
 };
 
-const getAllTrainingDays = async (req:Request,res:Response) =>{
-    if(req.params.id === undefined){
-        res.status(400).json({message:"No Regiment Id found"})
-    }try {
-        const response = await Regiment.findOne({_id:req.params.id})
+const getAllTrainingDays = async (req: Request, res: Response) => {
+  if (req.params.id === undefined) {
+    res.status(400).json({ message: "No Regiment Id found" });
+  }
+  try {
+    const response = await Regiment.findOne({ _id: req.params.id });
 
-        res.status(200).json({"routines":response?.routines})
-    } catch (error:any) {
-        res.status(400).json(error.message)
-
-    }
-
-}
-export default{
-    createTrainingDay,
-    UpdateTrainingDay,
-    getAllTrainingDays,
-    findSingleTrainingDay,
-    DeleteTrainingDay,
-}
+    res.status(200).json({ routines: response?.routines });
+  } catch (error: any) {
+    res.status(400).json(error.message);
+  }
+};
+export default {
+  createTrainingDay,
+  UpdateTrainingDay,
+  getAllTrainingDays,
+  findSingleTrainingDay,
+  DeleteTrainingDay,
+};

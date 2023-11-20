@@ -63,8 +63,11 @@ Router.route("/singleRegiment/:id")
 Router.route("/trainingdays/:id")
   .get(isAuthenticated, TrainingDay.getAllTrainingDays)
   .post(isAuthenticated, TrainingDay.createTrainingDay)
-  .put(isAuthenticated, TrainingDay.UpdateTrainingDay)
-  .delete(isAuthenticated, TrainingDay.DeleteTrainingDay);
+  .put(isAuthenticated, TrainingDay.UpdateTrainingDay);
+Router.route("/trainingdays/:id/delete").put(
+  isAuthenticated,
+  TrainingDay.DeleteTrainingDay
+);
 // GET
 Router.route("/singleTrainingDay/:id").get(
   isAuthenticated,
@@ -74,7 +77,7 @@ Router.route("/singleTrainingDay/:id").get(
 Router.route("/routines/:id")
   .get(isAuthenticated, exercisesCtrl.getAllWorkouts)
   .post(isAuthenticated, middleware.isValidWorkout, exercisesCtrl.createWorkout)
-  .put(isAuthenticated,  exercisesCtrl.updateWorkout)
+  .put(isAuthenticated, exercisesCtrl.updateWorkout)
   .delete(isAuthenticated, exercisesCtrl.deleteWorkout);
 
 export default Router;
