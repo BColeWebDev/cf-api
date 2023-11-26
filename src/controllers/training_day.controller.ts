@@ -23,9 +23,7 @@ const createTrainingDay = async (req: Request, res: Response) => {
       .status(400)
       .json({ message: "missing name / description / days" });
   }
-  if (req.body.index === undefined) {
-    return res.status(400).json({ message: "missing index" });
-  }
+
   if (req.body.day < 0 || req.body.day > 6) {
     res.status(400).json("invalid entry");
   }
