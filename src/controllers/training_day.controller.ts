@@ -23,74 +23,49 @@ const createTrainingDay = async (req: Request, res: Response) => {
       .status(400)
       .json({ message: "missing name / description / days" });
   }
-  const response = await Regiment.find({ _id: req.params.id });
+  if (req.body.index === undefined) {
+    return res.status(400).json({ message: "missing index" });
+  }
+  if (req.body.day < 0 || req.body.day > 6) {
+    res.status(400).json("invalid entry");
+  }
+  try {
+    const response = await Regiment.find({ _id: req.params.id });
 
-  const days = [
-    "sunday",
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-  ];
-  const createTrainingDay = async (req: Request, res: Response) => {
-    if (req.params.id === undefined) {
-      return res.status(400).json({ message: "No Regiment Id found" });
+    if (response.length === 0) {
+      return res.status(400).json({ message: "no regiment found" });
     }
+    // Day already created
     if (
-      req.body.name === undefined ||
-      req.body.description === undefined ||
-      req.body.day === undefined
+      response[0].routines.filter((val) => val.day === days[req.body.day])
+        .length > 0
     ) {
       return res
         .status(400)
-        .json({ message: "missing name / description / days" });
+        .json({ message: `${days[req.body.day]} already added` });
     }
-    if (req.body.index === undefined) {
-      return res.status(400).json({ message: "missing index" });
-    }
-    if (req.body.day < 0 || req.body.day > 6) {
-      res.status(400).json("invalid entry");
-    }
-    try {
-      const response = await Regiment.find({ _id: req.params.id });
+    //  Creating new date
+    response[0].routines.push({
+      name: req.body.name,
+      day: days[req.body.day],
+      description: req.body.description,
+      workouts: [],
+    });
 
-      if (response.length === 0) {
-        return res.status(400).json({ message: "no regiment found" });
-      }
-      // Day already created
-      if (
-        response[0].routines.filter((val) => val.day === days[req.body.day])
-          .length > 0
-      ) {
-        return res
-          .status(400)
-          .json({ message: `${days[req.body.day]} already added` });
-      }
-      //  Creating new date
-      response[0].routines.push({
-        name: req.body.name,
-        day: days[req.body.day],
-        description: req.body.description,
-        workouts: [],
-      });
+    response[0].days.push(days[req.body.day]);
+    response[0].days = [...new Set(response[0].days)];
 
-      response[0].days.push(days[req.body.day]);
-      response[0].days = [...new Set(response[0].days)];
-
-      // Creates new training days
-      const newTrainingDay = await Regiment.updateOne(
-        { _id: req.params.id },
-        response[0]
-      );
-      if (newTrainingDay.acknowledged) {
-        return res.status(200).json("New Training Day created!");
-      }
-    } catch (error: any) {
-      res.status(400).json(error.message);
+    // Creates new training days
+    const newTrainingDay = await Regiment.updateOne(
+      { _id: req.params.id },
+      response[0]
+    );
+    if (newTrainingDay.acknowledged) {
+      return res.status(200).json("New Training Day created!");
     }
-  };
+  } catch (error: any) {
+    res.status(400).json(error.message);
+  }
 };
 
 // Updates day, name and description
