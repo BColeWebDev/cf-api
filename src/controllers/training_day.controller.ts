@@ -158,7 +158,7 @@ const getAllTrainingDays = async (req: Request, res: Response) => {
   try {
     const response = await Regiment.findOne({ _id: req.params.id });
 
-    res.status(200).json({ routines: response?.routines });
+    res.status(200).json({ routines: response?.routines, days:response?.days});
   } catch (error: any) {
     res.status(400).json(error.message);
   }
