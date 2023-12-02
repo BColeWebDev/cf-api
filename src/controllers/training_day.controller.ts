@@ -93,14 +93,7 @@ const UpdateTrainingDay = async (req: Request, res: Response) => {
   try {
     const response = await Regiment.findOne({ _id: req.params.id });
 
-    // day already existing
-    if (
-      response?.routines?.filter(
-        (value) => value?.day === days[Number(req.body.day)]
-      )?.length === 1
-    ) {
-      return res.status(400).json({ error: "Day already exist" });
-    }
+   
     response!.routines[req.body.index].day = days[Number(req.body.day)];
     response!.routines[req.body.index].name =
       req.body.name ?? response?.routines[req.body.index].name;
