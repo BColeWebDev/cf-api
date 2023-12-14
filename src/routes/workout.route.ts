@@ -78,6 +78,8 @@ Router.route("/routines/:id")
   .get(isAuthenticated, exercisesCtrl.getAllWorkouts)
   .post(isAuthenticated, middleware.isValidWorkout, exercisesCtrl.createWorkout)
   .put(isAuthenticated, exercisesCtrl.updateWorkout)
-  .delete(isAuthenticated, exercisesCtrl.deleteWorkout);
+
+Router.route("/routines/:id/delete")
+  .put(isAuthenticated, exercisesCtrl.deleteWorkout);
 
 export default Router;

@@ -352,7 +352,8 @@ try {
 const updateWorkout =async(req:Request,res:Response) =>{
 
     try {
-        const{name,gifUrl,equipment,muscle_target,bodyPart, id} = req.body
+        const { name, gifUrl, equipment, muscle_target, bodyPart, id } =
+          req.body;
         const regimentId = req.params.id
         if(regimentId === undefined){
             return res.status(400).json({message:"Error! missing ids"})
@@ -371,6 +372,33 @@ const updateWorkout =async(req:Request,res:Response) =>{
     }
     
 }
+const deleteWorkout =async(req:Request,res:Response) =>{
+    const regimentId = req.params.id
+    const{id} = req.body
+    if(regimentId === undefined || id === undefined){
+      return res.status(400).json({message:"missing ids"})
+  }
+    try {
+      
+     const results = await Regiment.findByIdAndUpdate({_id:req.params.id},
+      {
+        // Delete Query
+        // "$set": RegimentsQueries.DeleteRegimentQuery(id),
+        "$pull":RegimentsQueries.DeleteRegimentQuery(id).query
+       },
+
+      )
+      let x = results?.save()
+      x?.then((newDoc)=>{
+       res.status(200).json(newDoc)
+      })   
+    
+    } catch (error) {
+        res.status(400).json(error)
+    }
+    
+}
+
 const getAllWorkouts =async(req:Request,res:Response) =>{
     const regimentID = req.params.id
     if(regimentID === undefined){
@@ -395,32 +423,6 @@ const getSingleWorkout =async(req:Request,res:Response) =>{
         })
         
         res.status(200).json(response)
-    
-    } catch (error) {
-        res.status(400).json(error)
-    }
-    
-}
-const deleteWorkout =async(req:Request,res:Response) =>{
-    const regimentId = req.params.id
-    const{id} = req.body
-    if(regimentId === undefined || id === undefined){
-      return res.status(400).json({message:"missing ids"})
-  }
-    try {
-      
-     const results = await Regiment.findByIdAndUpdate({_id:req.params.id},
-      {
-        // Delete Query
-        // "$set": RegimentsQueries.DeleteRegimentQuery(id),
-        "$pull":RegimentsQueries.DeleteRegimentQuery(id).query
-       },
-
-      )
-      let x = results?.save()
-      x?.then((newDoc)=>{
-       res.status(200).json(newDoc)
-      })   
     
     } catch (error) {
         res.status(400).json(error)
