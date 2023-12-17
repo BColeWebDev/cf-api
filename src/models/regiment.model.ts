@@ -12,7 +12,7 @@ export interface IRegimentAttrs {
   userid: ObjectId;
   routines: TrainingDaysAttrs[];
   isCompleted: boolean;
-  days:String[];
+  days: String[];
 }
 // Extends Mongo Class
 export interface RegiementDocument extends mongoose.Document {
@@ -21,7 +21,7 @@ export interface RegiementDocument extends mongoose.Document {
   userid: ObjectId;
   routines: TrainingDaysAttrs[];
   isCompleted: boolean;
-  days:String[];
+  days: String[];
 }
 
 interface RegimentModel extends mongoose.Model<RegiementDocument> {
@@ -50,10 +50,10 @@ const regimentSchema = new mongoose.Schema({
     default: false,
     required: true,
   },
-  days:{
-    type:[String],
-    required:true
-  }
+  days: {
+    type: [String],
+    required: true,
+  },
 });
 // Defines Schema to be built
 regimentSchema.statics.build = (attrs: IRegimentAttrs) => {
@@ -64,32 +64,31 @@ const Regiment = mongoose.model<RegiementDocument, RegimentModel>(
   regimentSchema
 );
 
-class RegimentsQueries{
-  static UpdateRegimentQuery(id:any,data:any) {
-    let arrayFilter = [ {"x.id": id}]
-    let query =  {
+class RegimentsQueries {
+  static UpdateRegimentQuery(id: any, data: any) {
+    let arrayFilter = [{ "x.id": id }];
+    let query = {
       // update query
-      "description":"TESTS", 
+      description: "TESTS",
       "routines.$[].workouts.$[x].name": name,
-      "routines.$[].workouts.$[x].equipment":data.equipment,
-      "routines.$[].workouts.$[x].bodyPart":data.bodyPart,
-      "routines.$[].workouts.$[x].gifUrl":data.gifUrl,
-      "routines.$[].workouts.$[x].muscle_target":data. muscle_target,
-  }
+      "routines.$[].workouts.$[x].equipment": data.equipment,
+      "routines.$[].workouts.$[x].bodyPart": data.bodyPart,
+      "routines.$[].workouts.$[x].gifUrl": data.gifUrl,
+      "routines.$[].workouts.$[x].muscle_target": data.muscle_target,
+    };
 
-  return {query,arrayFilter}
-}
-static DeleteRegimentQuery(id:any){
- 
-  let query =  {
-    routines:{
-      workouts:{
-        "id":id
-      }
-    }
-}
-console.log("query",query)
-return {query}
-}
+    return { query, arrayFilter };
+  }
+  static DeleteRegimentQuery(id: string) {
+    let query = {
+      routines: {
+        workouts: {
+          id: id,
+        },
+      },
+    };
+    console.log("query", query);
+    return { query };
+  }
 }
 export { Regiment, RegimentsQueries };
