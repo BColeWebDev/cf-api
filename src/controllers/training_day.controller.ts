@@ -48,6 +48,8 @@ const createTrainingDay = async (req: Request, res: Response) => {
       day: days[req.body.day],
       description: req.body.description,
       workouts: [],
+      primaryMuscleGroup: [],
+      secondaryMuscleGroup: [],
     });
 
     response[0].days.push(days[req.body.day]);
@@ -68,8 +70,6 @@ const createTrainingDay = async (req: Request, res: Response) => {
 
 // Updates day, name and description
 const UpdateTrainingDay = async (req: Request, res: Response) => {
-
-
   if (req.params.id === undefined) {
     res.status(400).json({ message: "No Regiment Id found" });
   }
@@ -89,21 +89,20 @@ const UpdateTrainingDay = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "missing index" });
   }
 
-  let newDays:string[] = []
+  let newDays: string[] = [];
   try {
     const response = await Regiment.findOne({ _id: req.params.id });
 
-   
     response!.routines[req.body.index].day = days[Number(req.body.day)];
     response!.routines[req.body.index].name =
       req.body.name ?? response?.routines[req.body.index].name;
     response!.routines[req.body.index].description =
       req.body.description ?? response?.routines[req.body.index].description;
-      response?.routines.map((val)=>{
-        newDays.push(val.day)
-      })
-    response!.days = newDays
-    response?.save()
+    response?.routines.map((val) => {
+      newDays.push(val.day);
+    });
+    response!.days = newDays;
+    response?.save();
     return res.status(200).json(response);
   } catch (error: any) {
     res.status(400).json(error.message);
@@ -151,7 +150,9 @@ const getAllTrainingDays = async (req: Request, res: Response) => {
   try {
     const response = await Regiment.findOne({ _id: req.params.id });
 
-    res.status(200).json({ routines: response?.routines, days:response?.days});
+    res
+      .status(200)
+      .json({ routines: response?.routines, days: response?.days });
   } catch (error: any) {
     res.status(400).json(error.message);
   }

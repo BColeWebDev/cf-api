@@ -6,6 +6,8 @@ interface TrainingDaysAttrs {
   name: string;
   day: string;
   workouts: WorkoutAttrs[];
+  primaryMuscleGroup: string[];
+  secondaryMuscleGroup: string[];
   _id?: string;
 }
 
@@ -14,6 +16,8 @@ export interface TrainingDocument extends mongoose.Document {
   name: string;
   day: string;
   workouts: WorkoutAttrs[];
+  primaryMuscleGroup: string[];
+  secondaryMuscleGroup: string[];
 }
 
 interface TrainingDayModel extends mongoose.Model<TrainingDocument> {
