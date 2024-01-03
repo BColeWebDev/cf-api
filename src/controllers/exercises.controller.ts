@@ -12,6 +12,7 @@ import {
 // Call 3rd Party endpoint
 import staticData from "./data";
 import Filtering from "../middleware/filtering";
+import { TrainingDay } from "models/trainingdays.model";
 const WorkoutsProxy = async (method: NeedleHttpVerbs, query: string) => {
   const options = {
     headers: {
@@ -307,16 +308,18 @@ const createWorkout = async (req: Request, res: Response) => {
     id,
     equipment,
     muscle_target,
+    secondaryMuscles,
     bodyPart,
     day,
     routineId,
   } = req.body;
+
   try {
     if (req.params.id === undefined) {
-      return res.status(400).json({ message: "No Regiment found" });
+      return res.status(400).json({ message: "No Regiment provided" });
     }
     if (routineId === undefined || routineId === null) {
-      return res.status(400).json({ message: "No routines id found" });
+      return res.status(400).json({ message: "No routines id provided" });
     }
 
     const results = await Regiment.findById(req.params.id);
@@ -326,21 +329,86 @@ const createWorkout = async (req: Request, res: Response) => {
     results.routines.filter(
       (routine) => routine._id?.toString() === routineId
     )[0];
-
-    if (
-      results.routines
+    if(results.routines.filter((routine) => routine._id?.toString() === routineId).length === 0){
+      return res.status(404).json({ message: "No Routines found" });
+    }
+    // For Muscle Images 
+    let x =[
+      "all",
+      "all_lower",
+      "all_upper",
+      "abductors",
+      "abs",
+      "adductors",
+      "back",
+      "back_lower",
+      "back_upper",
+      "biceps",
+      "calfs",
+      "chest",
+      "core",
+      "core_lower",
+      "core_upper",
+      "forearms",
+      "gluteus",
+      "hamstring",
+      "hands",
+      "latissimus",
+      "legs",
+      "neck",
+      "quadriceps",
+      "shoulders",
+      "shoulders_back",
+      "shoulders_front",
+      "triceps",
+    ];
+    let y = [
+      "abductors",
+      "abs",
+      "adductors",
+      "biceps",
+      "calves",
+      "cardiovascular system",
+      "delts",
+      "forearms",
+      "glutes",
+      "hamstrings",
+      "lats",
+      "levator scapulae",
+      "pectorals",
+      "quads",
+      "serratus anterior",
+      "spine",
+      "traps",
+      "triceps",
+      "upper back"
+    ]
+    
+    if (results
+        .routines
         .filter((routine) => routine._id?.toString() === routineId)[0]
-        .workouts.filter((val) => val.id === id).length >= 1
-    ) {
+        .workouts.filter((val) => val.id === id).length >= 1) {
       return res.status(400).json({ message: `${name} already exist` });
     }
     // Create Workout
-    results.routines
-      .filter((routine) => routine._id?.toString() === routineId)[0]
+    const workout = results.routines.filter((routine) => routine._id?.toString() === routineId)[0]
+      
+    
+      workout
       .workouts.push({ name, equipment, muscle_target, gifUrl, bodyPart, id });
 
+      // Add primary and secondary muscle groups 
+
+      workout.primaryMuscleGroup.push(muscle_target)
+      secondaryMuscles.map((val:string)=>
+        workout.secondaryMuscleGroup.push(val)
+      )
+
+      workout.primaryMuscleGroup = [...new Set(workout.primaryMuscleGroup)]
+      workout.secondaryMuscleGroup = [...new Set(workout.secondaryMuscleGroup)]
+    
     // handle results
-    results?.save((err, results) => {
+    results?.save( async(err, results) => {
       if (err) {
         return res
           .status(500)
@@ -352,6 +420,7 @@ const createWorkout = async (req: Request, res: Response) => {
       });
     });
   } catch (error) {
+    console.log(error)
     res.status(400).json(error);
   }
 };
@@ -437,6 +506,12 @@ const getSingleWorkout = async (req: Request, res: Response) => {
     res.status(400).json(error);
   }
 };
+
+
+
+
+
+
 
 export default {
   GetAllExercises,
