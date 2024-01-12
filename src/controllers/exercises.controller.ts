@@ -88,14 +88,13 @@ const GetAllExercises = async (req: Request, res: Response) => {
   const pageDisplay = req.query.limit;
   const sortation = req.query.sort;
   const filters = req.query.filters;
-
+  console.log(pageDisplay);
   if (page === undefined || pageDisplay === undefined) {
     return res.status(400).json({ error: "Page Number or Page Limit Missing" });
   }
 
   try {
-    let items = await WorkoutsProxy("get", "/exercises");
-    console.log("items", items);
+    let items = await WorkoutsProxy("get", "/exercises?limit=1200");
     if (sortation !== undefined) {
       items = Sorting(req, items);
     }
@@ -104,7 +103,7 @@ const GetAllExercises = async (req: Request, res: Response) => {
     }
 
     // // Pagination Check
-    let data = Pagination(req, items);
+    let data: object[] = Pagination(req, items);
     let results = {
       page: Number(page),
       pageDisplay: Number(pageDisplay),
@@ -329,11 +328,15 @@ const createWorkout = async (req: Request, res: Response) => {
     results.routines.filter(
       (routine) => routine._id?.toString() === routineId
     )[0];
-    if(results.routines.filter((routine) => routine._id?.toString() === routineId).length === 0){
+    if (
+      results.routines.filter(
+        (routine) => routine._id?.toString() === routineId
+      ).length === 0
+    ) {
       return res.status(404).json({ message: "No Routines found" });
     }
-    // For Muscle Images 
-    let x =[
+    // For Muscle Images
+    let x = [
       "all",
       "all_lower",
       "all_upper",
@@ -381,34 +384,42 @@ const createWorkout = async (req: Request, res: Response) => {
       "spine",
       "traps",
       "triceps",
-      "upper back"
-    ]
-    
-    if (results
-        .routines
+      "upper back",
+    ];
+
+    if (
+      results.routines
         .filter((routine) => routine._id?.toString() === routineId)[0]
-        .workouts.filter((val) => val.id === id).length >= 1) {
+        .workouts.filter((val) => val.id === id).length >= 1
+    ) {
       return res.status(400).json({ message: `${name} already exist` });
     }
     // Create Workout
-    const workout = results.routines.filter((routine) => routine._id?.toString() === routineId)[0]
-      
-    
-      workout
-      .workouts.push({ name, equipment, muscle_target, gifUrl, bodyPart, id });
+    const workout = results.routines.filter(
+      (routine) => routine._id?.toString() === routineId
+    )[0];
 
-      // Add primary and secondary muscle groups 
+    workout.workouts.push({
+      name,
+      equipment,
+      muscle_target,
+      gifUrl,
+      bodyPart,
+      id,
+    });
 
-      workout.primaryMuscleGroup.push(muscle_target)
-      secondaryMuscles.map((val:string)=>
-        workout.secondaryMuscleGroup.push(val)
-      )
+    // Add primary and secondary muscle groups
 
-      workout.primaryMuscleGroup = [...new Set(workout.primaryMuscleGroup)]
-      workout.secondaryMuscleGroup = [...new Set(workout.secondaryMuscleGroup)]
-    
+    workout.primaryMuscleGroup.push(muscle_target);
+    secondaryMuscles.map((val: string) =>
+      workout.secondaryMuscleGroup.push(val)
+    );
+
+    workout.primaryMuscleGroup = [...new Set(workout.primaryMuscleGroup)];
+    workout.secondaryMuscleGroup = [...new Set(workout.secondaryMuscleGroup)];
+
     // handle results
-    results?.save( async(err, results) => {
+    results?.save(async (err, results) => {
       if (err) {
         return res
           .status(500)
@@ -420,7 +431,7 @@ const createWorkout = async (req: Request, res: Response) => {
       });
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(400).json(error);
   }
 };
@@ -506,12 +517,6 @@ const getSingleWorkout = async (req: Request, res: Response) => {
     res.status(400).json(error);
   }
 };
-
-
-
-
-
-
 
 export default {
   GetAllExercises,
