@@ -107,6 +107,7 @@ const GetAllExercises = async (req: Request, res: Response) => {
     let results = {
       page: Number(page),
       pageDisplay: Number(pageDisplay),
+      resultsCount: data.length,
       items: data,
     };
     res.status(200).json(results);
