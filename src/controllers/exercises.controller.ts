@@ -4,15 +4,11 @@ let error: string[] = [];
 import { Response, Request, json } from "express";
 import Pagination from "../middleware/pagination";
 import Sorting from "../middleware/sorting";
-import {
-  RegiementDocument,
-  Regiment,
-  RegimentsQueries,
-} from "../models/regiment.model";
+import { Regiment, RegimentsQueries } from "../models/regiment.model";
 // Call 3rd Party endpoint
-import staticData from "./data";
+
 import Filtering from "../middleware/filtering";
-import { TrainingDay } from "models/trainingdays.model";
+
 const WorkoutsProxy = async (method: NeedleHttpVerbs, query: string) => {
   const options = {
     headers: {
