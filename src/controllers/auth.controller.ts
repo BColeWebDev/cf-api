@@ -13,11 +13,12 @@ import {
 import { saveToken, findTokenBy } from "../config/services/token.service";
 import { setUserId } from "../config/services/token.service";
 
-import { generateToken, createToken } from "../config/jwt";
+import { generateToken, createToken, decodeToken } from "../config/jwt";
 import { Response, Request } from "express";
 import { User } from "../models/user.model";
 import hashPassword from "../config/hash";
 import dayjs from "dayjs";
+import { IUserToken } from "config/interfaces";
 
 let error: string[] = [];
 
@@ -43,7 +44,6 @@ const registerUser = async (req: Request, res: Response) => {
     age,
     sex,
     device,
-   
   } = req.body;
 
   // check to see if user already exist
@@ -55,9 +55,6 @@ const registerUser = async (req: Request, res: Response) => {
   } else {
     // // Hashed Passwords
     const hashedPassword = await hashPassword.hash({ rounds: 10, password });
-    // token
-    const userToken = generateToken(email, first_name, last_name);
-
     // Create User
     const newUser = User.build({
       first_name,
@@ -71,13 +68,17 @@ const registerUser = async (req: Request, res: Response) => {
       crown_member,
       settings: {
         theme: "dark",
-        "weight":"ibs",
-        "distance":"miles",
-        "size":"inches"
+        weight: "ibs",
+        distance: "miles",
+        size: "inches",
       },
       device,
     });
     await newUser.save();
+
+    // token
+    const userToken = generateToken(email, first_name, last_name, newUser._id);
+
     // send user
     if (newUser) {
       // Creates verification email
@@ -85,26 +86,20 @@ const registerUser = async (req: Request, res: Response) => {
       try {
         await sendEmail(emailVerfication);
 
-        return res
-          .status(201)
-          .json({
-            message: `A verification mail has been sent. ${newUser.email}`,
-          });
+        return res.status(201).json({
+          message: `A verification mail has been sent. ${newUser.email}`,
+        });
       } catch (error) {
         console.log(error);
         User.findByIdAndDelete(newUser._id);
-        return res
-          .status(403)
-          .json({
-            message: `Impossible to send an email to ${newUser.email}, try again. Our service may be down.`,
-          });
+        return res.status(403).json({
+          message: `Impossible to send an email to ${newUser.email}, try again. Our service may be down.`,
+        });
       }
     } else {
       error.push("Invalid user data");
       res.status(400).json({ errors: error.map((err) => err) });
       error = [];
-
-      
     }
   }
 };
@@ -115,9 +110,10 @@ const loginUser = async (req: Request, res: Response) => {
   // Checks for email
   const existingUser = await User.findOne({ email: email });
 
-
-
-  if (!existingUser ||!(await hashPassword.compare(password, existingUser.password))) {
+  if (
+    !existingUser ||
+    !(await hashPassword.compare(password, existingUser.password))
+  ) {
     error.push("Invalid Credentials email or password is incorrect");
     return res
       .status(400)
@@ -127,7 +123,8 @@ const loginUser = async (req: Request, res: Response) => {
     const userToken = generateToken(
       existingUser.email,
       existingUser.first_name,
-      existingUser.last_name
+      existingUser.last_name,
+      existingUser._id
     );
 
     res.status(200).json({ existingUser, userToken });
@@ -170,11 +167,9 @@ const loginReset = async (req: Request, res: Response) => {
         .status(200)
         .send({ message: "Password has been successfully changed." });
     } catch (error) {
-      return res
-        .status(503)
-        .send({
-          message: `Impossible to send an email to ${user.email}, try again. Our service may be down.`,
-        });
+      return res.status(503).send({
+        message: `Impossible to send an email to ${user.email}, try again. Our service may be down.`,
+      });
     }
   } catch (error) {
     return res.status(500).send({ message: "An unexpected error occurred" });
@@ -204,17 +199,13 @@ const forgotPassword = async (req: Request, res: Response) => {
       const email = emailService.emailResetLink(user.email, resetToken.token);
       // sends email
       await emailService.sendEmail(email);
-      return res
-        .status(200)
-        .send({
-          message: `A reset passowrd email has been sent to ${user.email}`,
-        });
+      return res.status(200).send({
+        message: `A reset passowrd email has been sent to ${user.email}`,
+      });
     } catch (error) {
-      return res
-        .status(503)
-        .send({
-          message: `Impossible to send an email to ${email}, try again. Our service may be down.`,
-        });
+      return res.status(503).send({
+        message: `Impossible to send an email to ${email}, try again. Our service may be down.`,
+      });
     }
   } catch (error) {
     res.status(500).send({ message: "Error has occured" });
@@ -226,11 +217,9 @@ const resetPassword = async (req: Request, res: Response) => {
   try {
     const token = await findTokenBy("token", req.params["token"]);
     if (!token) {
-      return res
-        .status(404)
-        .send({
-          message: "This token is not valid. your token may have expired.",
-        });
+      return res.status(404).send({
+        message: "This token is not valid. your token may have expired.",
+      });
     }
     const user = await findUserById(token._id);
     if (!user) {
@@ -254,32 +243,34 @@ const resetPassword = async (req: Request, res: Response) => {
 // - Send Confirmation
 const sendConfirmation = async (req: Request, res: Response) => {
   try {
-    const token = await findTokenBy("token", req.params.token);
-    if (!token) {
+    const token: IUserToken = await decodeToken(req.params.token);
+    console.log("token", token);
+    if (token === undefined) {
       return res.status(404).send({
         message:
-          "We were unable to find a valid token. Your token may have expired.",
+          "We were unable to find a valid token. Your token may have expired. Please try again!",
       });
     }
 
-    const user = await findUserById(token._userId);
+    const user = await findUserById(token.user_id);
 
     if (!user) {
       return res
         .status(404)
         .send({ message: `We were unable to find a user for this token.` });
     }
-
+    console.log("users", user);
+    // User has already been verified
     if (user.isVerified) {
-      return res
-        .status(400)
-        .send({
-          message: "This user has already been verified. Please log in.",
-        });
+      return res.status(400).send({
+        message: "This user has already been verified. Please log in.",
+      });
     }
 
     setUserVerified(user);
     await saveUser(user);
+
+    return res.status(200).json({ message: "User Successfuly created" });
   } catch (error) {
     return res.status(500).send("An unexpected error occurred");
   }
@@ -295,7 +286,7 @@ const userCancel = async (req: Request, res: Response) => {
   }
 };
 
-// Settings tools 
+// Settings tools
 const Settings = async (req: Request, res: Response) => {
   try {
     const response = await User.findByIdAndUpdate(req.body.id, {
@@ -309,8 +300,6 @@ const Settings = async (req: Request, res: Response) => {
 
 // Delete all user and workouts regiments related to
 const deleteUser = async (req: Request, res: Response) => {
-  console.log(req.params.id);
-
   try {
     // no id provided
     if (req.params.id === undefined) {
@@ -323,7 +312,7 @@ const deleteUser = async (req: Request, res: Response) => {
     const response = await User.findByIdAndDelete(req.params.id);
 
     if (response) {
-      return res.status(200).json(response);
+      return res.status(200).json({ message: "User Deleted!" });
     }
   } catch (error) {
     return res.status(500).send("An unexpected error occurred");
