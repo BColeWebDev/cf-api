@@ -306,7 +306,6 @@ const createWorkout = async (req: Request, res: Response) => {
     muscle_target,
     secondaryMuscles,
     bodyPart,
-    day,
     routineId,
   } = req.body;
 
@@ -332,57 +331,7 @@ const createWorkout = async (req: Request, res: Response) => {
     ) {
       return res.status(404).json({ message: "No Routines found" });
     }
-    // For Muscle Images
-    let x = [
-      "all",
-      "all_lower",
-      "all_upper",
-      "abductors",
-      "abs",
-      "adductors",
-      "back",
-      "back_lower",
-      "back_upper",
-      "biceps",
-      "calfs",
-      "chest",
-      "core",
-      "core_lower",
-      "core_upper",
-      "forearms",
-      "gluteus",
-      "hamstring",
-      "hands",
-      "latissimus",
-      "legs",
-      "neck",
-      "quadriceps",
-      "shoulders",
-      "shoulders_back",
-      "shoulders_front",
-      "triceps",
-    ];
-    let y = [
-      "abductors",
-      "abs",
-      "adductors",
-      "biceps",
-      "calves",
-      "cardiovascular system",
-      "delts",
-      "forearms",
-      "glutes",
-      "hamstrings",
-      "lats",
-      "levator scapulae",
-      "pectorals",
-      "quads",
-      "serratus anterior",
-      "spine",
-      "traps",
-      "triceps",
-      "upper back",
-    ];
+  
 
     if (
       results.routines
@@ -392,9 +341,7 @@ const createWorkout = async (req: Request, res: Response) => {
       return res.status(400).json({ message: `${name} already exist` });
     }
     // Create Workout
-    const workout = results.routines.filter(
-      (routine) => routine._id?.toString() === routineId
-    )[0];
+    const workout = results.routines.filter((routine) => routine._id?.toString() === routineId)[0];
 
     workout.workouts.push({
       name,
@@ -432,31 +379,29 @@ const createWorkout = async (req: Request, res: Response) => {
     res.status(400).json(error);
   }
 };
+
+
+// Update 
 const updateWorkout = async (req: Request, res: Response) => {
-  try {
-    const { name, gifUrl, equipment, muscle_target, bodyPart, id } = req.body;
-    const regimentId = req.params.id;
-    if (regimentId === undefined) {
-      return res.status(400).json({ message: "Error! missing ids" });
-    }
-    const results = await Regiment.findOneAndUpdate(
-      { _id: regimentId },
-      {
-        // update query
-        $set: RegimentsQueries.UpdateRegimentQuery(id, req.body).query,
-      },
-      {
-        arrayFilters: RegimentsQueries.UpdateRegimentQuery(id, req.body)
-          .arrayFilter,
-      }
-    );
-    let x = results?.save();
-    x?.then((newDoc) => {
-      res.status(200).json(newDoc);
-    });
-  } catch (error) {
-    res.status(400).json({ message: error });
+  const { routineId, workoutId, sets,restTime } = req.body;
+  const regimentId = req.params.id;
+  if (regimentId === undefined || workoutId === null || routineId === null) {
+    return res.status(400).json({ message: "missing ids" });
   }
+
+
+  const results = await Regiment.findById(regimentId);
+
+  let filterExercises = results!.routines
+  .filter((value)=> value._id == routineId)[0].workouts.filter((value)=>value._id == workoutId)[0]
+
+
+  filterExercises!.sets = sets
+  filterExercises!.restTime = restTime
+
+  results?.save();
+  
+  return res.status(200).json("")
 };
 const deleteWorkout = async (req: Request, res: Response) => {
   const regimentId = req.params.id;

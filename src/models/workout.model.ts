@@ -1,3 +1,4 @@
+import { ISets } from "config/interfaces";
 import mongoose from "mongoose"
 // Workouts Schema 
  interface WorkoutAttrs{
@@ -8,7 +9,11 @@ import mongoose from "mongoose"
     gifUrl: string
     id:string   
     _id?:string
+    restTime?:string
+    sets?:ISets[]
 }
+
+
 
 interface WorkoutModel extends mongoose.Model<WorkoutDocument>{
     build(attrs:WorkoutAttrs): WorkoutDocument;
@@ -20,6 +25,8 @@ export interface WorkoutDocument extends mongoose.Document{
     bodyPart: string;
     gifUrl: string;
     id:string;
+    restTime:string
+    sets:ISets[]
 }
 
 const workoutSchema = new mongoose.Schema({
@@ -46,6 +53,16 @@ const workoutSchema = new mongoose.Schema({
     id:{
         type:String,
         required:true
+    },
+    // In between rest time on sets
+    restTime:{
+        type:String,
+        default:""
+    },
+
+    sets:{
+        type:Object, 
+        default:[]
     }
 })
 

@@ -73,7 +73,7 @@ Router.route("/singleTrainingDay/:id").get(
   isAuthenticated,
   trainingCtrl.findSingleTrainingDay
 );
-
+// WORKOUTS
 Router.route("/routines/:id")
   .get(isAuthenticated, exercisesCtrl.getAllWorkouts)
   .post(isAuthenticated, middleware.isValidWorkout, exercisesCtrl.createWorkout)
