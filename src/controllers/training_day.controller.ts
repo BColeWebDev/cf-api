@@ -157,10 +157,32 @@ const getAllTrainingDays = async (req: Request, res: Response) => {
     res.status(400).json(error.message);
   }
 };
+
+const trainingDayIsCompleted = async (req:Request, res:Response) =>{
+  if(req.params.id === null){
+    return res.status(400).json({message:"Missing IDs"})
+  }
+
+   await Regiment.findById(req.params.id).then((value)=>{
+   if(value === null){
+    return res.status(404).json({message:"regiment not found!"})
+   }
+   value.routines.filter((value)=> value._id == req.body.routineId)[0].isCompleted = true
+   value.save()
+  
+    return res.json({
+      "message":"workout completed"
+    })
+
+  })
+
+
+}
 export default {
   createTrainingDay,
   UpdateTrainingDay,
   getAllTrainingDays,
   findSingleTrainingDay,
   DeleteTrainingDay,
+  trainingDayIsCompleted
 };

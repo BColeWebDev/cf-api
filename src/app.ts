@@ -1,4 +1,4 @@
-// import { errorHandler } from './middleware/errorMiddleware';
+
 import express,{Request,Response} from "express";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
@@ -11,6 +11,7 @@ if (process.env.NODE_ENV !== 'production') {
     dotenv.config();
 }
 
+// Rate Limiting
 const limit = rateLimit({
     windowMs: 1 * 60 * 1000, // 1 minute
     max: 20,

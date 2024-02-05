@@ -9,6 +9,7 @@ interface TrainingDaysAttrs {
   primaryMuscleGroup: string[];
   secondaryMuscleGroup: string[];
   _id?: string;
+  isCompleted?:boolean
 }
 
 export interface TrainingDocument extends mongoose.Document {
@@ -18,6 +19,7 @@ export interface TrainingDocument extends mongoose.Document {
   workouts: WorkoutAttrs[];
   primaryMuscleGroup: string[];
   secondaryMuscleGroup: string[];
+  isCompleted:boolean
 }
 
 interface TrainingDayModel extends mongoose.Model<TrainingDocument> {

@@ -52,7 +52,8 @@ Router.route("/regimentsAll/:id").get(
   isAuthenticated,
   regimentCtrl.GetAllRegimentPlan
 );
-
+Router.route('/regimentsAll/:id/completed')
+      .post(regimentCtrl.regimentAllCompleted)
 // GET,PUT,DELETE - Regiments -> (regId)
 Router.route("/singleRegiment/:id")
   .get(isAuthenticated, regimentCtrl.GetSingleRegimentPlan)
@@ -68,6 +69,12 @@ Router.route("/trainingdays/:id/delete").put(
   isAuthenticated,
   trainingCtrl.DeleteTrainingDay
 );
+
+// POST - marked training day completed 
+Router.route('/trainingdays/:id/completed')
+      .post(trainingCtrl.trainingDayIsCompleted)
+
+
 // GET
 Router.route("/singleTrainingDay/:id").get(
   isAuthenticated,

@@ -65,6 +65,9 @@ const GetAllRegimentPlan = async (req: Request, res: Response) => {
     console.log("params", req.params.id);
     const allRegiments = await Regiment.find({ userid: id });
 
+
+
+  
     return res.status(200).json(allRegiments);
   } catch (error) {
     res.status(400).json(error);
@@ -91,10 +94,28 @@ const DeleteRegimentPlan = async (req: Request, res: Response) => {
   }
 };
 
+// POST - All training Days are completed for this week -> regiments completed
+
+const regimentAllCompleted = async (req:Request,res:Response)=>{
+  if(req.params.id === null){
+    return res.status(400).json({message:"Missing IDs"})
+  }
+  let results = await Regiment.findById(req.params.id);
+  if(results === null){
+      return res.status(404).json({message:"Not found"})
+    }
+
+
+  results.isCompleted = results!.routines.every((val)=>val.isCompleted === true)
+  results.save();
+  return res.status(200).json(results)
+  
+}
 export default {
   CreateRegimentPlan,
   UpdateRegimentPlan,
   GetAllRegimentPlan,
   GetSingleRegimentPlan,
   DeleteRegimentPlan,
+  regimentAllCompleted
 };
