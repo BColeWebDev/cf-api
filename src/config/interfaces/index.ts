@@ -33,9 +33,9 @@ export interface Workouts {
   muscle_target: string;
   equipment: string;
 }
-export interface ISets{
-  set:number;
-  reps:number;
-  weight:number;
-  kg:number;
+export interface ISets {
+  sets: number;
+  reps: number;
+  weight: number;
+  kg: number;
 }

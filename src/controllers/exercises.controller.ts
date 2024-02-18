@@ -307,6 +307,8 @@ const createWorkout = async (req: Request, res: Response) => {
     secondaryMuscles,
     bodyPart,
     routineId,
+    sets,
+    restTime,
   } = req.body;
 
   try {
@@ -331,7 +333,6 @@ const createWorkout = async (req: Request, res: Response) => {
     ) {
       return res.status(404).json({ message: "No Routines found" });
     }
-  
 
     if (
       results.routines
@@ -341,7 +342,9 @@ const createWorkout = async (req: Request, res: Response) => {
       return res.status(400).json({ message: `${name} already exist` });
     }
     // Create Workout
-    const workout = results.routines.filter((routine) => routine._id?.toString() === routineId)[0];
+    const workout = results.routines.filter(
+      (routine) => routine._id?.toString() === routineId
+    )[0];
 
     workout.workouts.push({
       name,
@@ -350,6 +353,7 @@ const createWorkout = async (req: Request, res: Response) => {
       gifUrl,
       bodyPart,
       id,
+      sets: [sets],
     });
 
     // Add primary and secondary muscle groups
@@ -380,28 +384,30 @@ const createWorkout = async (req: Request, res: Response) => {
   }
 };
 
-
-// Update 
+// Update
 const updateWorkout = async (req: Request, res: Response) => {
-  const { routineId, workoutId, sets,restTime } = req.body;
+  const { routineId, workoutId, sets, restTime } = req.body;
   const regimentId = req.params.id;
   if (regimentId === undefined || workoutId === null || routineId === null) {
     return res.status(400).json({ message: "missing ids" });
   }
 
-
   const results = await Regiment.findById(regimentId);
 
   let filterExercises = results!.routines
-  .filter((value)=> value._id == routineId)[0].workouts.filter((value)=>value._id == workoutId)[0]
+    .filter((value) => value._id == routineId)[0]
+    .workouts.filter((value) => value._id == workoutId)[0];
 
-
-  filterExercises!.sets = sets
-  filterExercises!.restTime = restTime
+  if (filterExercises === undefined) {
+    return res.status(400).json({ message: "workout not found" });
+  }
+  console.log(req.body, filterExercises);
+  filterExercises!.sets = [sets];
+  filterExercises!.restTime = restTime;
 
   results?.save();
-  
-  return res.status(200).json("")
+
+  return res.status(200).json({ message: "workout updated" });
 };
 const deleteWorkout = async (req: Request, res: Response) => {
   const regimentId = req.params.id;
