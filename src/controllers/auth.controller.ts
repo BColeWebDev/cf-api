@@ -12,14 +12,14 @@ import {
 } from "../config/services/user.service";
 import { saveToken, findTokenBy } from "../config/services/token.service";
 import { setUserId } from "../config/services/token.service";
-import path,{dirname} from "path"
+import path, { dirname } from "path";
 import { generateToken, createToken, decodeToken } from "../config/jwt";
 import { Response, Request } from "express";
 import { User } from "../models/user.model";
 import hashPassword from "../config/hash";
 import dayjs from "dayjs";
 import { IUserToken } from "config/interfaces";
-import fs from "fs"
+import fs from "fs";
 let error: string[] = [];
 
 // Return all Created Users (Admin)
@@ -319,40 +319,56 @@ const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
-const uploadAvatar = async(req: Request, res: Response) => {
-  
+const uploadAvatar = async (req: Request, res: Response) => {
   if (req.file === undefined) return res.send("you must select a file.");
 
-  if (req.params.id === null || req.params.id ===undefined){
-    return res.status(400).json({message:"Error userid is missing!"})
+  if (req.params.id === null || req.params.id === undefined) {
+    return res.status(400).json({ message: "Error userid is missing!" });
   }
 
-  console.log("req",fs.readFileSync(path.join(dirname(`${require.main?.filename}`) + '/uploads/' + req.file.filename )))
+  console.log(
+    "req",
+    fs.readFileSync(
+      path.join(
+        dirname(`${require.main?.filename}`) + "/uploads/" + req.file.filename
+      )
+    )
+  );
 
-  let results = await User.findById(req.params.id)
+  let results = await User.findById(req.params.id);
 
-  if (results === null || results ===undefined){
-    return res.status(404).json({message:"Error userid not found!"})
+  if (results === null || results === undefined) {
+    return res.status(404).json({ message: "Error userid not found!" });
   }
 
+  results!.avatarProfile = fs.readFileSync(
+    path.join(
+      dirname(`${require.main?.filename}`) + "/uploads/" + req.file.filename
+    )
+  );
+  results?.save();
+  return res.send(
+    fs
+      .readFileSync(
+        path.join(
+          dirname(`${require.main?.filename}`) + "/uploads/" + req.file.filename
+        )
+      )
+      .toString("base64")
+  );
+};
 
-  results!.avatarProfile = fs.readFileSync(path.join(dirname(`${require.main?.filename}`) + '/uploads/' + req.file.filename ))
-  results?.save()
-  return res.send(fs.readFileSync(path.join(dirname(`${require.main?.filename}`) + '/uploads/' + req.file.filename )).toString("base64"));
-}
-
-const previewAvatar = async (req:Request,res:Response)=>{
-  if (req.params.id === null || req.params.id ===undefined){
-    return res.status(400).json({message:"Error userid is missing!"})
+const previewAvatar = async (req: Request, res: Response) => {
+  if (req.params.id === null || req.params.id === undefined) {
+    return res.status(400).json({ message: "Error userid is missing!" });
   }
 
-  let results = await User.findById(req.params.id)
+  let results = await User.findById(req.params.id);
 
-  if (results === null || results ===undefined){
-    return res.status(404).json({message:"Error userid not found!"})
+  if (results === null || results === undefined) {
+    return res.status(404).json({ message: "Error userid not found!" });
   }
-
-}
+};
 export default {
   registerUser,
   allUsers,
@@ -366,5 +382,5 @@ export default {
   SignOutUser,
   Settings,
   deleteUser,
-  uploadAvatar
+  uploadAvatar,
 };
