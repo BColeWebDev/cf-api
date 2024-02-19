@@ -367,17 +367,20 @@ const createWorkout = async (req: Request, res: Response) => {
     workout.secondaryMuscleGroup = [...new Set(workout.secondaryMuscleGroup)];
 
     // handle results
-    results?.save(async (err, results) => {
-      if (err) {
-        return res
-          .status(500)
-          .json({ err: `Server Err! could not create lead ${err}` });
-      }
+    results.save().then((response) => {
       res.status(200).json({
         res: results,
         message: `Success! workout ${name} has been added!`,
       });
     });
+    // results?.save(async (err, results) => {
+    //   if (err) {
+    //     return res
+    //       .status(500)
+    //       .json({ err: `Server Err! could not create lead ${err}` });
+    //   }
+
+    // });
   } catch (error) {
     console.log(error);
     res.status(400).json(error);
