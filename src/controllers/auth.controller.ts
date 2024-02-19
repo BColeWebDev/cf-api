@@ -126,7 +126,7 @@ const loginUser = async (req: Request, res: Response) => {
       existingUser.last_name,
       existingUser._id
     );
-
+    existingUser.avatarProfile = "";
     res.status(200).json({ existingUser, userToken });
   } catch (error) {
     console.log(error);

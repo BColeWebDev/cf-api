@@ -15,7 +15,7 @@ interface UserAttrs {
   device: string;
   crown_member: boolean;
   settings: Object;
-  avatarProfile?:Buffer
+  avatarProfile?: Buffer;
 }
 // Interface that describe property a user model has
 interface UserModel extends mongoose.Model<UserDocument> {
@@ -46,7 +46,7 @@ export interface UserDocument extends mongoose.Document {
   hidePassword(): void;
   hashPassword(): Promise<string>;
   settings: Object;
-  avatarProfile:Buffer
+  avatarProfile: Buffer | string;
 }
 
 const userSchema = new mongoose.Schema({
@@ -113,9 +113,9 @@ const userSchema = new mongoose.Schema({
     require: true,
     default: false,
   },
-  avatarProfile:{
-  type:Buffer,
-  default:""
+  avatarProfile: {
+    type: Buffer,
+    default: "",
   },
   settings: {
     type: Object,
