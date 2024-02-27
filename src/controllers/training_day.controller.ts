@@ -11,6 +11,7 @@ const days = [
   "saturday",
 ];
 const createTrainingDay = async (req: Request, res: Response) => {
+  console.log("obj", req.body);
   if (req.params.id === undefined) {
     return res.status(400).json({ message: "No Regiment Id found" });
   }
@@ -45,25 +46,27 @@ const createTrainingDay = async (req: Request, res: Response) => {
     //  Creating new date
     response[0].routines.push({
       name: req.body.name,
-      day: days[req.body.day],
+      day: days[Number(req.body.day)],
       description: req.body.description,
       workouts: [],
       primaryMuscleGroup: [],
       secondaryMuscleGroup: [],
     });
 
-    response[0].days.push(days[req.body.day]);
+    response[0].days.push(days[Number(req.body.day)]);
     response[0].days = [...new Set(response[0].days)];
-
+    console.log("res", response[0]);
     // Creates new training days
     const newTrainingDay = await Regiment.updateOne(
-      { _id: req.params.id },
+      { _id: req.body.regimentId },
       response[0]
     );
+    console.log("new", newTrainingDay);
     if (newTrainingDay.acknowledged) {
       return res.status(200).json("New Training Day created!");
     }
   } catch (error: any) {
+    console.log(error);
     res.status(400).json(error.message);
   }
 };
@@ -121,25 +124,28 @@ const findSingleTrainingDay = async (req: Request, res: Response) => {
   }
 };
 const DeleteTrainingDay = async (req: Request, res: Response) => {
+  console.log(req.body);
   try {
-    if (req.params.id === undefined || req.body._id === undefined) {
+    if (req.params.id === undefined) {
       return res.status(400).json({ message: "No Regiment Id found" });
     }
-
-    Regiment.findOne({ _id: req.params.id }, (err: any, results: any) => {
-      if (!results) {
+    await Regiment.findById(req.params.id).then((regiment) => {
+      if (!regiment) {
         res.status(404).json({ message: "No Regiment Id found" });
-      } else {
-        results.days = results.days.filter(
-          (value: any) => value !== results.routines.id(req.body._id).day
-        );
-        results.routines.id(req.body._id)?.remove();
-        results.save();
-        res.status(200).json(results);
       }
+      regiment!.routines = regiment!.routines?.filter(
+        (value) => value._id !== req.body.routineId
+      );
+      regiment!.days = regiment!.days?.filter(
+        (value) => value !== req.body.trainingDay.day
+      );
+      console.log("newRes", regiment);
+      regiment?.save();
+      res.status(200).json(regiment);
     });
   } catch (error: any) {
-    res.status(400).json(error.message);
+    console.log("err", error);
+    res.status(500).json(error.message);
   }
 };
 
@@ -158,31 +164,30 @@ const getAllTrainingDays = async (req: Request, res: Response) => {
   }
 };
 
-const trainingDayIsCompleted = async (req:Request, res:Response) =>{
-  if(req.params.id === null){
-    return res.status(400).json({message:"Missing IDs"})
+const trainingDayIsCompleted = async (req: Request, res: Response) => {
+  if (req.params.id === null) {
+    return res.status(400).json({ message: "Missing IDs" });
   }
 
-   await Regiment.findById(req.params.id).then((value)=>{
-   if(value === null){
-    return res.status(404).json({message:"regiment not found!"})
-   }
-   value.routines.filter((value)=> value._id == req.body.routineId)[0].isCompleted = true
-   value.save()
-  
+  await Regiment.findById(req.params.id).then((value) => {
+    if (value === null) {
+      return res.status(404).json({ message: "regiment not found!" });
+    }
+    value.routines.filter(
+      (value) => value._id == req.body.routineId
+    )[0].isCompleted = true;
+    value.save();
+
     return res.json({
-      "message":"workout completed"
-    })
-
-  })
-
-
-}
+      message: "workout completed",
+    });
+  });
+};
 export default {
   createTrainingDay,
   UpdateTrainingDay,
   getAllTrainingDays,
   findSingleTrainingDay,
   DeleteTrainingDay,
-  trainingDayIsCompleted
+  trainingDayIsCompleted,
 };
