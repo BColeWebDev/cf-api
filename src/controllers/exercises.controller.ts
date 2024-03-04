@@ -90,8 +90,8 @@ const GetAllExercises = async (req: Request, res: Response) => {
   }
 
   try {
-    let items = sample;
-    // let items = await WorkoutsProxy("get", "/exercises?limit=1200");
+    // let items = sample;
+    let items = await WorkoutsProxy("get", "/exercises?limit=1200");
     if (sortation !== undefined) {
       items = Sorting(req, items);
     }
