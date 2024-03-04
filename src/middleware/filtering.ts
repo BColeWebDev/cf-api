@@ -1,19 +1,10 @@
 import { Response, Request } from "express";
 
+// Filters Collections for multi selections
 const Filtering = (req: Request, results: any) => {
   try {
-    const OBJ: any = req.query.filters;
-    let filters = JSON.parse(OBJ);
-    return results.filter(function (item: any) {
-      for (let key in filters) {
-        if (
-          item[key] === undefined ||
-          item[key] != filters[key as keyof typeof filters]
-        )
-          return false;
-      }
-      return true;
-    });
+    console.log("filter", req.params);
+    return results;
   } catch (error) {
     console.log(error);
   }

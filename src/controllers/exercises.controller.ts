@@ -8,7 +8,7 @@ import { Regiment, RegimentsQueries } from "../models/regiment.model";
 // Call 3rd Party endpoint
 
 import Filtering from "../middleware/filtering";
-
+import sample from "../config/data";
 const WorkoutsProxy = async (method: NeedleHttpVerbs, query: string) => {
   const options = {
     headers: {
@@ -90,7 +90,8 @@ const GetAllExercises = async (req: Request, res: Response) => {
   }
 
   try {
-    let items = await WorkoutsProxy("get", "/exercises?limit=1200");
+    let items = sample;
+    // let items = await WorkoutsProxy("get", "/exercises?limit=1200");
     if (sortation !== undefined) {
       items = Sorting(req, items);
     }
@@ -114,7 +115,6 @@ const GetAllExercises = async (req: Request, res: Response) => {
 // GET - All Body Parts
 const GetAllBodyParts = async (req: Request, res: Response) => {
   try {
-    // const data = await WorkoutsProxy('get', "exercises/bodyPartList")
     res
       .status(200)
       .json([
@@ -159,7 +159,6 @@ const GetSingleBodyPart = async (req: Request, res: Response) => {
 // GET- Muscle Group
 const GetAllMuscleGroup = async (req: Request, res: Response) => {
   try {
-    // const data = await WorkoutsProxy('get','exercises/targetList')
     res.json([
       "abductors",
       "abs",
@@ -205,7 +204,6 @@ const GetSingleMuscleGroup = async (req: Request, res: Response) => {
 // GET - All Equipment
 const GetAllEquipment = async (req: Request, res: Response) => {
   try {
-    // const data = await WorkoutsProxy('get','exercises/equipmentList');
     res.json([
       "assisted",
       "band",
@@ -373,14 +371,6 @@ const createWorkout = async (req: Request, res: Response) => {
         message: `Success! workout ${name} has been added!`,
       });
     });
-    // results?.save(async (err, results) => {
-    //   if (err) {
-    //     return res
-    //       .status(500)
-    //       .json({ err: `Server Err! could not create lead ${err}` });
-    //   }
-
-    // });
   } catch (error) {
     console.log(error);
     res.status(400).json(error);
@@ -415,7 +405,10 @@ const updateWorkout = async (req: Request, res: Response) => {
 const deleteWorkout = async (req: Request, res: Response) => {
   const regimentId = req.params.id;
   const { id, routineId } = req.body;
-  if (regimentId === undefined || id === undefined) {
+  console.log("req.", req.body);
+
+  // regiment id
+  if (regimentId === undefined || id === undefined || routineId === undefined) {
     return res.status(400).json({ message: "missing ids" });
   }
   console.log(id);

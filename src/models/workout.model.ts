@@ -13,9 +13,9 @@ interface WorkoutAttrs {
   sets?: ISets[];
 }
 
-interface WorkoutModel extends mongoose.Model<WorkoutDocument> {
-  build(attrs: WorkoutAttrs): WorkoutDocument;
-}
+// interface WorkoutModel extends mongoose.Model<WorkoutDocument> {
+//   build(attrs: WorkoutAttrs): WorkoutDocument;
+// }
 export interface WorkoutDocument extends mongoose.Document {
   name: string;
   equipment: string;
@@ -64,8 +64,5 @@ const workoutSchema = new mongoose.Schema({
   },
 });
 
-const Workout = mongoose.model<WorkoutDocument, WorkoutModel>(
-  "Workout",
-  workoutSchema
-);
+const Workout = mongoose.model<WorkoutDocument>("Workout", workoutSchema);
 export { Workout, WorkoutAttrs };
