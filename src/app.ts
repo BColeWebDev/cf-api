@@ -5,6 +5,7 @@ import workoutRoutes from "./routes/workout.route";
 import authRoutes from "./routes/auth.route";
 import dotenv from "dotenv";
 import fs from "fs";
+import ExpressMongoSanitize from "express-mongo-sanitize";
 import isAuthenticated from "./middleware/authMiddleware";
 // Enviorment Variables
 if (process.env.NODE_ENV !== "production") {
@@ -33,10 +34,17 @@ app.use(
     limit: "50mb",
   })
 );
+// Sanatize Data
+app.use(ExpressMongoSanitize());
+// Template Engine 
 app.set("view engine", "ejs");
 app.use(cors({ origin: true, credentials: true }));
+// Routes 
 app.use("/api/workouts", workoutRoutes);
 app.use("/api/auth", authRoutes);
+
+
+// Test Controllers
 app.get("/api/auth/whoami", async (req: Request, res: Response) => {
   res.json({ message: "auth controller" });
 });
@@ -44,10 +52,11 @@ app.get("/api/workouts/whoami", async (req: Request, res: Response) => {
   res.json({ message: "workouts controller" });
 });
 
+// Creates Upload Directory
 if (!fs.existsSync("./src/uploads")) {
   fs.mkdirSync("./src/uploads");
 }
-// app.all('*', async (req, res) => {res.send("Not Found")})
+app.all('*', async (req, res) => {res.status(404).send("Not Found")})
 // app.use(errorHandler);
 
 export { app };

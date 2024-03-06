@@ -12,8 +12,7 @@ Router.route("/exercises").get(isAuthenticated, exercisesCtrl.GetAllExercises);
 // GET - Single Body Part
 Router.route("/exercises/targets").get(
   isAuthenticated,
-  exercisesCtrl.GetAllBodyParts
-);
+exercisesCtrl.GetAllBodyParts);
 Router.route("/exercises/targets/:name").get(
   isAuthenticated,
   exercisesCtrl.GetSingleBodyPart

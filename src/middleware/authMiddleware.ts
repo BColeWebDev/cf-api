@@ -4,11 +4,11 @@ import {Request, Response, NextFunction} from 'express';
 // User authentication for routes 
 const isAuthenticated = async  (req: Request, res: Response, next: NextFunction) => {
     const authHeader:any = req?.headers?.bearer
-    const disabledAuth:boolean = process.env.CC_DISABLE_AUTH === "true"? true : false;
-   
+    const disabledAuth:boolean = (process.env.CC_DISABLE_AUTH === "true");
+   console.log("authHeader",authHeader)
   
     // // verify token being sent from header 
-    if ( authHeader === undefined && !disabledAuth) {
+    if (authHeader === undefined && !disabledAuth) {
         return res.status(400).json('No token provided')
     }
     

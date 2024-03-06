@@ -8,7 +8,7 @@ mongoose
     serverSelectionTimeoutMS: 5000,
   })
   .then((value) => {
-    console.log("| MongoDB Connected");
+    console.log("| MongoDB Connected ✅");
     console.log("|--------------------------------------------");
   })
   .catch((e) => {

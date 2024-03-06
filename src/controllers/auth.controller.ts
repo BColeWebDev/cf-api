@@ -56,15 +56,16 @@ const registerUser = async (req: Request, res: Response) => {
     // // Hashed Passwords
     const hashedPassword = await hashPassword.hash({ rounds: 10, password });
     // Create User
+  
     const newUser = User.build({
-      first_name,
-      last_name,
-      email,
+      first_name:first_name.trim().toLowerCase(),
+      last_name:last_name.trim().toLowerCase(),
+      email:email.trim().toLowerCase(),
       password: hashedPassword,
-      bio,
-      experience,
-      age,
-      sex,
+      bio:bio.trim().toLowerCase(),
+      experience:experience.trim().toLowerCase(),
+      age:age.trim().toLowerCase(),
+      sex:sex.trim().toLowerCase(),
       crown_member,
       settings: {
         theme: "dark",
@@ -72,7 +73,7 @@ const registerUser = async (req: Request, res: Response) => {
         distance: "miles",
         size: "inches",
       },
-      device,
+      device:device.trim().toLowerCase(),
     });
     await newUser.save();
 
@@ -108,17 +109,27 @@ const registerUser = async (req: Request, res: Response) => {
 const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   // Checks for email
-  const existingUser = await User.findOne({ email: email });
+  
+  const existingUser = await User.findOne({ email:email  });
 
-  if (
-    !existingUser ||
-    !(await hashPassword.compare(password, existingUser.password))
-  ) {
+  if (!existingUser ||!(await hashPassword.compare(password, existingUser.password))) {
     error.push("Invalid Credentials email or password is incorrect");
     return res
       .status(400)
       .json({ message: "Invalid Credentials email or password is incorrect" });
   }
+
+  // Existing User has not authenticate account
+  if (existingUser && existingUser.isVerified) {
+    error.push("User credentials has not been validated");
+    return res
+      .status(400)
+      .json({ message: "User credentials has not been validated" });
+  }
+
+
+
+
   try {
     const userToken = generateToken(
       existingUser.email,
@@ -126,6 +137,7 @@ const loginUser = async (req: Request, res: Response) => {
       existingUser.last_name,
       existingUser._id
     );
+    // hide avatarProfile for now 
     existingUser.avatarProfile = "";
     res.status(200).json({ existingUser, userToken });
   } catch (error) {
@@ -286,13 +298,22 @@ const userCancel = async (req: Request, res: Response) => {
   }
 };
 
-// Settings tools
+// Settings Tools
 const Settings = async (req: Request, res: Response) => {
+
+  const response = await await User.findById(req.params.id);
+
+  if(response === undefined || response === null){
+    return res.status(404).json({message:"User ID Not found"})
+  }
+  if(req.body.settings ===undefined){
+    return res.status(400).json({message:"Missing Settings"})
+  }
   try {
-    const response = await User.findByIdAndUpdate(req.body.id, {
+    const response = await User.findByIdAndUpdate(req.params.id, {
       settings: req.body.settings,
-    });
-    return res.status(200).json(response?.settings);
+});
+    return res.status(200).json({message:"Settings Updated"});
   } catch (error) {
     return res.status(500).send("An unexpected error occurred");
   }
