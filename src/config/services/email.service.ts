@@ -20,7 +20,7 @@ export const emailResetLink = (
     subject: "Reset password link",
     text: "text",
     html: `<p>You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n Please click on the following link, or paste this into your browser to complete the process:\n\n
-  <a href="http://${process.env.HOST}/login/reset?token=${resetToken}">http://${process.env.HOST}/login/reset?token=${resetToken}</a> \n\n If you did not request this, please ignore this email and your password will remain unchanged.\n </p>`,
+  <a href="${process.env.WEB_HOST}/login/reset?token=${resetToken}">${process.env.WEB_HOST}/login/reset?token=${resetToken}</a> \n\n If you did not request this, please ignore this email and your password will remain unchanged.\n </p>`,
   };
   return email;
 };
@@ -49,7 +49,7 @@ export const verificationEmail = (
     subject: "Email Verification",
     text: "some useless text",
     html: `<p>Please verify your account by clicking the link: 
-    <a href="http://${process.env.HOST}/account/confirm?token=${verficationTokenValue}">http://${process.env.HOST}/account/confirm?token=${verficationTokenValue}</a>
+    <a href="${process.env.WEB_HOST}/account/confirm?token=${verficationTokenValue}">${process.env.WEB_HOST}/account/confirm?token=${verficationTokenValue}</a>
     </p>`,
   };
   console.log("email", email);
@@ -67,7 +67,7 @@ export const createResetPasswordEmail = (
     subject: "Email Verification",
     text: "Some uselss text",
     html: `<p>Please verify your account by clicking the link: 
-      <a href="http://${process.env.HOST}/account/confirm?token=${verificationTokenValue}">http://${process.env.HOST}/account/confirm?token=${verificationTokenValue}</a> </p>`,
+      <a href="${process.env.WEB_HOST}/account/confirm?token=${verificationTokenValue}">${process.env.WEB_HOST}/account/confirm?token=${verificationTokenValue}</a> </p>`,
   };
 
   return email;

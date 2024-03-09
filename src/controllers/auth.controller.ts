@@ -120,7 +120,8 @@ const loginUser = async (req: Request, res: Response) => {
   }
 
   // Existing User has not authenticate account
-  if (existingUser && existingUser.isVerified) {
+  console.log("existing", existingUser)
+  if (existingUser && !existingUser.isVerified) {
     error.push("User credentials has not been validated");
     return res
       .status(400)
