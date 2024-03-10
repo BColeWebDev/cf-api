@@ -95,8 +95,9 @@ const GetAllExercises = async (req: Request, res: Response) => {
     if (sortation !== undefined) {
       items = Sorting(req, items);
     }
-
-    items = Filtering(req, items);
+    if (filters !== undefined) {
+      items = Filtering(req, items);
+    }
 
     // // Pagination Check
     let data: object[] = Pagination(req, items);
