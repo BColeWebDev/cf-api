@@ -2,6 +2,7 @@ import { required } from "joi";
 import { ObjectId } from "bson";
 import mongoose from "mongoose";
 import { TrainingDaysAttrs, TrainingDay } from "./trainingdays.model";
+import { WorkoutAttrs } from "./workout.model";
 
 // TODO: Add Days array to schema
 
@@ -65,12 +66,12 @@ const Regiment = mongoose.model<RegiementDocument, RegimentModel>(
 );
 
 class RegimentsQueries {
-  static UpdateRegimentQuery(id: any, data: any) {
+  static UpdateRegimentQuery(id: string, data: WorkoutAttrs) {
     let arrayFilter = [{ "x.id": id }];
     let query = {
       // update query
       description: "TESTS",
-      "routines.$[].workouts.$[x].name": name,
+      "routines.$[].workouts.$[x].name": data.name,
       "routines.$[].workouts.$[x].equipment": data.equipment,
       "routines.$[].workouts.$[x].bodyPart": data.bodyPart,
       "routines.$[].workouts.$[x].gifUrl": data.gifUrl,

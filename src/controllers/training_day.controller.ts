@@ -94,18 +94,20 @@ const UpdateTrainingDay = async (req: Request, res: Response) => {
 
   let newDays: string[] = [];
   try {
-    const response = await Regiment.findOne({ _id: req.params.id });
+    let response = await Regiment.findOne({ _id: req.params.id });
+    if (response !== null) {
+      response.routines[req.body.index].day = days[Number(req.body.day)];
+      response.routines[req.body.index].name =
+        req.body.name ?? response?.routines[req.body.index].name;
+      response.routines[req.body.index].description =
+        req.body.description ?? response?.routines[req.body.index].description;
+      response?.routines.map((val) => {
+        newDays.push(val.day);
+      });
+      response.days = newDays;
+      response?.save();
+    }
 
-    response!.routines[req.body.index].day = days[Number(req.body.day)];
-    response!.routines[req.body.index].name =
-      req.body.name ?? response?.routines[req.body.index].name;
-    response!.routines[req.body.index].description =
-      req.body.description ?? response?.routines[req.body.index].description;
-    response?.routines.map((val) => {
-      newDays.push(val.day);
-    });
-    response!.days = newDays;
-    response?.save();
     return res.status(200).json(response);
   } catch (error: any) {
     res.status(400).json(error.message);
@@ -130,10 +132,10 @@ const DeleteTrainingDay = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "No Regiment Id found" });
     }
     await Regiment.findById(req.params.id).then((regiment) => {
-      if (!regiment) {
-        res.status(404).json({ message: "No Regiment Id found" });
+      if (!regiment || regiment === null) {
+        return res.status(404).json({ message: "No Regiment Id found" });
       }
-      regiment!.routines = regiment!.routines?.filter(
+      regiment.routines = regiment!.routines?.filter(
         (value) => value._id !== req.body.routineId
       );
       regiment!.days = regiment!.days?.filter(

@@ -1,4 +1,3 @@
-import { ObjectId } from "bson";
 import mongoose from "mongoose";
 import { WorkoutAttrs, Workout } from "./workout.model";
 interface TrainingDaysAttrs {
@@ -9,21 +8,7 @@ interface TrainingDaysAttrs {
   primaryMuscleGroup: string[];
   secondaryMuscleGroup: string[];
   _id?: string;
-  isCompleted?:boolean
-}
-
-export interface TrainingDocument extends mongoose.Document {
-  description: string;
-  name: string;
-  day: string;
-  workouts: WorkoutAttrs[];
-  primaryMuscleGroup: string[];
-  secondaryMuscleGroup: string[];
-  isCompleted:boolean
-}
-
-interface TrainingDayModel extends mongoose.Model<TrainingDocument> {
-  build(attrs: TrainingDaysAttrs): TrainingDocument;
+  isCompleted?: boolean;
 }
 
 const trainingSchema = new mongoose.Schema({
@@ -51,8 +36,5 @@ const trainingSchema = new mongoose.Schema({
   },
 });
 
-const TrainingDay = mongoose.model<TrainingDayModel, TrainingDayModel>(
-  "TrainingDay",
-  trainingSchema
-);
-export { TrainingDay, TrainingDaysAttrs };
+const TrainingDay = mongoose.model("TrainingDay", trainingSchema);
+export { TrainingDaysAttrs, TrainingDay };

@@ -30,7 +30,7 @@ const CreateRegimentPlan = async (req: Request, res: Response) => {
       userid,
       routines: [],
       isCompleted: false,
-      days:[]
+      days: [],
     });
     newRegiment.save();
     return res.json(newRegiment);
@@ -41,33 +41,29 @@ const CreateRegimentPlan = async (req: Request, res: Response) => {
 // PUT - Update workout Plans (Regiment ID)
 const UpdateRegimentPlan = async (req: Request, res: Response) => {
   const { name, description, isCompleted } = req.body;
-    try {
-        
-    } catch (error) {
-        return res.status(500).json(error);
-    }
+  try {
+  } catch (error) {
+    return res.status(500).json(error);
+  }
   const response = await Regiment.findByIdAndUpdate(req.params.id, {
     name,
     description,
     isCompleted,
   });
-  response?.save()
+  response?.save();
 
   return res.status(200).json(response);
 };
 // GET  - Get all Regiment Plans (Regiment ID)
 const GetAllRegimentPlan = async (req: Request, res: Response) => {
   const { id } = req.params;
-  if(id === undefined || id === null){
-    return res.status(400).json({error:"No ID provided"})
+  if (id === undefined || id === null) {
+    return res.status(400).json({ error: "No ID provided" });
   }
   try {
     console.log("params", req.params.id);
     const allRegiments = await Regiment.find({ userid: id });
 
-
-
-  
     return res.status(200).json(allRegiments);
   } catch (error) {
     res.status(400).json(error);
@@ -95,27 +91,26 @@ const DeleteRegimentPlan = async (req: Request, res: Response) => {
 };
 
 // POST - All training Days are completed for this week -> regiments completed
-
-const regimentAllCompleted = async (req:Request,res:Response)=>{
-  if(req.params.id === null){
-    return res.status(400).json({message:"Missing IDs"})
+const regimentAllCompleted = async (req: Request, res: Response) => {
+  if (req.params.id === null) {
+    return res.status(400).json({ message: "Missing IDs" });
   }
   let results = await Regiment.findById(req.params.id);
-  if(results === null){
-      return res.status(404).json({message:"Not found"})
-    }
+  if (results === null) {
+    return res.status(404).json({ message: "Not found" });
+  }
 
-
-  results.isCompleted = results!.routines.every((val)=>val.isCompleted === true)
+  results.isCompleted = results!.routines.every(
+    (val) => val.isCompleted === true
+  );
   results.save();
-  return res.status(200).json(results)
-  
-}
+  return res.status(200).json(results);
+};
 export default {
   CreateRegimentPlan,
   UpdateRegimentPlan,
   GetAllRegimentPlan,
   GetSingleRegimentPlan,
   DeleteRegimentPlan,
-  regimentAllCompleted
+  regimentAllCompleted,
 };

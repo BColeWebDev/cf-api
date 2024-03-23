@@ -84,14 +84,14 @@ const GetAllExercises = async (req: Request, res: Response) => {
   const pageDisplay = req.query.limit;
   const sortation = req.query.sort;
   const filters = req.query.filters;
-  console.log(pageDisplay);
+  console.log("page", pageDisplay);
   if (page === undefined || pageDisplay === undefined) {
     return res.status(400).json({ error: "Page Number or Page Limit Missing" });
   }
 
   try {
     // let items = sample;
-    let items = await WorkoutsProxy("get", "/exercises?limit=1200");
+    let items = await WorkoutsProxy("get", `/exercises?limit=${pageDisplay}`);
     if (sortation !== undefined) {
       items = Sorting(req, items);
     }

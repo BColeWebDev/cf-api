@@ -36,13 +36,12 @@ app.use(
 );
 // Sanatize Data
 app.use(ExpressMongoSanitize());
-// Template Engine 
+// Template Engine
 app.set("view engine", "ejs");
 app.use(cors({ origin: true, credentials: true }));
-// Routes 
-app.use("/api/workouts", workoutRoutes);
+// Routes
+// app.use("/api/workouts", workoutRoutes);
 app.use("/api/auth", authRoutes);
-
 
 // Test Controllers
 app.get("/api/auth/whoami", async (req: Request, res: Response) => {
@@ -56,7 +55,9 @@ app.get("/api/workouts/whoami", async (req: Request, res: Response) => {
 if (!fs.existsSync("./src/uploads")) {
   fs.mkdirSync("./src/uploads");
 }
-app.all('*', async (req, res) => {res.status(404).send("Not Found")})
+app.all("*", async (req, res) => {
+  res.status(404).send("Not Found");
+});
 // app.use(errorHandler);
 
 export { app };
