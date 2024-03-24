@@ -3,6 +3,7 @@ import cors from "cors";
 import rateLimit from "express-rate-limit";
 import workoutRoutes from "./routes/workout.route";
 import authRoutes from "./routes/auth.route";
+import sharableRoutes from "./routes/sharable.route";
 import dotenv from "dotenv";
 import fs from "fs";
 import ExpressMongoSanitize from "express-mongo-sanitize";
@@ -40,8 +41,9 @@ app.use(ExpressMongoSanitize());
 app.set("view engine", "ejs");
 app.use(cors({ origin: true, credentials: true }));
 // Routes
-// app.use("/api/workouts", workoutRoutes);
+app.use("/api/workouts", workoutRoutes);
 app.use("/api/auth", authRoutes);
+app.use("api/sharable", sharableRoutes);
 
 // Test Controllers
 app.get("/api/auth/whoami", async (req: Request, res: Response) => {

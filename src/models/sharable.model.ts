@@ -1,4 +1,4 @@
-import { Schema, model, Document } from "mongoose";
+import { Schema, Document } from "mongoose";
 import mongoose from "mongoose";
 
 interface SharableAttrs {
