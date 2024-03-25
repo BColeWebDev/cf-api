@@ -7,6 +7,6 @@ import { isAdmin } from "../middleware/isAdminMiddleware";
 import uploadMiddleware from "../middleware/uploadMiddleware";
 import isAuthenticated from "../middleware/authMiddleware";
 import sharableCtrl from "../controllers/sharable.controller";
-router.route("/sharable").get(isAuthenticated, sharableCtrl.getAllSharable);
+router.route("/").get(isAuthenticated, sharableCtrl.getAllSharable);
 
 export default router;
