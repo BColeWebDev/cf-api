@@ -43,7 +43,7 @@ app.use(cors({ origin: true, credentials: true }));
 // Routes
 app.use("/api/workouts", workoutRoutes);
 app.use("/api/auth", authRoutes);
-app.use("api/sharables", sharableRoutes);
+app.use("/api/sharables", sharableRoutes);
 
 // Test Controllers
 app.get("/api/auth/whoami", async (req: Request, res: Response) => {
