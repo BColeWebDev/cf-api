@@ -6,13 +6,11 @@ import authRoutes from "./routes/auth.route";
 import sharableRoutes from "./routes/sharable.route";
 import dotenv from "dotenv";
 import fs from "fs";
-import ExpressMongoSanitize from "express-mongo-sanitize";
-import isAuthenticated from "./middleware/authMiddleware";
-// Enviorment Variables
-if (process.env.NODE_ENV !== "production") {
-  dotenv.config();
-}
+import { dirname, join } from 'node:path';
 
+import ExpressMongoSanitize from "express-mongo-sanitize";
+
+import { webSocket } from "./config/services/websockets.service";
 // Enviorment Variables
 if (process.env.NODE_ENV !== "production") {
   dotenv.config();
@@ -26,6 +24,7 @@ const limit = rateLimit({
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 const app = express();
+
 // Middleware
 app.set("trust proxy", 1);
 app.use(limit);
@@ -38,7 +37,8 @@ app.use(
 // Sanatize Data
 app.use(ExpressMongoSanitize());
 // Template Engine
-app.set("view engine", "ejs");
+
+app.use(express.static(join(__dirname, 'public')));
 app.use(cors({ origin: true, credentials: true }));
 // Routes
 app.use("/api/workouts", workoutRoutes);
@@ -60,6 +60,8 @@ if (!fs.existsSync("./src/uploads")) {
 app.all("*", async (req, res) => {
   res.status(404).send("Not Found");
 });
-// app.use(errorHandler);
+
+
+
 
 export { app };

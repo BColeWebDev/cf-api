@@ -1,9 +1,11 @@
+import { Nutritions } from "../models/nutritions.model";
 import { Sharable } from "../models/sharable.model";
 import { Response, Request } from "express";
 
 // Sharable Controllers
 const getAllSharable = async (req: Request, res: Response) => {
   const response = await Sharable.find({});
+  await Nutritions.find({})
   return res.status(200).json(response);
 };
 // Create Sharable
