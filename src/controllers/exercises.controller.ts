@@ -1,5 +1,4 @@
-import needle from "needle";
-import { NeedleHttpVerbs } from "needle";
+
 let error: string[] = [];
 import { Response, Request, json } from "express";
 import Pagination from "../middleware/pagination";
@@ -14,7 +13,7 @@ import {
   MuscleImageGenerator,
   WorkoutsProxy,
 } from "../config/services/workouts.service";
-import redis from "../db/redis";
+import {} from "../db/redis";
 
 //    ***EXERCISES***
 // GET - All Excercises route
@@ -31,7 +30,7 @@ const GetAllExercises = async (req: Request, res: Response) => {
   try {
     // let items = sample;
     let items = await WorkoutsProxy("get", `/exercises?limit=${pageDisplay}`);
-
+    
     // const value = await redis.getAsync("workouts");
     // console.log("workouts", value);
     if (sortation !== undefined) {
