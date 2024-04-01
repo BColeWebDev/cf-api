@@ -9,8 +9,12 @@ import { Regiment, RegimentsQueries } from "../models/regiment.model";
 
 import Filtering from "../middleware/filtering";
 import sample from "../config/data";
-import { MuscleGroupProxy, MuscleImageGenerator, WorkoutsProxy } from "../config/services/workouts.service";
-
+import {
+  MuscleGroupProxy,
+  MuscleImageGenerator,
+  WorkoutsProxy,
+} from "../config/services/workouts.service";
+import redis from "../db/redis";
 
 //    ***EXERCISES***
 // GET - All Excercises route
@@ -27,6 +31,9 @@ const GetAllExercises = async (req: Request, res: Response) => {
   try {
     // let items = sample;
     let items = await WorkoutsProxy("get", `/exercises?limit=${pageDisplay}`);
+
+    // const value = await redis.getAsync("workouts");
+    // console.log("workouts", value);
     if (sortation !== undefined) {
       items = Sorting(req, items);
     }
