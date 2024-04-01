@@ -38,3 +38,7 @@ export interface ISets {
   reps: number;
   weight: number;
 }
+
+export interface Nutritions{
+  name:string
+}

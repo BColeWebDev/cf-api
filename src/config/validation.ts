@@ -4,6 +4,7 @@ import {
   Login,
   forgotPassword,
   Workouts,
+  Nutritions
 } from "./interfaces/index";
 import Joi, { required } from "joi";
 
@@ -139,7 +140,19 @@ const workoutSchema = Joi.object({
     "any.required": `equipment is required`,
   }),
 }).unknown();
+const nutritionsSchema = Joi.object({
+  name: Joi.string().required()
+  .min(3)
+  .max(30)
+  .messages({
+    "string.empty": `name cannot be an empty`,
+    "any.required": `experience is required`,
+    "string.min": `first name should have a minimum length of 3 characters`,
+    "string.max": `last name should have a minimum length of 30 characters`,
 
+  }),
+ 
+})
 class Validation {
   // Validation for registering Register
   registerValidation = (data: Register) => {
@@ -176,6 +189,10 @@ class Validation {
 
     return response;
   };
+  createNutritionPlan = (data:Nutritions)=>{
+    const response = nutritionsSchema.validate(data,{abortEarly:false});
+    return response;
+  }
 }
 
 export default new Validation();

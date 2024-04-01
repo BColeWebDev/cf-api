@@ -4,6 +4,7 @@ import rateLimit from "express-rate-limit";
 import workoutRoutes from "./routes/workout.route";
 import authRoutes from "./routes/auth.route";
 import sharableRoutes from "./routes/sharable.route";
+import  nutritonsRoutes from "./routes/nutritions.route"
 import dotenv from "dotenv";
 import fs from "fs";
 import { dirname, join } from 'node:path';
@@ -44,6 +45,7 @@ app.use(cors({ origin: true, credentials: true }));
 app.use("/api/workouts", workoutRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/sharables", sharableRoutes);
+app.use('/api/nutritions',nutritonsRoutes);
 
 // Test Controllers
 app.get("/api/auth/whoami", async (req: Request, res: Response) => {

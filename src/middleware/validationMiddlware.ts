@@ -44,5 +44,11 @@ error === undefined ?
 next():
 res.status(400).json({errors: error.details.map(err => err.message)})
 }
+const nutritionIsValid = async (req:Request,res:Response,next:NextFunction) =>{
+    const{error} = await validation.createNutritionPlan(req.body)
 
-export default {registerIsValid, loginIsValid, forgotPassword,isValidWorkout}
+error === undefined ?
+next():
+res.status(400).json({errors: error.details.map(err => err.message)})
+}
+export default {registerIsValid, loginIsValid, forgotPassword,isValidWorkout,nutritionIsValid}
