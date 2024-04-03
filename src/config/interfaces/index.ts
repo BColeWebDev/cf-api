@@ -42,3 +42,10 @@ export interface ISets {
 export interface Nutritions{
   name:string
 }
+export interface Sharables{
+  sharable_name:string;
+  created_by:string;
+  regiment_difficulty:string;
+  
+
+}

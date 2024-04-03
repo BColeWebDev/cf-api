@@ -16,9 +16,7 @@ const registerIsValid = async (req: Request, res:Response, next:NextFunction) =>
 
 }
 
-
 // Validation of Login
-
 const loginIsValid = async (req: Request, res:Response, next:NextFunction)  => {
     const { error } = await validation.loginValidation(req.body)
     // returns error if credentials are incorrect
@@ -37,6 +35,7 @@ next():
 res.status(400).json({errors: error.details.map(err => err.message)})
 };
 
+// Validation Workout
 const isValidWorkout = async (req:Request, res:Response, next:NextFunction) =>{
     const{error} = await validation.createWorkoutValidation(req.body)
 
@@ -44,6 +43,7 @@ error === undefined ?
 next():
 res.status(400).json({errors: error.details.map(err => err.message)})
 }
+// Nutrition Workout
 const nutritionIsValid = async (req:Request,res:Response,next:NextFunction) =>{
     const{error} = await validation.createNutritionPlan(req.body)
 
@@ -51,4 +51,18 @@ error === undefined ?
 next():
 res.status(400).json({errors: error.details.map(err => err.message)})
 }
-export default {registerIsValid, loginIsValid, forgotPassword,isValidWorkout,nutritionIsValid}
+const sharableIsValid = async (req:Request,res:Response,next:NextFunction)=>{
+    const{error} = await validation.createSharableValidation(req.body)
+
+error === undefined ?
+next():
+res.status(400).json({errors: error.details.map(err => err.message)})
+}
+export default {
+  registerIsValid,
+  loginIsValid,
+  forgotPassword,
+  isValidWorkout,
+  nutritionIsValid,
+  sharableIsValid
+};

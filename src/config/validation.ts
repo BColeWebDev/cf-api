@@ -4,7 +4,8 @@ import {
   Login,
   forgotPassword,
   Workouts,
-  Nutritions
+  Nutritions,
+  Sharables
 } from "./interfaces/index";
 import Joi, { required } from "joi";
 
@@ -153,11 +154,41 @@ const nutritionsSchema = Joi.object({
   }),
  
 })
+const sharableSchema = Joi.object({
+  sharable_name: Joi.string().required()
+  .min(3)
+  .max(30)
+  .messages({
+    "string.empty": `sharable_name cannot be an empty`,
+    "any.required": `sharable_name is required`,
+    "string.min": `sharable_name should have a minimum length of 3 characters`,
+    "string.max": `sharable_name should have a minimum length of 30 characters`,
+  }),
+  created_by: Joi.string().required()
+  .min(3)
+  .max(30)
+  .messages({
+    "string.empty": `created_by cannot be an empty`,
+    "any.required": `created_by is required`,
+    "string.min": `created_by should have a minimum length of 3 characters`,
+    "string.max": `created_by should have a minimum length of 30 characters`,
+  }),
+  regiment_difficulty: Joi.string()
+  .required()
+  .valid('beginner','intermediate','advance')
+  .messages({
+    "string.empty": `regiment_difficulty cannot be an empty`,
+    "any.required": `regiment_difficulty is required`,
+    "string.min": `regiment_difficulty should have a minimum length of 3 characters`,
+    "string.max": `regiment_difficulty should have a minimum length of 30 characters`,
+  }),
+  
+}).unknown();
 class Validation {
   // Validation for registering Register
   registerValidation = (data: Register) => {
     // checks if text is not blank
-    console.log("registers",data)
+    console.log("registers", data);
     const response = registerSchema.validate(
       { ...data },
       { abortEarly: false }
@@ -189,10 +220,14 @@ class Validation {
 
     return response;
   };
-  createNutritionPlan = (data:Nutritions)=>{
-    const response = nutritionsSchema.validate(data,{abortEarly:false});
+  createNutritionPlan = (data: Nutritions) => {
+    const response = nutritionsSchema.validate(data, { abortEarly: false });
     return response;
-  }
+  };
+  createSharableValidation = (data: Sharables) => {
+    const response = sharableSchema.validate(data, { abortEarly: false });
+    return response;
+  };
 }
 
 export default new Validation();
