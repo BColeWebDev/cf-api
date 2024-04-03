@@ -44,8 +44,11 @@ function isRedisWorking(){
 export async function writeData(key:string, data:string){
   if (isRedisWorking()) {
     try {
+      let options = {
+        EX: 2000, // 6h
+      }
       // write data to the Redis cache
-      await redisClient.set(key, data);
+      await redisClient.set(key, data,options);
     } catch (e) {
       console.error(`Failed to cache data for key=${key}`, e);
     }
@@ -63,20 +66,32 @@ export async function readData(key:string){
 }
 export function redisCachingWrapper(key:string){
 
-    let options = {
-      EX: 21600, // 6h
-    }
-   
+ 
+  //  Acutal Middlware
     return async (req: Request, res: Response, next: NextFunction) =>{
       if(isRedisWorking()){
-        console.log("called",req.headers)
+        console.log("called",req.query)
         console.log("key",key);
-
+        
         const resRedis = await redisClient.get(key);
-        console.log("res",JSON.parse(resRedis));
-        if(resRedis === null){
-        return next();
+       const cacheResults = JSON.parse(resRedis)
+        console.log(req.query.bodyPart === cacheResults.filters.bodyPart)
+        if (
+          // If Cache Does'nt exist
+          resRedis === null ||
+          // For Pagination
+          Number(req.query.page) !== cacheResults.page ||
+          Number(req.query.limit) !== cacheResults.pageDisplay ||
+          // For Filters 
+          req.query.bodyPart !== cacheResults.filters.bodyPart ||
+          req.query.equipment !== cacheResults.filters.equipment ||
+          req.query.target !== cacheResults.filters.target 
+          // For Sortation 
+        ) {
+          // refetch data
+          return next();
         }
+        // return cache results
         return res.status(200).json(JSON.parse(resRedis));
 
       }

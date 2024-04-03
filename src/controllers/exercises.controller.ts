@@ -13,7 +13,7 @@ import {
   MuscleImageGenerator,
   WorkoutsProxy,
 } from "../config/services/workouts.service";
-import {} from "../db/redis";
+import { writeData } from "../db/redis";
 
 //    ***EXERCISES***
 // GET - All Excercises route
@@ -47,7 +47,14 @@ const GetAllExercises = async (req: Request, res: Response) => {
       pageDisplay: Number(pageDisplay),
       resultsCount: data.length,
       items: data,
+      filters:{
+        bodyPart:req.query.bodyPart,
+        equipment:req.query.equipment,
+        target:req.query.target,
+
+      }
     };
+    await writeData('exercises',JSON.stringify(results));
     res.status(200).json(results);
   } catch (error) {
     res.status(400).json(error);

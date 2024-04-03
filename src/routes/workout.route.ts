@@ -6,8 +6,9 @@ import trainingCtrl from "../controllers/training_day.controller";
 import isAuthenticated from "../middleware/authMiddleware";
 import middleware from "../middleware/validationMiddlware";
 import isValidUser from "../middleware/validUserIdMiddleware";
+import cacheMiddleware from "../middleware/cacheMiddleware";
 // GET - Exercises
-Router.route("/exercises").get(isAuthenticated, exercisesCtrl.GetAllExercises);
+Router.route("/exercises").get(isAuthenticated,cacheMiddleware("exercises"), exercisesCtrl.GetAllExercises);
 // GET - Exercises (Muscle Target)
 // GET - Single Body Part
 Router.route("/exercises/targets").get(
