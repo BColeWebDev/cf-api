@@ -45,7 +45,7 @@ export async function writeData(key:string, data:string){
   if (isRedisWorking()) {
     try {
       let options = {
-        EX: 2000, // 6h
+        EX: 60, // 6h
       }
       // write data to the Redis cache
       await redisClient.set(key, data,options);
@@ -75,7 +75,6 @@ export function redisCachingWrapper(key:string){
         
         const resRedis = await redisClient.get(key);
        const cacheResults = JSON.parse(resRedis)
-        console.log(req.query.bodyPart === cacheResults.filters.bodyPart)
         if (
           // If Cache Does'nt exist
           resRedis === null ||
