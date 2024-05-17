@@ -47,8 +47,18 @@ const createSharable = async (req: Request, res: Response) => {
   }
 };
 
-// Delete Sharable
-const deleteSharable = async (req: Request, res: Response) => {};
+// Delete Existing Sharable
+const deleteSharable = async (req: Request, res: Response) => {
+if(req.params.id === undefined){
+  return res.status(400).json({message:"Sharable ID Not found"});
+}
+
+const results = await Sharable.findByIdAndDelete(req.params.id);
+
+return res.json(results);
+
+
+};
 
 // Like and Download
 const likeSharable = async (req: Request, res: Response) => {};
