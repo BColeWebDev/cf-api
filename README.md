@@ -4,7 +4,6 @@ Crown Fitness REST API
 
 - User Authentication
 - Full CRUD functionality work excercises, regiments, training days\
--
 
 ### Server <img height="20" src="https://pic.onlinewebfonts.com/svg/img_569193.png"></img>
 

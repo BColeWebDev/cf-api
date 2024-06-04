@@ -10,8 +10,8 @@ router.route("/create")
 .post(isAuthenticated,middleware.sharableIsValid,sharableCtrl.createSharable);
 
 
-router.route("/delete")
-.get(isAuthenticated, sharableCtrl.deleteSharable);
+router.route("/:id/delete")
+.put(isAuthenticated, sharableCtrl.deleteSharable);
 
 router.route("/:id/like")
 .get(isAuthenticated, sharableCtrl.likeSharable);

@@ -23,6 +23,7 @@ const createNutrition= async(req:Request,res:Response)=>{
     return res.status(200).json({})
 }
 
+// Update existing nutrition 
 const updateNutrition = async (req: Request, res: Response) => {
   const { id } = req.params;
 
@@ -35,7 +36,7 @@ const updateNutrition = async (req: Request, res: Response) => {
 
   return res.status(200).json({});
 };
-
+// delete existing nutririon
 const deleteNutrition = async(req:Request,res:Response)=>{
     const {id} = req.params
     const newNutrition = await Nutritions.findByIdAndDelete(id)
