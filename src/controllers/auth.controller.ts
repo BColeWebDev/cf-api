@@ -141,9 +141,13 @@ const loginUser = async (req: Request, res: Response) => {
     );
     // hide avatarProfile for now
     const allRegiments = await Regiment.find({ userid: existingUser._id });
-    let userData = { existingUser, regimentsCount: allRegiments.length };
+    let userData = {
+      existingUser,
+      regimentsCount: allRegiments.length,
+      userToken,
+    };
     existingUser.avatarProfile = "";
-    res.status(200).json({ userData, userToken });
+    res.status(200).json(userData);
   } catch (error) {
     console.log(error);
     res.status(400).json({ error: error });
