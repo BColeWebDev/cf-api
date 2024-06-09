@@ -320,7 +320,9 @@ const Settings = async (req: Request, res: Response) => {
     const response = await User.findByIdAndUpdate(req.params.id, {
       settings: req.body.settings,
     });
-    return res.status(200).json({ message: "Settings Updated" });
+    return res
+      .status(200)
+      .json({ message: "Settings Updated", existingUser: response });
   } catch (error) {
     return res.status(500).send("An unexpected error occurred");
   }
