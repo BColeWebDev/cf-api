@@ -309,6 +309,7 @@ const userCancel = async (req: Request, res: Response) => {
 // Settings Tools
 const Settings = async (req: Request, res: Response) => {
   const response = await await User.findById(req.params.id);
+  // hide avatarProfile for now
 
   if (response === undefined || response === null) {
     return res.status(404).json({ message: "User ID Not found" });
@@ -317,12 +318,18 @@ const Settings = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "Missing Settings" });
   }
   try {
+    const allRegiments = await Regiment.find({ userid: req.params.id });
+
     const response = await User.findByIdAndUpdate(req.params.id, {
       settings: req.body.settings,
     });
     return res
       .status(200)
-      .json({ message: "Settings Updated", existingUser: response });
+      .json({
+        message: "Settings Updated",
+        existingUser: response,
+        regimentsCount: allRegiments.length,
+      });
   } catch (error) {
     return res.status(500).send("An unexpected error occurred");
   }
