@@ -1,4 +1,3 @@
-
 let error: string[] = [];
 import { Response, Request, json } from "express";
 import Pagination from "../middleware/pagination";
@@ -30,9 +29,6 @@ const GetAllExercises = async (req: Request, res: Response) => {
   try {
     // let items = sample;
     let items = await WorkoutsProxy("get", `/exercises?limit=${pageDisplay}`);
-    
-    // const value = await redis.getAsync("workouts");
-    // console.log("workouts", value);
     if (sortation !== undefined) {
       items = Sorting(req, items);
     }
@@ -47,14 +43,13 @@ const GetAllExercises = async (req: Request, res: Response) => {
       pageDisplay: Number(pageDisplay),
       resultsCount: data.length,
       items: data,
-      filters:{
-        bodyPart:req.query.bodyPart,
-        equipment:req.query.equipment,
-        target:req.query.target,
-
-      }
+      filters: {
+        bodyPart: req.query.bodyPart,
+        equipment: req.query.equipment,
+        target: req.query.target,
+      },
     };
-    await writeData('exercises',JSON.stringify(results));
+    await writeData("exercises", JSON.stringify(results));
     res.status(200).json(results);
   } catch (error) {
     res.status(400).json(error);

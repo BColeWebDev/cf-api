@@ -146,7 +146,7 @@ const loginUser = async (req: Request, res: Response) => {
       regimentsCount: allRegiments.length,
       userToken,
     };
-    existingUser.avatarProfile = "";
+    existingUser.avatarProfile;
     res.status(200).json(userData);
   } catch (error) {
     console.log(error);
@@ -323,13 +323,11 @@ const Settings = async (req: Request, res: Response) => {
     const response = await User.findByIdAndUpdate(req.params.id, {
       settings: req.body.settings,
     });
-    return res
-      .status(200)
-      .json({
-        message: "Settings Updated",
-        existingUser: response,
-        regimentsCount: allRegiments.length,
-      });
+    return res.status(200).json({
+      message: "Settings Updated",
+      existingUser: response,
+      regimentsCount: allRegiments.length,
+    });
   } catch (error) {
     return res.status(500).send("An unexpected error occurred");
   }
