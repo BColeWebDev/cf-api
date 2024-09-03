@@ -1,7 +1,4 @@
 import mongoose from "mongoose";
-console.log("url-test", process.env.MONGO_URL_TEST);
-console.log("url", process.env.MONGO_URL);
-
 mongoose
   .connect(`${process.env.MONGO_URL}`, {
     dbName: `${process.env.MONGO_DB_NAME}`,

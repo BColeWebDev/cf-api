@@ -146,7 +146,7 @@ const loginUser = async (req: Request, res: Response) => {
       regimentsCount: allRegiments.length,
       userToken,
     };
-    existingUser.avatarProfile;
+
     res.status(200).json(userData);
   } catch (error) {
     console.log(error);

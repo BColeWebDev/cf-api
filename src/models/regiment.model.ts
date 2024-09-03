@@ -14,7 +14,6 @@ export interface IRegimentAttrs {
   routines: TrainingDaysAttrs[];
   isCompleted: boolean;
   days: String[];
-
 }
 // Extends Mongo Class
 export interface RegiementDocument extends mongoose.Document {
@@ -24,7 +23,7 @@ export interface RegiementDocument extends mongoose.Document {
   routines: TrainingDaysAttrs[];
   isCompleted: boolean;
   days: String[];
-  sharables:boolean;
+  sharables: boolean;
 }
 
 interface RegimentModel extends mongoose.Model<RegiementDocument> {
@@ -57,10 +56,14 @@ const regimentSchema = new mongoose.Schema({
     type: [String],
     required: true,
   },
-  sharables:{
-    type:Boolean,
-    required:false
-  }
+  sharables: {
+    type: Boolean,
+    required: false,
+  },
+  isShared: {
+    type: Boolean,
+    required: false,
+  },
 });
 // Defines Schema to be built
 regimentSchema.statics.build = (attrs: IRegimentAttrs) => {
