@@ -35,12 +35,11 @@ const NutritionInstantProxy = async (
     `${process.env.API_HOST_NUTRITION_INSTANT}`,
     {
       query: query,
-      self: false,
-      common: true,
-      branded: true,
     },
     options
   );
+  const body = resData.body;
+  return body;
 };
 
 export { NutritionProxy, NutritionInstantProxy };

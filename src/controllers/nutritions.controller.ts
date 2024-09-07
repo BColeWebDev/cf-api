@@ -16,6 +16,7 @@ const getAllNutrition = async (req: Request, res: Response) => {
 
 const instantNutritionSearch = async (req: Request, res: Response) => {
   let items = await NutritionInstantProxy("get", `${req.query.query}`);
+  console.log("items", items);
   await writeData("nutritions-instant", JSON.stringify(items));
   return res.status(200).json(items);
 };
