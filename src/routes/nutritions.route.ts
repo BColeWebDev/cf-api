@@ -28,5 +28,12 @@ router
 router
   .route("/:id/deleteNutrition")
   .delete(isAuthenticated, nutritionCtrl.deleteNutrition);
+router
+  .route("/details")
+  .get(
+    isAuthenticated,
+    cacheMiddleware("nutritions-details"),
+    nutritionCtrl.getNutritionDetails
+  );
 
 export default router;

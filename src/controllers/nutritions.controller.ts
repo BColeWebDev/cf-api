@@ -16,8 +16,9 @@ const getAllNutrition = async (req: Request, res: Response) => {
 
 const instantNutritionSearch = async (req: Request, res: Response) => {
   let items = await NutritionInstantProxy("get", `${req.query.query}`);
-  console.log("items", items);
+
   await writeData("nutritions-instant", JSON.stringify(items));
+
   return res.status(200).json(items);
 };
 
@@ -44,6 +45,7 @@ const updateNutrition = async (req: Request, res: Response) => {
 
   return res.status(200).json({});
 };
+
 // delete existing nutririon
 const deleteNutrition = async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -54,10 +56,21 @@ const deleteNutrition = async (req: Request, res: Response) => {
 
   return res.status(200).json({});
 };
+
+// nutrition data details
+const getNutritionDetails = async (req: Request, res: Response) => {
+  let items = await NutritionInstantProxy("get", `${req.query.upc}`);
+
+  await writeData("nutritions-details", JSON.stringify(items));
+
+  return res.status(200).json(items);
+};
+
 export default {
   getAllNutrition,
   createNutrition,
   updateNutrition,
   deleteNutrition,
   instantNutritionSearch,
+  getNutritionDetails,
 };
