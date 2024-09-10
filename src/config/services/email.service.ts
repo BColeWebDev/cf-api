@@ -49,7 +49,7 @@ export const verificationEmail = (
     subject: "Email Verification",
     text: "some useless text",
     html: `<p>Please verify your account by clicking the link: 
-    <a href="${process.env.WEB_HOST}/account/confirm?token=${verficationTokenValue}">${process.env.WEB_HOST}/account/confirm?token=${verficationTokenValue}</a>
+    <a href="${process.env.WEB_HOST}account/confirm?token=${verficationTokenValue}">${process.env.WEB_HOST}/account/confirm?token=${verficationTokenValue}</a>
     </p>`,
   };
   console.log("email", email);
@@ -67,7 +67,7 @@ export const createResetPasswordEmail = (
     subject: "Email Verification",
     text: "Some uselss text",
     html: `<p>Please verify your account by clicking the link: 
-      <a href="${process.env.WEB_HOST}/account/confirm?token=${verificationTokenValue}">${process.env.WEB_HOST}/account/confirm?token=${verificationTokenValue}</a> </p>`,
+      <a href="${process.env.WEB_HOST}account/confirm?token=${verificationTokenValue}">${process.env.WEB_HOST}/account/confirm?token=${verificationTokenValue}</a> </p>`,
   };
 
   return email;
