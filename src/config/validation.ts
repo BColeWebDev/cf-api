@@ -5,7 +5,7 @@ import {
   forgotPassword,
   Workouts,
   Nutritions,
-  Sharables
+  Sharables,
 } from "./interfaces/index";
 import Joi, { required } from "joi";
 
@@ -49,13 +49,18 @@ const registerSchema = Joi.object({
     "number.min": `Invalid! age cannot be less than 1. Please try again.`,
     "number.max": `Invalid! age cannot be over 100. Please try again.`,
   }),
-  sex: Joi.string().max(1).required(),
+  gender: Joi.string().max(1).required(),
   bio: Joi.string().min(2).max(140).messages({
     "string.empty": `bio cannot be an empty field`,
     "string.min": `Invalid! bio cannot be less than 1. Please try again.`,
     "string.max": `Invalid! bio cannot be over 140. Please try again.`,
   }),
-
+  primary_goals: Joi.string(),
+  performance_goals: Joi.string(),
+  lifestyle_goals: Joi.string(),
+  equipment_access: Joi.string(),
+  weight: Joi.string().required(),
+  height: Joi.string().required(),
   experience: Joi.string().required().messages({
     "string.empty": `experience cannot be an empty field`,
   }),
@@ -142,47 +147,35 @@ const workoutSchema = Joi.object({
   }),
 }).unknown();
 const nutritionsSchema = Joi.object({
-  name: Joi.string().required()
-  .min(3)
-  .max(30)
-  .messages({
+  name: Joi.string().required().min(3).max(30).messages({
     "string.empty": `name cannot be an empty`,
     "any.required": `experience is required`,
     "string.min": `first name should have a minimum length of 3 characters`,
     "string.max": `last name should have a minimum length of 30 characters`,
-
   }),
- 
-})
+});
 const sharableSchema = Joi.object({
-  sharable_name: Joi.string().required()
-  .min(3)
-  .max(30)
-  .messages({
+  sharable_name: Joi.string().required().min(3).max(30).messages({
     "string.empty": `sharable_name cannot be an empty`,
     "any.required": `sharable_name is required`,
     "string.min": `sharable_name should have a minimum length of 3 characters`,
     "string.max": `sharable_name should have a minimum length of 30 characters`,
   }),
-  created_by: Joi.string().required()
-  .min(3)
-  .max(30)
-  .messages({
+  created_by: Joi.string().required().min(3).max(30).messages({
     "string.empty": `created_by cannot be an empty`,
     "any.required": `created_by is required`,
     "string.min": `created_by should have a minimum length of 3 characters`,
     "string.max": `created_by should have a minimum length of 30 characters`,
   }),
   regiment_difficulty: Joi.string()
-  .required()
-  .valid('beginner','intermediate','advance')
-  .messages({
-    "string.empty": `regiment_difficulty cannot be an empty`,
-    "any.required": `regiment_difficulty is required`,
-    "string.min": `regiment_difficulty should have a minimum length of 3 characters`,
-    "string.max": `regiment_difficulty should have a minimum length of 30 characters`,
-  }),
-  
+    .required()
+    .valid("beginner", "intermediate", "advance")
+    .messages({
+      "string.empty": `regiment_difficulty cannot be an empty`,
+      "any.required": `regiment_difficulty is required`,
+      "string.min": `regiment_difficulty should have a minimum length of 3 characters`,
+      "string.max": `regiment_difficulty should have a minimum length of 30 characters`,
+    }),
 }).unknown();
 class Validation {
   // Validation for registering Register

@@ -9,7 +9,11 @@ if (process.env.NODE_ENV !== "production") {
 // setup api key
 sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 
-// Email Reset
+/** Email Reset Link Email Template
+ * @param reciverEmail string
+ * @param verificationTokenValue string
+ * @returns email
+ */
 export const emailResetLink = (
   receiverEmail: string,
   resetToken: string
@@ -24,7 +28,12 @@ export const emailResetLink = (
   };
   return email;
 };
-// Email Reset confirmation
+
+/** Email Reset Confirmation Template
+ * @param reciverEmail string
+ * @param verificationTokenValue string
+ * @returns email
+ */
 export const resetConfirmationEmail = (
   receiverEmail: string
 ): sgMail.MailDataRequired => {
@@ -38,7 +47,11 @@ export const resetConfirmationEmail = (
   return email;
 };
 
-// Verification Email : Goes to Front end
+/** Creates Verification Email Template
+ * @param reciverEmail string
+ * @param verificationTokenValue string
+ * @returns email
+ */
 export const verificationEmail = (
   receiverEmail: string,
   verficationTokenValue: string
@@ -56,7 +69,11 @@ export const verificationEmail = (
   return email;
 };
 
-// Reset Password Email: Goes to Front End
+/** Creates Reset Password Email Template
+ * @param reciverEmail string
+ * @param verificationTokenValue string
+ * @returns email
+ */
 export const createResetPasswordEmail = (
   receiverEmail: string,
   verificationTokenValue: string
@@ -72,7 +89,9 @@ export const createResetPasswordEmail = (
 
   return email;
 };
-// Sending email
+/** Sends Verification Email
+ * @param email MailDataRequired
+ */
 export const sendEmail = async (email: sgMail.MailDataRequired) =>
   sgMail.send(email);
 

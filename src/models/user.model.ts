@@ -11,11 +11,31 @@ interface UserAttrs {
   password: string;
   bio: string;
   age: string;
-  sex: string;
-  device: string;
+  gender: "M" | "F";
+  primary_goals:
+    | "Weight Loss"
+    | "Weight Gain"
+    | "Improved Cardiovascular Health"
+    | "Increased Strength"
+    | "Improved Flexibility"
+    | "Reduced Body Fat Percentage";
+  performance_goals:
+    | "Running Faster"
+    | "Lifting Heavier Weights"
+    | "Completing a Challenge"
+    | "Improving Sports Performance";
+  lifestyle_goals:
+    | "Stress Reduction"
+    | "Better Sleep"
+    | "Increased Energy"
+    | "Improved Mood";
+  equipment_access: "Full Gym" | "Dumbell Only" | "No Equipment";
+  weight: string;
+  height: string;
+  device: "ios" | "android" | "web";
   crown_member: boolean;
   settings: Object;
-  avatarProfile?: Buffer;
+  avatarProfile?: string;
 }
 // Interface that describe property a user model has
 interface UserModel extends mongoose.Model<UserDocument> {
@@ -31,7 +51,7 @@ export interface UserDocument extends mongoose.Document {
   passwordResetExpires: Date;
   lastLoggedIn: Date;
   device: string;
-  height: "";
+  height: string;
   accountCreated: Date;
   isVerified: boolean;
   isAdmin: boolean;
@@ -39,14 +59,32 @@ export interface UserDocument extends mongoose.Document {
   expires?: boolean;
   bio: string;
   age: string;
-  sex: string;
+  gender: "M" | "F";
   crown_member: boolean;
+  performance_goals:
+    | "Running Faster"
+    | "Lifting Heavier Weights"
+    | "Completing a Challenge"
+    | "Improving Sports Performance";
+  primary_goals:
+    | "Weight Loss"
+    | "Weight Gain"
+    | "Improved Cardiovascular Health"
+    | "Increased Strength"
+    | "Improved Flexibility"
+    | "Reduced Body Fat Percentage";
+  lifestyle_goals:
+    | "Stress Reduction"
+    | "Better Sleep"
+    | "Increased Energy"
+    | "Improved Mood";
+  equipment_access: "Full Gym" | "Dumbell Only" | "No Equipment";
   features: object;
   comparePassword(password: string): boolean;
   hidePassword(): void;
   hashPassword(): Promise<string>;
   settings: Object;
-  avatarProfile: Buffer | string;
+  avatarProfile: string | string;
 }
 
 const userSchema = new mongoose.Schema({
@@ -81,7 +119,7 @@ const userSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  sex: {
+  gender: {
     type: String,
     required: true,
   },
@@ -89,11 +127,22 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  performance_goals: {
+    type: String,
+    required: true,
+  },
+  lifestyle_goals: {
+    type: String,
+    required: true,
+  },
+  primary_goals: {
+    type: String,
+    required: true,
+  },
   crown_member: {
     type: Boolean,
     required: true,
   },
-
   experience: {
     type: String,
     required: true,
@@ -114,7 +163,7 @@ const userSchema = new mongoose.Schema({
     default: false,
   },
   avatarProfile: {
-    type: Buffer,
+    type: String,
     default: "",
   },
   settings: {

@@ -22,7 +22,7 @@ export const generateToken = (
 ) => {
   // information to be encoded
   return sign({ email, first_name, last_name, user_id }, jwtSecret, {
-    expiresIn: "10hr",
+    expiresIn: "365d",
   });
 };
 

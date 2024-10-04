@@ -21,6 +21,7 @@ import dayjs from "dayjs";
 import { IUserToken } from "config/interfaces";
 import fs from "fs";
 import { Regiment } from "../models/regiment.model";
+import { uploadImage } from "../config/services/image.service";
 let error: string[] = [];
 
 // Return all Created Users (Admin)
@@ -43,7 +44,13 @@ const registerUser = async (req: Request, res: Response) => {
     experience,
     crown_member,
     age,
-    sex,
+    gender,
+    weight,
+    height,
+    equipment_access,
+    primary_goals,
+    performance_goals,
+    lifestyle_goals,
     device,
   } = req.body;
 
@@ -56,8 +63,8 @@ const registerUser = async (req: Request, res: Response) => {
   } else {
     // // Hashed Passwords
     const hashedPassword = await hashPassword.hash({ rounds: 10, password });
-    // Create User
 
+    // Create User
     const newUser = User.build({
       first_name: first_name.trim().toLowerCase(),
       last_name: last_name.trim().toLowerCase(),
@@ -66,7 +73,13 @@ const registerUser = async (req: Request, res: Response) => {
       bio: bio.trim().toLowerCase(),
       experience: experience.trim().toLowerCase(),
       age: age.trim().toLowerCase(),
-      sex: sex.trim().toLowerCase(),
+      gender,
+      primary_goals,
+      performance_goals,
+      lifestyle_goals,
+      equipment_access,
+      weight,
+      height,
       crown_member,
       settings: {
         theme: "dark",
@@ -76,6 +89,7 @@ const registerUser = async (req: Request, res: Response) => {
       },
       device: device.trim().toLowerCase(),
     });
+
     await newUser.save();
 
     // token
@@ -92,7 +106,7 @@ const registerUser = async (req: Request, res: Response) => {
           message: `A verification mail has been sent. ${newUser.email}`,
         });
       } catch (error) {
-        console.log(error);
+        console.log("Error", error);
         User.findByIdAndDelete(newUser._id);
         return res.status(403).json({
           message: `Impossible to send an email to ${newUser.email}, try again. Our service may be down.`,
@@ -361,49 +375,19 @@ const uploadAvatar = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "Error userid is missing!" });
   }
 
-  console.log(
-    "req",
-    fs.readFileSync(
-      path.join(
-        dirname(`${require.main?.filename}`) + "/uploads/" + req.file.filename
-      )
-    )
-  );
+  const response = await uploadImage(req.file?.path, req.params.id);
 
-  let results = await User.findById(req.params.id);
-
-  if (results === null || results === undefined) {
-    return res.status(404).json({ message: "Error userid not found!" });
-  }
-
-  results!.avatarProfile = fs.readFileSync(
-    path.join(
-      dirname(`${require.main?.filename}`) + "/uploads/" + req.file.filename
-    )
-  );
-  results?.save();
-  return res.send(
-    fs
-      .readFileSync(
-        path.join(
-          dirname(`${require.main?.filename}`) + "/uploads/" + req.file.filename
-        )
-      )
-      .toString("base64")
-  );
+  await User.findByIdAndUpdate(req.params.id, {
+    avatarProfile: response.secure_url,
+  }).then((value) => {
+    return res.status(200).json({
+      message: "Success! Updated profile image",
+      userid: req.params.id,
+      url: response.secure_url,
+    });
+  });
 };
 
-const previewAvatar = async (req: Request, res: Response) => {
-  if (req.params.id === null || req.params.id === undefined) {
-    return res.status(400).json({ message: "Error userid is missing!" });
-  }
-
-  let results = await User.findById(req.params.id);
-
-  if (results === null || results === undefined) {
-    return res.status(404).json({ message: "Error userid not found!" });
-  }
-};
 export default {
   registerUser,
   allUsers,
