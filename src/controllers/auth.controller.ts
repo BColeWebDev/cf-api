@@ -138,7 +138,7 @@ const loginUser = async (req: Request, res: Response) => {
   }
 
   // Existing User has not authenticate account
-  console.log("existing", existingUser);
+
   if (existingUser && !existingUser.isVerified) {
     error.push("User credentials has not been validated");
     return res
@@ -378,7 +378,7 @@ const uploadAvatar = async (req: Request, res: Response) => {
   const response = await uploadImage(req.file?.path, req.params.id);
 
   await User.findByIdAndUpdate(req.params.id, {
-    avatarProfile: response.secure_url,
+    avatarProfile: response.secure_,
   }).then((value) => {
     return res.status(200).json({
       message: "Success! Updated profile image",

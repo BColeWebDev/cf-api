@@ -2,7 +2,7 @@ let error: string[] = [];
 import { Response, Request, json } from "express";
 import Pagination from "../middleware/pagination";
 import Sorting from "../middleware/sorting";
-import { Regiment, RegimentsQueries } from "../models/regiment.model";
+import { Regiment } from "../models/regiment.model";
 // Call 3rd Party endpoint
 
 import Filtering from "../middleware/filtering";

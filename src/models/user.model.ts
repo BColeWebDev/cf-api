@@ -51,7 +51,6 @@ export interface UserDocument extends mongoose.Document {
   passwordResetExpires: Date;
   lastLoggedIn: Date;
   device: string;
-  height: string;
   accountCreated: Date;
   isVerified: boolean;
   isAdmin: boolean;
@@ -79,6 +78,8 @@ export interface UserDocument extends mongoose.Document {
     | "Increased Energy"
     | "Improved Mood";
   equipment_access: "Full Gym" | "Dumbell Only" | "No Equipment";
+  weight: string;
+  height: string;
   features: object;
   comparePassword(password: string): boolean;
   hidePassword(): void;
@@ -151,6 +152,14 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
     default: false,
+  },
+  weight: {
+    type: String,
+    require: true,
+  },
+  height: {
+    type: String,
+    require: true,
   },
   isAdmin: {
     type: Boolean,
