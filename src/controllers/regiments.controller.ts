@@ -30,6 +30,8 @@ const CreateRegimentPlan = async (req: Request, res: Response) => {
       userid,
       routines: [],
       isCompleted: false,
+      isActive: false,
+      isShared: false,
       days: [],
     });
     newRegiment.save();

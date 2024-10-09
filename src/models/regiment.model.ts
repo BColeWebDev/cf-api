@@ -10,6 +10,8 @@ export interface IRegimentAttrs {
   userid: ObjectId;
   routines: TrainingDaysAttrs[];
   isCompleted: boolean;
+  isActive: boolean;
+  isShared: boolean;
   days: String[];
 }
 
@@ -21,6 +23,8 @@ export interface RegiementDocument extends mongoose.Document {
   routines: TrainingDaysAttrs[];
   isCompleted: boolean;
   days: String[];
+  isActive: boolean;
+  isShared: boolean;
   sharables: boolean;
 }
 
